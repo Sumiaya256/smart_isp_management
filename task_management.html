@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Promee International - Task List</title>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+      /* === Task pages shared extras === */
+      .page-header { margin-bottom: 22px; }
+      .page-header h2 { font-size: 20px; font-weight: 600; color: #1a3c5e; display:flex; align-items:center; gap:10px; }
+      .page-header p  { font-size: 13px; color: #888; margin-top: 4px; margin-left: 34px; }
+
+      /* Sub-nav tabs inside card */
+      .subnav { display:flex; border-bottom: 2px solid #e8ecf4; margin-bottom:20px; }
+      .subnav a {
+        padding: 9px 18px; font-size: 13px; color: #777; text-decoration:none;
+        border-bottom: 2px solid transparent; margin-bottom: -2px;
+        display:flex; align-items:center; gap:6px; transition: color .2s;
+      }
+      .subnav a:hover { color: #1a3c5e; }
+      .subnav a.active { color: #1a3c5e; border-bottom-color: #1a3c5e; font-weight:600; }
+
+      /* Stats row */
+      .stat-row { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-bottom:22px; }
+      .s-card {
+        background:#fff; border-radius:4px; padding:15px 17px;
+        display:flex; align-items:center; gap:13px;
+        box-shadow: 0 1px 4px rgba(0,0,0,.07);
+        border-left: 4px solid #ccc; cursor:pointer;
+        transition: box-shadow .2s, transform .15s; user-select:none;
+      }
+      .s-card:hover       { box-shadow: 0 4px 14px rgba(0,0,0,.11); transform:translateY(-1px); }
+      .s-card.s-active    { transform:translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,.14); }
+      .s-card.sc-all      { border-left-color:#1a3c5e; }
+      .s-card.sc-pending  { border-left-color:#f39c12; }
+      .s-card.sc-progress { border-left-color:#3498db; }
+      .s-card.sc-done     { border-left-color:#27ae60; }
+      .s-card.sc-overdue  { border-left-color:#e74c3c; }
+      .s-icon { width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+      .sc-all     .s-icon { background:#eaf0f7; color:#1a3c5e; }
+      .sc-pending .s-icon { background:#fef6e4; color:#f39c12; }
+      .sc-progress .s-icon{ background:#e8f4fd; color:#3498db; }
+      .sc-done    .s-icon { background:#e9f7ef; color:#27ae60; }
+      .sc-overdue .s-icon { background:#fdf0f0; color:#e74c3c; }
+      .s-num { font-size:22px; font-weight:700; color:#222; line-height:1; }
+      .s-lbl { font-size:12px; color:#888; margin-top:3px; }
+
+      /* Toolbar */
+      .t-bar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:18px; }
+      .t-bar-l { display:flex; gap:8px; flex-wrap:wrap; }
+      .t-bar-r { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+      .flt { height:33px; border:1px solid #ddd; background:#fafafa; border-radius:3px; padding:0 10px; font-size:13px; color:#555; }
+      .flt:focus { border-color:#3498db; outline:none; }
+      .srch-wrap { position:relative; }
+      .srch-wrap i { position:absolute; left:9px; top:50%; transform:translateY(-50%); color:#bbb; font-size:12px; pointer-events:none; }
+      .srch { height:33px; border:1px solid #ddd; background:#fafafa; border-radius:3px; padding:0 10px 0 30px; font-size:13px; color:#555; width:195px; }
+      .srch:focus { border-color:#3498db; outline:none; }
+
+      /* result count */
+      .rc { font-size:12px; color:#999; margin-bottom:14px; }
+      .rc strong { color:#444; }
+
+      /* === TASK CARDS === */
+      .task-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); gap:14px; }
+
+      .tk {
+        background:#fff; border-radius:5px;
+        box-shadow: 0 1px 4px rgba(0,0,0,.08);
+        border-top: 3px solid #ddd;
+        display:flex; flex-direction:column;
+        transition: box-shadow .2s, transform .15s;
+      }
+      .tk:hover { box-shadow: 0 5px 18px rgba(0,0,0,.12); transform:translateY(-2px); }
+      .tk.pri-c { border-top-color:#e74c3c; }
+      .tk.pri-h { border-top-color:#f39c12; }
+      .tk.pri-m { border-top-color:#3498db; }
+      .tk.pri-l { border-top-color:#27ae60; }
+
+      .tk-h { padding:12px 14px 10px; border-bottom:1px solid #f2f2f2; }
+      .tk-meta-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+      .tk-id { font-size:10px; color:#bbb; font-weight:700; letter-spacing:.5px; }
+      .tk-cat { font-size:10px; color:#888; display:flex; align-items:center; gap:4px; }
+      .tk-cat i { color:#1a3c5e; }
+      .tk-title { font-size:13px; font-weight:600; color:#2c3e50; line-height:1.38; margin-bottom:8px; }
+      .tk-badges { display:flex; gap:6px; flex-wrap:wrap; }
+
+      .bp { display:inline-block; padding:2px 9px; border-radius:12px; font-size:10px; font-weight:700; text-transform:uppercase; white-space:nowrap; }
+      .bp-c { background:#fde8e8; color:#c0392b; }
+      .bp-h { background:#fef3e0; color:#d35400; }
+      .bp-m { background:#e8f4fd; color:#1a6fa8; }
+      .bp-l { background:#e9f7ef; color:#1e8449; }
+      .bs-p { background:#fff3cd; color:#856404; }
+      .bs-i { background:#cce5ff; color:#004085; }
+      .bs-d { background:#d4edda; color:#155724; }
+      .bs-h { background:#e2e3e5; color:#383d41; }
+      .bs-o { background:#f8d7da; color:#721c24; }
+
+      .tk-b { padding:11px 14px; flex:1; }
+      .tk-info { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:10px; }
+      .tk-info-i { font-size:11px; color:#888; display:flex; align-items:center; gap:4px; }
+      .tk-info-i i { color:#1a3c5e; width:11px; text-align:center; font-size:10px; }
+      .tk-info-i span { color:#555; font-weight:500; }
+
+      .pg-label { display:flex; justify-content:space-between; font-size:11px; color:#aaa; margin-bottom:3px; }
+      .pg-track { background:#ecf0f1; border-radius:10px; height:4px; }
+      .pg-fill  { height:4px; border-radius:10px; background:#3498db; }
+      .pg-fill.pf-d { background:#27ae60; }
+      .pg-fill.pf-o { background:#e74c3c; }
+
+      .sla { margin-top:8px; font-size:11px; font-weight:600; display:flex; align-items:center; gap:3px; }
+      .sla-ok { color:#27ae60; } .sla-w { color:#f39c12; } .sla-ov { color:#e74c3c; }
+
+      .tk-desc { font-size:11.5px; color:#aaa; margin-top:8px; line-height:1.4;
+        display:-webkit-box; 
+        -webkit-line-clamp:2; 
+        -webkit-box-orient:vertical;
+         overflow:hidden; }
+
+      .tk-ref { display:inline-flex; align-items:center; gap:4px; background:#f0f4f8;
+        border:1px solid #dde; border-radius:3px; padding:2px 7px; font-size:10px; color:#1a3c5e; margin-top:7px; }
+
+      .tk-f { padding:9px 14px; border-top:1px solid #f2f2f2; display:flex; align-items:center; justify-content:space-between; }
+      .av { display:flex; align-items:center; gap:7px; font-size:11px; color:#777; }
+      .av-c { width:26px; height:26px; border-radius:50%; background:#1a3c5e; color:#fff;
+        display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; flex-shrink:0; }
+      .tk-act { display:flex; gap:4px; }
+      .tk-act button { padding:4px 9px; border:none; border-radius:3px; font-size:11px; cursor:pointer;
+        display:inline-flex; align-items:center; gap:3px; transition:opacity .15s; }
+      .tk-act button:hover { opacity:.82; }
+      .btn-v { background:#1a3c5e; color:#fff; }
+      .btn-e { background:#f39c12; color:#fff; }
+      .btn-d { background:#27ae60; color:#fff; }
+      .btn-x { background:#e74c3c; color:#fff; }
+
+      /* empty */
+      .empty { text-align:center; padding:50px 20px; color:#ccc; }
+      .empty i { font-size:44px; display:block; margin-bottom:12px; }
+      .empty p { font-size:14px; color:#bbb; }
+
+      /* modal */
+      .mo { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:1050; align-items:center; justify-content:center; }
+      .mo.open { display:flex; }
+      .mo-box { background:#fff; border-radius:5px; width:640px; max-width:96vw; max-height:92vh;
+        overflow-y:auto; box-shadow:0 12px 40px rgba(0,0,0,.25); animation:mIn .16s ease; }
+      @keyframes mIn { from{transform:translateY(-14px);opacity:0} to{transform:none;opacity:1} }
+      .mo-hd { background:#0d1b2a; color:#fff; padding:13px 20px; display:flex; align-items:center;
+        justify-content:space-between; border-radius:5px 5px 0 0; }
+      .mo-hd h3 { font-size:14px; font-weight:600; display:flex; align-items:center; gap:7px; }
+      .mo-close { background:none; border:none; color:#fff; font-size:19px; cursor:pointer; }
+      .mo-body { padding:20px; }
+      .mo-ft { padding:13px 20px; border-top:1px solid #eee; display:flex; justify-content:flex-end; gap:9px; }
+      .sec-lbl { font-size:10px; font-weight:700; color:#1a3c5e; text-transform:uppercase; letter-spacing:.5px;
+        border-bottom:1px solid #edf0f5; padding-bottom:5px; margin-bottom:12px; margin-top:6px; }
+
+      /* view modal */
+      .vm-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+      .vm-item .vi-l { font-size:11px; color:#999; margin-bottom:2px; }
+      .vm-item .vi-v { font-size:13px; font-weight:600; color:#333; }
+      .vm-desc { font-size:13px; color:#555; line-height:1.6; background:#f9fafc; border-radius:4px; padding:10px 13px; }
+      .al { list-style:none; }
+      .al li { display:flex; align-items:flex-start; gap:9px; font-size:12px; color:#666; padding:6px 0; border-bottom:1px solid #f5f5f5; }
+      .al li:last-child { border-bottom:none; }
+      .al-dot { width:7px; height:7px; border-radius:50%; background:#1a3c5e; margin-top:4px; flex-shrink:0; }
+      .al-t { color:#bbb; font-size:11px; white-space:nowrap; }
+
+      /* extra btns */
+      .btn-success { background:#27ae60!important; color:#fff!important; }
+      .btn-info    { background:#3498db!important; color:#fff!important; }
+      .btn-warn    { background:#f39c12!important; color:#fff!important; }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <i class="fa-solid fa-circle-nodes"></i> Promee International
+    </div>
+    <ul class="menu">
+      <li><a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-user"></i> Client <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="new_request.html"><i class="fa-regular fa-circle"></i> New Request</a></li>
+          <li><a href="add_new_client.html"><i class="fa-regular fa-circle"></i> Add New</a></li>
+          <li><a href="client_list.html"><i class="fa-regular fa-circle"></i> Client List</a></li>
+          <li><a href="left_client.html"><i class="fa-regular fa-circle"></i> Left Client</a></li>
+          <li><a href="scheduler.html"><i class="fa-regular fa-circle"></i> Scheduler</a></li>
+          <li><a href="change_request.html"><i class="fa-regular fa-circle"></i> Change Request</a></li>
+          <li><a href="portal_manage.html"><i class="fa-regular fa-circle"></i> Portal Manage</a></li>
+        </ul>
+      </li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-file-invoice-dollar"></i> Billing <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="billing.html"><i class="fa-regular fa-circle"></i> Billing</a></li>
+        </ul>
+      </li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-server"></i> Mikrotik Server <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="Bulk_Client_Import.html"><i class="fa-regular fa-circle"></i> Bulk Client Import</a></li>
+        </ul>
+      </li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-users-gear"></i> HR &amp; Payroll <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="employee_list.html"><i class="fa-regular fa-circle"></i> Employee List</a></li>
+          <li><a href="add_employee.html"><i class="fa-regular fa-circle"></i> Add Employee</a></li>
+          <li><a href="attendance.html"><i class="fa-regular fa-circle"></i> Attendance</a></li>
+          <li><a href="salary_sheet.html"><i class="fa-regular fa-circle"></i> Salary Sheet</a></li>
+          <li><a href="department.html"><i class="fa-regular fa-circle"></i> Department</a></li>
+          <li><a href="position.html"><i class="fa-regular fa-circle"></i> Position</a></li>
+          <li><a href="payhead.html"><i class="fa-regular fa-circle"></i> Payhead</a></li>
+          <li><a href="payroll.html"><i class="fa-regular fa-circle"></i> Payroll</a></li>
+          <li><a href="resign_rule.html"><i class="fa-regular fa-circle"></i> Resign Rule</a></li>
+          <li><a href="resignation.html"><i class="fa-regular fa-circle"></i> Resignation</a></li>
+          <li><a href="rejoin.html"><i class="fa-regular fa-circle"></i> Rejoin</a></li>
+        </ul>
+      </li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-door-open"></i> Leave Management <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="leave_management.html"><i class="fa-regular fa-circle"></i> Leave Management</a></li>
+        </ul>
+      </li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-calendar-days"></i> Events &amp; Holidays <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="events_holidays.html"><i class="fa-regular fa-circle"></i> Events &amp; Holidays</a></li>
+        </ul>
+      </li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-headset"></i> Support &amp; Ticketing <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="ticket_list.html"><i class="fa-regular fa-circle"></i> Ticket List</a></li>
+          <li><a href="new_ticket.html"><i class="fa-regular fa-circle"></i> New Ticket</a></li>
+          <li><a href="complain_list.html"><i class="fa-regular fa-circle"></i> Complain List</a></li>
+          <li><a href="complain_category.html"><i class="fa-regular fa-circle"></i> Complain Category</a></li>
+          <li><a href="support_team.html"><i class="fa-regular fa-circle"></i> Support Team</a></li>
+          <li><a href="ticket_reports.html"><i class="fa-regular fa-circle"></i> Ticket Reports</a></li>
+          <li><a href="service_history.html"><i class="fa-regular fa-circle"></i> Service History</a></li>
+        </ul>
+      </li>
+
+      <li class="has-submenu open" id="task-menu">
+        <a href="#"><i class="fa-solid fa-list-check"></i> Task Management <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="task_management.html" class="active"><i class="fa-regular fa-circle"></i> Task List</a></li>
+          <li><a href="task_category.html"><i class="fa-regular fa-circle"></i> Task Category</a></li>
+          <li><a href="task_assign.html"><i class="fa-regular fa-circle"></i> Task Assignment</a></li>
+          <li><a href="task_report.html"><i class="fa-regular fa-circle"></i> Task Report</a></li>
+        </ul>
+      </li>
+
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-basket-shopping"></i> Purchase <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="purchase.html"><i class="fa-regular fa-circle"></i> Purchase Orders</a></li>
+          <li><a href="vendor_list.html"><i class="fa-regular fa-circle"></i> Vendor List</a></li>
+          <li><a href="purchase_report.html"><i class="fa-regular fa-circle"></i> Purchase Report</a></li>
+        </ul>
+      </li>
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-boxes-stacked"></i> Inventory <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="inventory.html"><i class="fa-regular fa-circle"></i> Stock List</a></li>
+        </ul>
+      </li>
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-laptop-medical"></i> Assets <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="assets.html"><i class="fa-regular fa-circle"></i> Asset List</a></li>
+        </ul>
+      </li>
+      <li class="has-submenu">
+        <a href="#"><i class="fa-solid fa-money-bill-trend-up"></i> Income <i class="fa-solid fa-caret-right" style="float:right;font-size:10px;margin-top:5px"></i></a>
+        <ul class="submenu">
+          <li><a href="income.html"><i class="fa-regular fa-circle"></i> Income List</a></li>
+        </ul>
+      </li>
+    </ul>
+  </aside>
+
+  <div class="main-content">
+    <header>
+      <div class="header-left">
+        <div class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></div>
+        <div class="search-box">
+          <input type="text" placeholder="Search Customer" />
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+      </div>
+      <div class="header-right">
+        <div><i class="fa-solid fa-desktop"></i> Online Client Monitoring</div>
+        <div><i class="fa-solid fa-wrench"></i> Releases <span class="badge">0</span></div>
+        <div><i class="fa-solid fa-bell"></i> <span class="badge">3</span></div>
+        <a href="login.html" class="header-btn"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="login.html" class="header-btn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+        <div><i class="fa-solid fa-user-circle" style="font-size:22px"></i></div>
+      </div>
+    </header>
+
+    <div class="page-content">
+      <div class="page-header">
+        <h2><i class="fa-solid fa-list-check"></i> Task Management</h2>
+        <p>Track, assign and manage all operational tasks across your ISP departments.</p>
+      </div>
+
+      <!-- Stat cards -->
+      <div class="stat-row">
+        <div class="s-card sc-all s-active" onclick="filterStat('')" id="sc-all">
+          <div class="s-icon"><i class="fa-solid fa-layer-group"></i></div>
+          <div><div class="s-num" id="cnt-all">0</div><div class="s-lbl">Total Tasks</div></div>
+        </div>
+        <div class="s-card sc-pending" onclick="filterStat('Pending')" id="sc-pending">
+          <div class="s-icon"><i class="fa-solid fa-clock"></i></div>
+          <div><div class="s-num" id="cnt-pending">0</div><div class="s-lbl">Pending</div></div>
+        </div>
+        <div class="s-card sc-progress" onclick="filterStat('In Progress')" id="sc-progress">
+          <div class="s-icon"><i class="fa-solid fa-spinner"></i></div>
+          <div><div class="s-num" id="cnt-prog">0</div><div class="s-lbl">In Progress</div></div>
+        </div>
+        <div class="s-card sc-done" onclick="filterStat('Completed')" id="sc-done">
+          <div class="s-icon"><i class="fa-solid fa-circle-check"></i></div>
+          <div><div class="s-num" id="cnt-done">0</div><div class="s-lbl">Completed</div></div>
+        </div>
+        <div class="s-card sc-overdue" onclick="filterStat('Overdue')" id="sc-overdue">
+          <div class="s-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div><div class="s-num" id="cnt-over">0</div><div class="s-lbl">Overdue</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid #f0f0f0">
+          <div class="card-title"><i class="fa-solid fa-list-check"></i> Task List</div>
+          <div style="font-size:11px;color:#aaa">Task Management &rsaquo; Task List</div>
+        </div>
+
+        <!-- Sub-nav -->
+        <div class="subnav" style="margin-top:16px">
+          <a href="task_management.html" class="active"><i class="fa-solid fa-list"></i> Task List</a>
+          <a href="task_category.html"><i class="fa-solid fa-tags"></i> Categories</a>
+          <a href="task_assign.html"><i class="fa-solid fa-user-check"></i> Assignments</a>
+          <a href="task_report.html"><i class="fa-solid fa-chart-bar"></i> Reports</a>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="t-bar">
+          <div class="t-bar-l">
+            <button class="btn btn-navy" onclick="openMo('addMo')"><i class="fa-solid fa-plus"></i> Add Task</button>
+            <button class="btn btn-success"><i class="fa-solid fa-file-excel"></i> Export</button>
+            <button class="btn btn-info"><i class="fa-solid fa-print"></i> Print</button>
+          </div>
+          <div class="t-bar-r">
+            <select class="flt" id="f-pri" onchange="applyF()">
+              <option value="">All Priority</option>
+              <option>Critical</option><option>High</option><option>Medium</option><option>Low</option>
+            </select>
+            <select class="flt" id="f-cat" onchange="applyF()">
+              <option value="">All Category</option>
+              <option>Network</option><option>Client Service</option>
+              <option>Billing</option><option>Field Work</option><option>IT/Server</option>
+            </select>
+            <select class="flt" id="f-ass" onchange="applyF()">
+              <option value="">All Assignees</option>
+              <option>Rakib Hasan</option><option>Tanvir Ahmed</option>
+              <option>Sumaiya Akter</option><option>Jahidul Islam</option><option>Nusrat Jahan</option>
+            </select>
+            <div class="srch-wrap">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input class="srch" type="text" id="f-srch" placeholder="Search tasks…" oninput="applyF()"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="rc">Showing <strong id="rc-num">0</strong> task(s)</div>
+        <div class="task-grid" id="taskGrid"></div>
+        <div class="empty" id="emptyEl" style="display:none">
+          <i class="fa-solid fa-inbox"></i><p>No tasks match your filters.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD/EDIT MODAL -->
+  <div class="mo" id="addMo">
+    <div class="mo-box">
+      <div class="mo-hd"><h3 id="addMoTitle"><i class="fa-solid fa-plus"></i> Add New Task</h3><button class="mo-close" onclick="closeMo('addMo')"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="mo-body">
+        <input type="hidden" id="ei"/>
+        <div class="sec-lbl">Basic Information</div>
+        <div class="form-row">
+          <div class="form-group"><label>Task Title *</label><input type="text" id="it" placeholder="e.g. Router firmware upgrade – Zone A"/></div>
+          <div class="form-group"><label>Category *</label>
+            <select id="ic"><option value="">-- Select --</option><option>Network</option><option>Client Service</option><option>Billing</option><option>Field Work</option><option>IT/Server</option></select>
+          </div>
+        </div>
+        <div class="sec-lbl">Assignment &amp; Priority</div>
+        <div class="form-row">
+          <div class="form-group"><label>Assign To *</label>
+            <select id="ia"><option value="">-- Select Employee --</option><option>Rakib Hasan</option><option>Tanvir Ahmed</option><option>Sumaiya Akter</option><option>Jahidul Islam</option><option>Nusrat Jahan</option></select>
+          </div>
+          <div class="form-group"><label>Priority *</label>
+            <select id="ip"><option value="">-- Select --</option><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select>
+          </div>
+        </div>
+        <div class="sec-lbl">Schedule &amp; Reference</div>
+        <div class="form-row">
+          <div class="form-group"><label>Due Date *</label><input type="date" id="idue"/></div>
+          <div class="form-group"><label>Linked Ticket / Client ID</label><input type="text" id="iref" placeholder="e.g. TKT-1023 or C-4512"/></div>
+        </div>
+        <div class="sec-lbl">Status &amp; Progress</div>
+        <div class="form-row">
+          <div class="form-group"><label>Status</label>
+            <select id="ist"><option>Pending</option><option>In Progress</option><option>On Hold</option><option>Completed</option></select>
+          </div>
+          <div class="form-group"><label>Progress (0–100%)</label><input type="number" id="ipg" min="0" max="100" value="0"/></div>
+        </div>
+        <div class="sec-lbl">Description</div>
+        <div class="form-row"><div class="form-group" style="flex:1"><label>Task Description</label><textarea id="idesc" rows="3" placeholder="Describe the task…"></textarea></div></div>
+      </div>
+      <div class="mo-ft">
+        <button class="btn btn-default" onclick="closeMo('addMo')"><i class="fa-solid fa-xmark"></i> Cancel</button>
+        <button class="btn btn-navy" onclick="saveTask()"><i class="fa-solid fa-floppy-disk"></i> Save Task</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW MODAL -->
+  <div class="mo" id="viewMo">
+    <div class="mo-box">
+      <div class="mo-hd"><h3><i class="fa-solid fa-eye"></i> Task Details</h3><button class="mo-close" onclick="closeMo('viewMo')"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="mo-body" id="viewBody"></div>
+      <div class="mo-ft"><button class="btn btn-default" onclick="closeMo('viewMo')"><i class="fa-solid fa-xmark"></i> Close</button></div>
+    </div>
+  </div>
+
+  <div class="chat-widget"><i class="fa-solid fa-comment"></i> Send message</div>
+
+  <script>
+    // Sidebar toggle
+    document.getElementById('sidebarToggle').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('active');
+    });
+    // Submenu accordion
+    document.querySelectorAll('.has-submenu > a').forEach(function(a) {
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        var li = a.parentElement;
+        var isOpen = li.classList.contains('open');
+        document.querySelectorAll('.has-submenu').forEach(function(x){ x.classList.remove('open'); });
+        if (!isOpen) li.classList.add('open');
+      });
+    });
+    // Keep task menu open
+    var tm = document.getElementById('task-menu');
+    if (tm) tm.classList.add('open');
+  </script>
+
+  <script>
+    var tasks = [
+      {id:"TSK-001",title:"Router firmware upgrade – Zone A",cat:"Network",ass:"Rakib Hasan",pri:"Critical",sts:"In Progress",pg:60,due:"2026-02-22",ref:"",desc:"Upgrade MikroTik RB951 routers in Zone A to latest stable firmware to patch known vulnerabilities.",by:"Admin",created:"2026-02-15"},
+      {id:"TSK-002",title:"New fiber installation – Client C-4512",cat:"Field Work",ass:"Jahidul Islam",pri:"High",sts:"Pending",pg:0,due:"2026-02-25",ref:"C-4512",desc:"Install fiber drop cable and ONU at client premises. Confirm building access with manager.",by:"Admin",created:"2026-02-16"},
+      {id:"TSK-003",title:"Overdue invoice follow-up – March batch",cat:"Billing",ass:"Sumaiya Akter",pri:"High",sts:"Pending",pg:10,due:"2026-02-20",ref:"",desc:"Call and SMS clients with unpaid invoices older than 30 days.",by:"Admin",created:"2026-02-14"},
+      {id:"TSK-004",title:"IP pool expansion – CGNAT block",cat:"IT/Server",ass:"Tanvir Ahmed",pri:"Medium",sts:"In Progress",pg:45,due:"2026-02-28",ref:"",desc:"Allocate new /22 block and configure on MikroTik CGNAT.",by:"Admin",created:"2026-02-13"},
+      {id:"TSK-005",title:"Resolve TKT-1023 – Slow speed complaint",cat:"Client Service",ass:"Nusrat Jahan",pri:"High",sts:"In Progress",pg:80,due:"2026-02-21",ref:"TKT-1023",desc:"Client reports 2Mbps instead of 10Mbps. Check QoS rules on PPPoE profile.",by:"Support",created:"2026-02-17"},
+      {id:"TSK-006",title:"Monthly bandwidth usage report",cat:"IT/Server",ass:"Rakib Hasan",pri:"Low",sts:"Completed",pg:100,due:"2026-02-18",ref:"",desc:"Generate and email bandwidth usage report to management.",by:"Admin",created:"2026-02-10"},
+      {id:"TSK-007",title:"Cable fault repair – Zone C main trunk",cat:"Field Work",ass:"Jahidul Islam",pri:"Critical",sts:"Overdue",pg:30,due:"2026-02-18",ref:"TKT-1018",desc:"Underground cable fault causing downtime for 45 clients.",by:"Support",created:"2026-02-12"},
+      {id:"TSK-008",title:"New connection request – Client C-4590",cat:"Client Service",ass:"Sumaiya Akter",pri:"Medium",sts:"Pending",pg:0,due:"2026-03-01",ref:"C-4590",desc:"Process new broadband connection request and schedule technician dispatch.",by:"Admin",created:"2026-02-18"},
+      {id:"TSK-009",title:"Server room UPS battery replacement",cat:"IT/Server",ass:"Tanvir Ahmed",pri:"High",sts:"On Hold",pg:20,due:"2026-02-27",ref:"",desc:"Replace 3 faulty UPS batteries. Waiting for procurement delivery.",by:"Admin",created:"2026-02-11"},
+      {id:"TSK-010",title:"Customer portal bulk password reset",cat:"Client Service",ass:"Nusrat Jahan",pri:"Low",sts:"Completed",pg:100,due:"2026-02-16",ref:"",desc:"Reset portal passwords for 28 clients who forgot login credentials.",by:"Support",created:"2026-02-09"},
+      {id:"TSK-011",title:"Zone B switch configuration backup",cat:"Network",ass:"Rakib Hasan",pri:"Medium",sts:"Completed",pg:100,due:"2026-02-15",ref:"",desc:"Take config backup of all L2 switches in Zone B.",by:"Admin",created:"2026-02-08"},
+      {id:"TSK-012",title:"Salary disbursement verification – Feb",cat:"Billing",ass:"Sumaiya Akter",pri:"High",sts:"In Progress",pg:50,due:"2026-02-28",ref:"",desc:"Verify payroll entries for 32 employees before bank disbursement.",by:"Admin",created:"2026-02-17"},
+      {id:"TSK-013",title:"DNS server failover drill",cat:"IT/Server",ass:"Tanvir Ahmed",pri:"Medium",sts:"Pending",pg:0,due:"2026-03-05",ref:"",desc:"Simulate primary DNS failure and verify automatic failover to secondary.",by:"Admin",created:"2026-02-19"},
+      {id:"TSK-014",title:"Reconnect TKT-1031 – disconnected client",cat:"Client Service",ass:"Nusrat Jahan",pri:"Critical",sts:"Overdue",pg:0,due:"2026-02-17",ref:"TKT-1031",desc:"Client disconnected due to billing error. Reconnect immediately.",by:"Support",created:"2026-02-17"},
+      {id:"TSK-015",title:"Quarterly network audit – all zones",cat:"Network",ass:"Rakib Hasan",pri:"Medium",sts:"Pending",pg:0,due:"2026-03-10",ref:"",desc:"Audit network topology, IP assignments and VLAN config across all 6 zones.",by:"Admin",created:"2026-02-19"},
+      {id:"TSK-016",title:"MikroTik hotspot voucher cleanup",cat:"Network",ass:"Tanvir Ahmed",pri:"Low",sts:"Pending",pg:0,due:"2026-03-08",ref:"",desc:"Remove expired vouchers and unused PPPoE secrets from all MikroTik servers.",by:"Admin",created:"2026-02-18"},
+      {id:"TSK-017",title:"Field cabling – new residential block",cat:"Field Work",ass:"Jahidul Islam",pri:"High",sts:"Pending",pg:0,due:"2026-03-03",ref:"",desc:"Pull fiber cable to new 50-unit residential building.",by:"Admin",created:"2026-02-17"},
+      {id:"TSK-018",title:"BFD session drops – core router",cat:"Network",ass:"Rakib Hasan",pri:"Critical",sts:"Overdue",pg:15,due:"2026-02-19",ref:"TKT-1029",desc:"Fix BFD session instability causing route flapping on the BGP core router.",by:"Support",created:"2026-02-16"},
+      {id:"TSK-019",title:"Client plan upgrade – C-4411",cat:"Client Service",ass:"Sumaiya Akter",pri:"Low",sts:"Completed",pg:100,due:"2026-02-14",ref:"C-4411",desc:"Upgrade PPPoE profile from 10M to 20M as per client request.",by:"Support",created:"2026-02-12"},
+      {id:"TSK-020",title:"New OLT device commissioning – Zone D",cat:"IT/Server",ass:"Tanvir Ahmed",pri:"High",sts:"In Progress",pg:70,due:"2026-02-26",ref:"",desc:"Configure Nokia 7360 OLT for Zone D with 96 ONT ports and VLAN segmentation.",by:"Admin",created:"2026-02-15"},
+      {id:"TSK-021",title:"Payment reconciliation – January",cat:"Billing",ass:"Sumaiya Akter",pri:"Medium",sts:"Completed",pg:100,due:"2026-02-10",ref:"",desc:"Match bKash, bank transfer and cash payments with January invoice records.",by:"Admin",created:"2026-02-05"},
+      {id:"TSK-022",title:"Tech visit – C-4580 ONU fault",cat:"Field Work",ass:"Jahidul Islam",pri:"High",sts:"In Progress",pg:40,due:"2026-02-23",ref:"TKT-1025",desc:"Visit client premises to replace faulty ONU device and run line quality test.",by:"Support",created:"2026-02-18"},
+      {id:"TSK-023",title:"Staff cybersecurity awareness training",cat:"IT/Server",ass:"Nusrat Jahan",pri:"Low",sts:"On Hold",pg:0,due:"2026-03-15",ref:"",desc:"Conduct cybersecurity training for all 18 staff. Venue booking pending.",by:"Admin",created:"2026-02-19"},
+      {id:"TSK-024",title:"Billing system database backup",cat:"IT/Server",ass:"Rakib Hasan",pri:"Medium",sts:"Completed",pg:100,due:"2026-02-17",ref:"",desc:"Full database backup of billing system before version upgrade.",by:"Admin",created:"2026-02-15"}
+    ];
+
+    var activeStat = "";
+
+    var priCls  = {Critical:"bp-c",High:"bp-h",Medium:"bp-m",Low:"bp-l"};
+    var stsCls  = {"Pending":"bs-p","In Progress":"bs-i","Completed":"bs-d","On Hold":"bs-h","Overdue":"bs-o"};
+    var priCard = {Critical:"pri-c",High:"pri-h",Medium:"pri-m",Low:"pri-l"};
+    var catIco  = {Network:"fa-network-wired","Client Service":"fa-user-headset",Billing:"fa-file-invoice-dollar","Field Work":"fa-helmet-safety","IT/Server":"fa-server"};
+
+    function init(n){return n.split(" ").map(function(w){return w[0];}).join("").slice(0,2).toUpperCase();}
+    function pfCls(p,s){return s==="Completed"?"pf-d":s==="Overdue"?"pf-o":"";}
+    function slaHtml(due,sts){
+      if(sts==="Completed") return '<div class="sla sla-ok"><i class="fa-solid fa-check-circle"></i> Completed</div>';
+      var d=Math.ceil((new Date(due)-new Date())/86400000);
+      if(d<0)  return '<div class="sla sla-ov"><i class="fa-solid fa-fire"></i> '+Math.abs(d)+' day(s) overdue</div>';
+      if(d===0)return '<div class="sla sla-w"><i class="fa-solid fa-clock"></i> Due today</div>';
+      if(d<=2) return '<div class="sla sla-w"><i class="fa-solid fa-clock"></i> '+d+' day(s) left</div>';
+      return '<div class="sla sla-ok"><i class="fa-solid fa-calendar-check"></i> '+d+' day(s) left</div>';
+    }
+
+    function renderCards(list){
+      var g=document.getElementById("taskGrid"),e=document.getElementById("emptyEl");
+      document.getElementById("rc-num").textContent=list.length;
+      if(!list.length){g.innerHTML="";e.style.display="";return;}
+      e.style.display="none";
+      g.innerHTML=list.map(function(t){
+        return '<div class="tk '+priCard[t.pri]+'">'+
+          '<div class="tk-h">'+
+            '<div class="tk-meta-top">'+
+              '<span class="tk-id">'+t.id+'</span>'+
+              '<span class="tk-cat"><i class="fa-solid '+(catIco[t.cat]||"fa-tag")+'"></i> '+t.cat+'</span>'+
+            '</div>'+
+            '<div class="tk-title">'+t.title+'</div>'+
+            '<div class="tk-badges">'+
+              '<span class="bp '+(priCls[t.pri]||"")+'">'+t.pri+'</span> '+
+              '<span class="bp '+(stsCls[t.sts]||"")+'">'+t.sts+'</span>'+
+            '</div>'+
+          '</div>'+
+          '<div class="tk-b">'+
+            '<div class="tk-info">'+
+              '<div class="tk-info-i"><i class="fa-solid fa-calendar-alt"></i> Due: <span>'+t.due+'</span></div>'+
+              '<div class="tk-info-i"><i class="fa-solid fa-user-tie"></i> By: <span>'+t.by+'</span></div>'+
+            '</div>'+
+            '<div class="pg-label"><span>Progress</span><span>'+t.pg+'%</span></div>'+
+            '<div class="pg-track"><div class="pg-fill '+pfCls(t.pg,t.sts)+'" style="width:'+t.pg+'%"></div></div>'+
+            slaHtml(t.due,t.sts)+
+            '<div class="tk-desc">'+t.desc+'</div>'+
+            (t.ref?'<div class="tk-ref"><i class="fa-solid fa-link"></i> '+t.ref+'</div>':"")+
+          '</div>'+
+          '<div class="tk-f">'+
+            '<div class="av"><div class="av-c">'+init(t.ass)+'</div> '+t.ass+'</div>'+
+            '<div class="tk-act">'+
+              '<button class="btn-v" onclick="viewT(\''+t.id+'\')"><i class="fa-solid fa-eye"></i></button>'+
+              '<button class="btn-e" onclick="editT(\''+t.id+'\')"><i class="fa-solid fa-pen"></i></button>'+
+              (t.sts!=="Completed"?'<button class="btn-d" onclick="doneT(\''+t.id+'\')"><i class="fa-solid fa-check"></i></button>':"")+
+              '<button class="btn-x" onclick="delT(\''+t.id+'\')"><i class="fa-solid fa-trash"></i></button>'+
+            '</div>'+
+          '</div>'+
+        '</div>';
+      }).join("");
+    }
+
+    function getF(){
+      var s=(document.getElementById("f-srch").value||"").toLowerCase();
+      var p=document.getElementById("f-pri").value;
+      var c=document.getElementById("f-cat").value;
+      var a=document.getElementById("f-ass").value;
+      return tasks.filter(function(t){
+        return (!activeStat||t.sts===activeStat)&&(!p||t.pri===p)&&(!c||t.cat===c)&&(!a||t.ass===a)&&
+          (!s||t.title.toLowerCase().includes(s)||t.id.toLowerCase().includes(s)||(t.ref||"").toLowerCase().includes(s)||t.ass.toLowerCase().includes(s));
+      });
+    }
+    function applyF(){renderCards(getF());}
+
+    function filterStat(s){
+      activeStat=s;
+      document.querySelectorAll(".s-card").forEach(function(c){c.classList.remove("s-active");});
+      var m={"":"sc-all","Pending":"sc-pending","In Progress":"sc-progress","Completed":"sc-done","Overdue":"sc-overdue"};
+      var el=document.getElementById(m[s]);
+      if(el)el.classList.add("s-active");
+      applyF();
+    }
+
+    function updateCnts(){
+      var c=function(s){return tasks.filter(function(t){return t.sts===s;}).length;};
+      document.getElementById("cnt-all").textContent=tasks.length;
+      document.getElementById("cnt-pending").textContent=c("Pending");
+      document.getElementById("cnt-prog").textContent=c("In Progress");
+      document.getElementById("cnt-done").textContent=c("Completed");
+      document.getElementById("cnt-over").textContent=c("Overdue");
+    }
+
+    function viewT(id){
+      var t=tasks.find(function(x){return x.id===id;}); if(!t)return;
+      document.getElementById("viewBody").innerHTML=
+        '<div class="vm-grid">'+
+          '<div class="vm-item"><div class="vi-l">Task ID</div><div class="vi-v">'+t.id+'</div></div>'+
+          '<div class="vm-item"><div class="vi-l">Category</div><div class="vi-v">'+t.cat+'</div></div>'+
+          '<div class="vm-item"><div class="vi-l">Priority</div><div class="vi-v"><span class="bp '+(priCls[t.pri]||"")+'">'+t.pri+'</span></div></div>'+
+          '<div class="vm-item"><div class="vi-l">Status</div><div class="vi-v"><span class="bp '+(stsCls[t.sts]||"")+'">'+t.sts+'</span></div></div>'+
+          '<div class="vm-item"><div class="vi-l">Assigned To</div><div class="vi-v">'+t.ass+'</div></div>'+
+          '<div class="vm-item"><div class="vi-l">Created By</div><div class="vi-v">'+t.by+'</div></div>'+
+          '<div class="vm-item"><div class="vi-l">Due Date</div><div class="vi-v">'+t.due+'</div></div>'+
+          '<div class="vm-item"><div class="vi-l">Progress</div><div class="vi-v">'+t.pg+'%</div></div>'+
+          (t.ref?'<div class="vm-item"><div class="vi-l">Linked Ref</div><div class="vi-v">'+t.ref+'</div></div>':"")
+        +'</div>'+
+        '<div class="sec-lbl">Progress Bar</div>'+
+        '<div class="pg-label"><span>Completion</span><span>'+t.pg+'%</span></div>'+
+        '<div class="pg-track" style="height:8px"><div class="pg-fill '+pfCls(t.pg,t.sts)+'" style="width:'+t.pg+'%;height:8px"></div></div>'+
+        '<div style="margin-top:8px">'+slaHtml(t.due,t.sts)+'</div>'+
+        '<div class="sec-lbl" style="margin-top:14px">Description</div>'+
+        '<div class="vm-desc">'+t.desc+'</div>'+
+        '<div class="sec-lbl" style="margin-top:14px">Activity Log</div>'+
+        '<ul class="al">'+
+          '<li><div class="al-dot"></div><span class="al-t">'+t.created+' 09:00</span> Task created by <strong>'+t.by+'</strong></li>'+
+          (t.pg>0&&t.sts!=="Completed"?'<li><div class="al-dot"></div><span class="al-t">'+t.due+' 10:30</span> Progress updated to <strong>'+t.pg+'%</strong></li>':"")+
+          (t.sts==="Completed"?'<li><div class="al-dot" style="background:#27ae60"></div><span class="al-t">'+t.due+'</span> Marked <strong style="color:#27ae60">Completed</strong></li>':"")+
+          (t.sts==="Overdue"?'<li><div class="al-dot" style="background:#e74c3c"></div><span class="al-t">'+t.due+'</span> <strong style="color:#e74c3c">Deadline passed</strong></li>':"")+
+        '</ul>';
+      openMo("viewMo");
+    }
+
+    function editT(id){
+      var t=tasks.find(function(x){return x.id===id;}); if(!t)return;
+      document.getElementById("ei").value=t.id;
+      document.getElementById("it").value=t.title;
+      document.getElementById("ic").value=t.cat;
+      document.getElementById("ia").value=t.ass;
+      document.getElementById("ip").value=t.pri;
+      document.getElementById("idue").value=t.due;
+      document.getElementById("iref").value=t.ref;
+      document.getElementById("idesc").value=t.desc;
+      document.getElementById("ist").value=t.sts;
+      document.getElementById("ipg").value=t.pg;
+      document.getElementById("addMoTitle").innerHTML='<i class="fa-solid fa-pen"></i> Edit Task — '+t.id;
+      openMo("addMo");
+    }
+
+    function doneT(id){
+      var t=tasks.find(function(x){return x.id===id;});
+      if(t){t.sts="Completed";t.pg=100;updateCnts();applyF();}
+    }
+
+    function delT(id){
+      if(!confirm("Delete this task?"))return;
+      tasks=tasks.filter(function(x){return x.id!==id;});
+      updateCnts();applyF();
+    }
+
+    function saveTask(){
+      var title=document.getElementById("it").value.trim();
+      var cat=document.getElementById("ic").value;
+      var ass=document.getElementById("ia").value;
+      var pri=document.getElementById("ip").value;
+      var due=document.getElementById("idue").value;
+      if(!title||!cat||!ass||!pri||!due){alert("Please fill all required (*) fields.");return;}
+      var eid=document.getElementById("ei").value;
+      if(eid){
+        var t=tasks.find(function(x){return x.id===eid;});
+        if(t){
+          t.title=title;t.cat=cat;t.ass=ass;t.pri=pri;t.due=due;
+          t.ref=document.getElementById("iref").value;
+          t.desc=document.getElementById("idesc").value;
+          t.sts=document.getElementById("ist").value;
+          t.pg=parseInt(document.getElementById("ipg").value)||0;
+        }
+      } else {
+        tasks.push({
+          id:"TSK-"+String(tasks.length+1).padStart(3,"0"),
+          title:title,cat:cat,ass:ass,pri:pri,
+          sts:document.getElementById("ist").value,
+          pg:parseInt(document.getElementById("ipg").value)||0,
+          due:due,ref:document.getElementById("iref").value,
+          desc:document.getElementById("idesc").value,
+          by:"Admin",created:new Date().toISOString().slice(0,10)
+        });
+      }
+      closeMo("addMo"); updateCnts(); applyF();
+    }
+
+    function openMo(id){document.getElementById(id).classList.add("open");}
+    function closeMo(id){
+      document.getElementById(id).classList.remove("open");
+      if(id==="addMo"){
+        document.getElementById("ei").value="";
+        document.getElementById("addMoTitle").innerHTML='<i class="fa-solid fa-plus"></i> Add New Task';
+        ["it","iref","idesc"].forEach(function(f){document.getElementById(f).value="";});
+        ["ic","ia","ip"].forEach(function(f){document.getElementById(f).value="";});
+        document.getElementById("ist").value="Pending";
+        document.getElementById("ipg").value="0";
+        document.getElementById("idue").value="";
+      }
+    }
+
+    document.querySelectorAll(".mo").forEach(function(m){
+      m.addEventListener("click",function(e){if(e.target===m)m.classList.remove("open");});
+    });
+
+    updateCnts();
+    applyF();
+  </script>
+</body>
+</html>

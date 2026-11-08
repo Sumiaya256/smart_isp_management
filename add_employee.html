@@ -1,0 +1,1260 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/style.css?v=20260326f" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <title>Promee Internet - Add Employee</title>
+    <style>
+      :root {
+        --emp-bg-1: #06182f;
+        --emp-bg-2: #0b2a4d;
+        --emp-accent: #0ea5e9;
+        --emp-accent-2: #22d3ee;
+        --emp-ink: #0f172a;
+        --emp-muted: #64748b;
+        --emp-panel: #ffffff;
+        --emp-border: #d9e2ec;
+        --emp-ok: #059669;
+      }
+
+      .employee-page {
+        min-height: 100%;
+        background:
+          radial-gradient(900px 500px at -10% -20%, rgba(34, 211, 238, 0.18), transparent 60%),
+          radial-gradient(900px 500px at 110% -10%, rgba(14, 165, 233, 0.18), transparent 60%),
+          linear-gradient(140deg, #f4f9ff 0%, #eef6ff 48%, #f7fbff 100%);
+        padding: 28px;
+        overflow: auto;
+      }
+
+      .employee-shell {
+        max-width: 1240px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 330px 1fr;
+        gap: 22px;
+        animation: pageEnter 560ms ease both;
+      }
+
+      @keyframes pageEnter {
+        from { opacity: 0; transform: translateY(16px) scale(0.99); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+
+      .hero-card {
+        position: sticky;
+        top: 16px;
+        align-self: start;
+        color: #e6f4ff;
+        border-radius: 18px;
+        overflow: hidden;
+        padding: 24px;
+        background: linear-gradient(165deg, var(--emp-bg-1) 0%, var(--emp-bg-2) 65%);
+        box-shadow: 0 18px 40px rgba(2, 28, 60, 0.28);
+      }
+
+      .hero-card::before,
+      .hero-card::after {
+        content: "";
+        position: absolute;
+        border-radius: 999px;
+        pointer-events: none;
+      }
+
+      .hero-card::before {
+        width: 260px;
+        height: 260px;
+        top: -120px;
+        right: -100px;
+        background: radial-gradient(circle, rgba(34, 211, 238, 0.35), rgba(34, 211, 238, 0));
+      }
+
+      .hero-card::after {
+        width: 220px;
+        height: 220px;
+        bottom: -120px;
+        left: -90px;
+        background: radial-gradient(circle, rgba(56, 189, 248, 0.22), rgba(56, 189, 248, 0));
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 12px;
+        background: rgba(148, 233, 255, 0.16);
+        border: 1px solid rgba(148, 233, 255, 0.3);
+        border-radius: 999px;
+        font-size: 12px;
+        margin-bottom: 14px;
+      }
+
+      .hero-card h1 {
+        font-size: 28px;
+        line-height: 1.25;
+        margin: 0 0 10px;
+      }
+
+      .hero-card p {
+        margin: 0 0 18px;
+        color: #b9dbf6;
+        font-size: 14px;
+      }
+
+      .hero-stats {
+        display: grid;
+        gap: 10px;
+      }
+
+      .hero-stat {
+        border: 1px solid rgba(163, 230, 255, 0.2);
+        background: rgba(7, 44, 82, 0.55);
+        border-radius: 12px;
+        padding: 12px;
+      }
+
+      .hero-stat span {
+        display: block;
+        font-size: 12px;
+        color: #b8d8f3;
+      }
+
+      .hero-stat strong {
+        font-size: 15px;
+        color: #f2fbff;
+      }
+
+      .form-card {
+        background: var(--emp-panel);
+        border: 1px solid var(--emp-border);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+      }
+
+      .form-head {
+        padding: 22px 24px;
+        border-bottom: 1px solid #e5edf5;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .form-head h2 {
+        margin: 0;
+        color: var(--emp-ink);
+        font-size: 24px;
+      }
+
+      .form-head p {
+        margin: 4px 0 0;
+        color: var(--emp-muted);
+        font-size: 13px;
+      }
+
+      .id-pill {
+        background: #eff7ff;
+        border: 1px solid #bfdbfe;
+        color: #0f3b7a;
+        border-radius: 999px;
+        padding: 9px 14px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .employee-form {
+        padding: 22px 24px 26px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px 16px;
+      }
+
+      .field {
+        position: relative;
+        animation: fieldFloat 460ms ease both;
+      }
+
+      .field:nth-child(odd) { animation-delay: 40ms; }
+      .field:nth-child(even) { animation-delay: 110ms; }
+
+      @keyframes fieldFloat {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .field label {
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: #334155;
+        margin-bottom: 6px;
+      }
+
+      .field input,
+      .field select {
+        width: 100%;
+        border: 1px solid #cdd8e3;
+        border-radius: 11px;
+        padding: 11px 12px;
+        font-size: 14px;
+        color: #0f172a;
+        background: #fff;
+        transition: all 170ms ease;
+      }
+
+      .field input:focus,
+      .field select:focus {
+        outline: none;
+        border-color: #38bdf8;
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+      }
+
+      .field.full {
+        grid-column: 1 / -1;
+      }
+
+      .section-title {
+        grid-column: 1 / -1;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #0f3b7a;
+        border-bottom: 1px solid #dbe7f3;
+        padding-bottom: 7px;
+        margin-top: 6px;
+      }
+
+      .mail-wrap {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        border: 1px solid #cdd8e3;
+        border-radius: 11px;
+        overflow: hidden;
+      }
+
+      .mail-wrap:focus-within {
+        border-color: #38bdf8;
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+      }
+
+      .mail-wrap input {
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .mail-domain {
+        background: #eef4ff;
+        color: #1e3a8a;
+        border-left: 1px solid #dbe5f5;
+        padding: 11px 12px;
+        font-size: 13px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .password-wrap {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        border: 1px solid #cdd8e3;
+        border-radius: 11px;
+        overflow: hidden;
+      }
+
+      .password-wrap:focus-within {
+        border-color: #38bdf8;
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+      }
+
+      .password-wrap input {
+        border: none;
+        border-radius: 0;
+      }
+
+      .toggle-password-btn {
+        border: none;
+        border-left: 1px solid #dbe5f5;
+        background: #f8fbff;
+        color: #0f3b7a;
+        padding: 0 12px;
+        font-size: 13px;
+        cursor: pointer;
+      }
+
+      .strength-meter {
+        margin-top: 8px;
+      }
+
+      .strength-track {
+        width: 100%;
+        height: 7px;
+        background: #e2e8f0;
+        border-radius: 999px;
+        overflow: hidden;
+      }
+
+      .strength-fill {
+        height: 100%;
+        width: 0;
+        border-radius: 999px;
+        transition: width 180ms ease, background-color 180ms ease;
+      }
+
+      .strength-label {
+        margin-top: 5px;
+        font-size: 12px;
+        color: #64748b;
+      }
+
+      .access-box {
+        border: 1px solid #cdd8e3;
+        border-radius: 12px;
+        background: #f8fbff;
+        padding: 12px;
+      }
+
+      .access-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .access-head strong {
+        font-size: 14px;
+        color: #0f172a;
+      }
+
+      .access-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+        gap: 8px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid #d7e4f2;
+        background: #fff;
+        border-radius: 999px;
+        padding: 7px 11px;
+        font-size: 13px;
+      }
+
+      .chip input {
+        width: 14px;
+        height: 14px;
+      }
+
+      .actions {
+        margin-top: 18px;
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+
+      .btn {
+        border: none;
+        border-radius: 10px;
+        padding: 11px 16px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .btn-ghost {
+        background: #eaf2fb;
+        color: #1e293b;
+      }
+
+      .btn-primary {
+        color: #fff;
+        background: linear-gradient(90deg, var(--emp-accent), var(--emp-accent-2));
+        box-shadow: 0 10px 18px rgba(14, 165, 233, 0.3);
+      }
+
+      .toast {
+        margin-top: 12px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1px solid #bfdbfe;
+        background: linear-gradient(135deg, #eff6ff, #dbeafe);
+        color: #1d4ed8;
+        display: none;
+        font-size: 13px;
+        font-weight: 600;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 10px 25px rgba(30, 64, 175, 0.12);
+      }
+
+      .toast.show {
+        display: flex;
+        animation: toastSlideIn 0.24s ease;
+      }
+
+      .toast .toast-icon {
+        width: 24px;
+        height: 24px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.6);
+      }
+
+      .toast.toast-success {
+        border-color: #86efac;
+        background: linear-gradient(135deg, #ecfdf5, #dcfce7);
+        color: #166534;
+      }
+
+      .toast.toast-error {
+        border-color: #fca5a5;
+        background: linear-gradient(135deg, #fef2f2, #fee2e2);
+        color: #b91c1c;
+      }
+
+      .toast.toast-info {
+        border-color: #bfdbfe;
+        background: linear-gradient(135deg, #eff6ff, #dbeafe);
+        color: #1d4ed8;
+      }
+
+      @keyframes toastSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 980px) {
+        .employee-shell {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-card {
+          position: static;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .employee-page {
+          padding: 14px;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .actions {
+          justify-content: stretch;
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app-header"></div>
+
+    <div class="main-content">
+      <div class="page-content employee-page">
+        <div class="employee-shell">
+          <aside class="hero-card">
+            <div class="hero-badge"><i class="fa-solid fa-user-plus"></i> HR Onboarding</div>
+            <h1>Build A Powerful Team</h1>
+            <p>Create employee accounts with role-based access, department mapping, and secured email policy.</p>
+
+            <div class="hero-stats">
+              <div class="hero-stat">
+                <span>ID Format</span>
+                <strong>Starts from 2026001</strong>
+              </div>
+              <div class="hero-stat">
+                <span>Email Domain</span>
+                <strong>@promee.internet</strong>
+              </div>
+              <div class="hero-stat">
+                <span>Dashboard Access</span>
+                <strong>Always Enabled</strong>
+              </div>
+            </div>
+          </aside>
+
+          <section class="form-card">
+            <div class="form-head">
+              <div>
+                <h2>Add Employee</h2>
+                <p>Complete all fields to create a new employee profile.</p>
+              </div>
+              <div class="id-pill">Employee ID: <span id="employeeIdPreview">2026001</span></div>
+            </div>
+
+            <form id="employeeForm" class="employee-form">
+              <div class="grid">
+                <div class="field">
+                  <label for="employeeId">Employee ID</label>
+                  <input id="employeeId" name="employeeId" readonly />
+                </div>
+                <div class="field">
+                  <label for="employeeFirstName">First Name</label>
+                  <input id="employeeFirstName" name="employeeFirstName" placeholder="First name" required />
+                </div>
+
+                <div class="field">
+                  <label for="employeeLastName">Last Name</label>
+                  <input id="employeeLastName" name="employeeLastName" placeholder="Last name" required />
+                </div>
+
+                <div class="field">
+                  <label for="employeeDepartment">Employee Department</label>
+                  <select id="employeeDepartment" name="employeeDepartment" required></select>
+                </div>
+
+                <div class="field">
+                  <label for="employeeDesignation">Employee Designation</label>
+                  <select id="employeeDesignation" name="employeeDesignation" required>
+                    <option value="">Select designation</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="employeeJoiningDate">Employee Joining Date</label>
+                  <input id="employeeJoiningDate" name="employeeJoiningDate" type="date" required />
+                </div>
+
+                <div class="field">
+                  <label for="employeeNid">Employee NID</label>
+                  <input id="employeeNid" name="employeeNid" placeholder="National ID" required />
+                </div>
+
+                <div class="field">
+                  <label for="employeeDob">Employee Date of Birth</label>
+                  <input id="employeeDob" name="employeeDob" type="date" required />
+                </div>
+
+                <div class="field">
+                  <label for="employeeBloodGroup">Employee Blood Group</label>
+                  <select id="employeeBloodGroup" name="employeeBloodGroup" required>
+                    <option value="">Select blood group</option>
+                    <option>A+</option>
+                    <option>A-</option>
+                    <option>B+</option>
+                    <option>B-</option>
+                    <option>AB+</option>
+                    <option>AB-</option>
+                    <option>O+</option>
+                    <option>O-</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="employeeType">Employee Type</label>
+                  <select id="employeeType" name="employeeType" required>
+                    <option value="">Select type</option>
+                    <option value="Contractual">Contractual</option>
+                    <option value="Permanent">Permanent</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="employeeStatus">Status</label>
+                  <select id="employeeStatus" name="employeeStatus">
+                    <option value="Active">Active</option>
+                    <option value="Probation">Probation</option>
+                    <option value="On Leave">On Leave</option>
+                    <option value="Inactive">Inactive</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="employeeGender">Gender</label>
+                  <select id="employeeGender" name="employeeGender">
+                    <option value="">Select gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="employeePhoneNumber">Phone Number</label>
+                  <input id="employeePhoneNumber" name="employeePhoneNumber" placeholder="01XXXXXXXXX" required />
+                </div>
+
+                <div class="field">
+                  <label for="employeeEmergencyName">Emergency Contact Name</label>
+                  <input id="employeeEmergencyName" name="employeeEmergencyName" placeholder="Contact person name" />
+                </div>
+
+                <div class="field">
+                  <label for="employeeEmergencyPhone">Emergency Contact Phone</label>
+                  <input id="employeeEmergencyPhone" name="employeeEmergencyPhone" placeholder="01XXXXXXXXX" />
+                </div>
+
+                <div class="field">
+                  <label for="employeeMailUser">Employee Mail</label>
+                  <div class="mail-wrap">
+                    <input id="employeeMailUser" name="employeeMailUser" placeholder="first.last" required />
+                    <span class="mail-domain">@promee.internet</span>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="employeePassword">Employee Password</label>
+                  <div class="password-wrap">
+                    <input id="employeePassword" name="employeePassword" type="password" placeholder="Password" minlength="6" required />
+                    <button type="button" id="togglePassword" class="toggle-password-btn">Show</button>
+                  </div>
+                  <div class="strength-meter">
+                    <div class="strength-track"><div id="strengthFill" class="strength-fill"></div></div>
+                    <div id="strengthLabel" class="strength-label">Strength: too weak</div>
+                  </div>
+                </div>
+
+                <div class="section-title">Additional Employment Information</div>
+
+                <div class="field">
+                  <label for="employeeManager">Reporting Manager</label>
+                  <input id="employeeManager" name="employeeManager" placeholder="Manager name" />
+                </div>
+
+                <div class="field">
+                  <label for="employeeSalary">Basic Salary (BDT)</label>
+                  <input id="employeeSalary" name="employeeSalary" type="number" min="0" placeholder="0.00" />
+                </div>
+
+                <div class="field">
+                  <label for="employeeHouseAllowance">House Allowance (BDT)</label>
+                  <input id="employeeHouseAllowance" name="employeeHouseAllowance" type="number" min="0" placeholder="0.00" />
+                </div>
+
+                <div class="field">
+                  <label for="employeeMedicalAllowance">Medical Allowance (BDT)</label>
+                  <input id="employeeMedicalAllowance" name="employeeMedicalAllowance" type="number" min="0" placeholder="0.00" />
+                </div>
+
+                <div class="field">
+                  <label for="employeeTransportAllowance">Transport Allowance (BDT)</label>
+                  <input id="employeeTransportAllowance" name="employeeTransportAllowance" type="number" min="0" placeholder="0.00" />
+                </div>
+
+                <div class="field">
+                  <label for="employeeBankName">Bank Name</label>
+                  <input id="employeeBankName" name="employeeBankName" placeholder="Bank name" />
+                </div>
+
+                <div class="field">
+                  <label for="employeeBankAccount">Bank Account No</label>
+                  <input id="employeeBankAccount" name="employeeBankAccount" placeholder="Account number" />
+                </div>
+
+                <div class="field">
+                  <label for="employeeEducation">Highest Qualification</label>
+                  <select id="employeeEducation" name="employeeEducation">
+                    <option value="">Select</option>
+                    <option>SSC</option>
+                    <option>HSC</option>
+                    <option>Diploma</option>
+                    <option>Bachelor's</option>
+                    <option>Master's</option>
+                    <option>PhD</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="employeeExperience">Years of Experience</label>
+                  <input id="employeeExperience" name="employeeExperience" type="number" min="0" placeholder="0" />
+                </div>
+
+                <div class="field full">
+                  <label for="employeePresentAddress">Present Address</label>
+                  <input id="employeePresentAddress" name="employeePresentAddress" placeholder="Full present address" />
+                </div>
+
+                <div class="field full">
+                  <label for="employeePermanentAddress">Permanent Address</label>
+                  <input id="employeePermanentAddress" name="employeePermanentAddress" placeholder="Full permanent address" />
+                </div>
+
+                <div class="field full">
+                  <label for="employeeSkills">Skills / Expertise</label>
+                  <input id="employeeSkills" name="employeeSkills" placeholder="e.g. Network Admin, Linux, MikroTik" />
+                </div>
+
+                <div class="field full">
+                  <label for="employeeNotes">Notes / Remarks</label>
+                  <input id="employeeNotes" name="employeeNotes" placeholder="Any additional notes about the employee" />
+                </div>
+
+                <div class="field full">
+                  <label>Employee Access</label>
+                  <div class="access-box">
+                    <div class="access-head">
+                      <strong>Department-based Module Access</strong>
+                      <span id="accessHint">Select an employee department to load access options.</span>
+                    </div>
+                    <div id="accessList" class="access-grid"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn btn-ghost" type="reset" id="resetBtn">Reset</button>
+                <button class="btn btn-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save Employee</button>
+              </div>
+
+              <div id="saveToast" class="toast"><i class="fa-solid fa-circle-check"></i> Employee added successfully.</div>
+            </form>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/js/header-loader.js?v=20260328i"></script>
+
+    <script>
+      const BASE_EMPLOYEE_ID = 2026001;
+      const FIXED_DOMAIN = '@promee.internet';
+      const SECTION_ACCESS_TREE = {
+        'Dashboard': ['Dashboard'],
+        'Client': ['New Request', 'Add New Client', 'Client List', 'Left Client', 'Scheduler', 'Change Request', 'Portal Manage'],
+        'Billing': ['Billing'],
+        'Mikrotik Server': ['Bulk Client Import'],
+        'HR & Payroll': ['Employee List', 'Add Employee', 'Attendance', 'Salary Sheet', 'Department', 'Position', 'Payhead', 'Payroll', 'Resign Rule', 'Resignation', 'Internet Packages'],
+        'Support & Ticketing': ['Ticket List', 'New Ticket', 'Support Team', 'Ticket Reports', 'Service History'],
+        'Task Management': ['Task Management'],
+        'Leave Management': ['Leave Management', 'Apply Leave'],
+        'Events & Holidays': ['Events & Holidays'],
+        'Purchase': ['Purchase'],
+        'Inventory': ['Inventory'],
+        'Assets': ['Assets'],
+        'Income': ['Income']
+      };
+      let departmentConfigs = [];
+      let positionConfigs = [];
+      let currentPositionPermissionMap = {};
+
+      const employeeForm = document.getElementById('employeeForm');
+      const employeeIdInput = document.getElementById('employeeId');
+      const employeeIdPreview = document.getElementById('employeeIdPreview');
+      const accessList = document.getElementById('accessList');
+      const accessHint = document.getElementById('accessHint');
+      const deptSelect = document.getElementById('employeeDepartment');
+      const designationSelect = document.getElementById('employeeDesignation');
+      const mailUserInput = document.getElementById('employeeMailUser');
+      const passwordInput = document.getElementById('employeePassword');
+      const togglePasswordBtn = document.getElementById('togglePassword');
+      const strengthFill = document.getElementById('strengthFill');
+      const strengthLabel = document.getElementById('strengthLabel');
+      const toast = document.getElementById('saveToast');
+      const resetBtn = document.getElementById('resetBtn');
+      let toastTimer = null;
+
+      function safeJsonParse(value, fallback) {
+        try {
+          const parsed = JSON.parse(value);
+          return parsed ?? fallback;
+        } catch (_error) {
+          return fallback;
+        }
+      }
+
+      async function assignEmployeeId() {
+        try {
+          const response = await fetch('backend/public/employees/next_employee_code_add_employee.php', {
+            method: 'GET',
+            credentials: 'same-origin',
+            cache: 'no-store'
+          });
+          const result = await response.json().catch(() => null);
+          const id = Number(result && result.next_employee_code);
+          const code = Number.isFinite(id) && id > 0 ? id : BASE_EMPLOYEE_ID;
+          employeeIdInput.value = String(code);
+          employeeIdPreview.textContent = String(code);
+        } catch (_error) {
+          employeeIdInput.value = String(BASE_EMPLOYEE_ID);
+          employeeIdPreview.textContent = String(BASE_EMPLOYEE_ID);
+        }
+      }
+
+      function normalizeDepartmentItem(item) {
+        if (typeof item === 'string') return item.trim();
+        if (item && typeof item === 'object') {
+          return (item.name || item.department || item.title || '').toString().trim();
+        }
+        return '';
+      }
+
+      async function syncDepartmentsFromDb() {
+        try {
+          const response = await fetch('backend/public/employees/list_departments_add_employee.php', {
+            method: 'GET',
+            credentials: 'same-origin',
+            cache: 'no-store'
+          });
+          const result = await response.json().catch(() => null);
+          if (!response.ok || !result || result.ok === false) {
+            departmentConfigs = [];
+            return;
+          }
+
+          departmentConfigs = Array.isArray(result.departments)
+            ? result.departments
+              .map((item) => ({
+                name: normalizeDepartmentItem(item),
+                options: Array.isArray(item && item.options) ? item.options.map((x) => String(x).trim()).filter(Boolean) : []
+              }))
+              .filter((item) => item.name)
+            : [];
+        } catch (_error) {
+          departmentConfigs = [];
+        }
+      }
+
+      function getDepartmentList() {
+        const list = departmentConfigs.map((item) => item.name).filter(Boolean);
+        return list;
+      }
+
+      function getDepartmentConfigs() {
+        return departmentConfigs;
+      }
+
+      function renderDepartments() {
+        const list = Array.from(new Set(getDepartmentList()));
+        deptSelect.innerHTML = '<option value="">Select department</option>';
+        list.forEach((dept) => {
+          const option = document.createElement('option');
+          option.value = dept;
+          option.textContent = dept;
+          deptSelect.appendChild(option);
+        });
+      }
+
+      async function syncPositionsFromDb() {
+        try {
+          const response = await fetch('backend/public/employees/list_positions_add_employee.php', {
+            method: 'GET',
+            credentials: 'same-origin',
+            cache: 'no-store'
+          });
+          const result = await response.json().catch(() => null);
+          if (!response.ok || !result || result.ok === false) {
+            positionConfigs = [];
+            return;
+          }
+
+          positionConfigs = Array.isArray(result.positions)
+            ? result.positions
+              .map((item) => ({
+                name: (item && item.name ? String(item.name) : '').trim(),
+                department: (item && item.department ? String(item.department) : '').trim(),
+                module_permissions: item && item.module_permissions && typeof item.module_permissions === 'object'
+                  ? item.module_permissions
+                  : {}
+              }))
+              .filter((item) => item.name)
+            : [];
+        } catch (_error) {
+          positionConfigs = [];
+        }
+      }
+
+      function getPositionList(filterByDepartment) {
+        let list = positionConfigs;
+        if (filterByDepartment) {
+          list = list.filter((item) => item.department.toLowerCase() === filterByDepartment.toLowerCase());
+        }
+        return list.map((item) => item.name).filter(Boolean);
+      }
+
+      function renderDesignations(filterByDepartment = null) {
+        const list = Array.from(new Set(getPositionList(filterByDepartment)));
+        designationSelect.innerHTML = '<option value="">Select designation</option>';
+        list.forEach((designation) => {
+          const option = document.createElement('option');
+          option.value = designation;
+          option.textContent = designation;
+          designationSelect.appendChild(option);
+        });
+      }
+
+      function permissionLabel(level) {
+        const raw = (level || '').toString().toLowerCase();
+        if (raw === 'full') return 'Full';
+        if (raw === 'view') return 'View';
+        if (raw === 'limited') return 'Limited';
+        return 'None';
+      }
+
+      function createAccessChip(accessName, level = '', sectionName = '') {
+        const label = document.createElement('label');
+        label.className = 'chip';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.name = 'employeeAccess';
+        checkbox.value = accessName;
+        checkbox.checked = true;
+        checkbox.disabled = true;
+
+        const span = document.createElement('span');
+        const suffix = level ? ` (${permissionLabel(level)})` : '';
+        const prefix = sectionName ? `${sectionName} / ` : '';
+        span.textContent = `${prefix}${accessName}${suffix}`;
+
+        label.appendChild(checkbox);
+        label.appendChild(span);
+        return label;
+      }
+
+      function normalizePermissionLevel(value) {
+        const raw = (value || '').toString().toLowerCase().trim();
+        if (raw === 'full' || raw === 'view' || raw === 'limited' || raw === 'none') {
+          return raw;
+        }
+        return 'none';
+      }
+
+      function resolvePermissionLevel(permissionMap, sectionName, pageName) {
+        if (permissionMap && Object.prototype.hasOwnProperty.call(permissionMap, pageName)) {
+          return normalizePermissionLevel(permissionMap[pageName]);
+        }
+        if (permissionMap && Object.prototype.hasOwnProperty.call(permissionMap, sectionName)) {
+          return normalizePermissionLevel(permissionMap[sectionName]);
+        }
+        return 'none';
+      }
+
+      function buildSubsectionAccessEntries(permissionMap) {
+        const entries = [];
+        Object.entries(SECTION_ACCESS_TREE).forEach(([sectionName, pages]) => {
+          pages.forEach((pageName) => {
+            const level = resolvePermissionLevel(permissionMap, sectionName, pageName);
+            if (level === 'full' || level === 'view' || level === 'limited') {
+              entries.push({
+                key: pageName,
+                label: pageName,
+                section: sectionName,
+                level,
+              });
+            }
+          });
+        });
+        return entries;
+      }
+
+      function findPositionConfig(department, designation) {
+        return positionConfigs.find((item) =>
+          item.department.toLowerCase() === department.toLowerCase() &&
+          item.name.toLowerCase() === designation.toLowerCase()
+        ) || null;
+      }
+
+      function renderAccessByDepartment() {
+        const department = (deptSelect.value || '').trim();
+        const designation = (designationSelect.value || '').trim();
+        accessList.innerHTML = '';
+        currentPositionPermissionMap = {};
+
+        if (!department) {
+          accessHint.textContent = 'Select an employee department to load access options.';
+          return;
+        }
+
+        if (designation) {
+          const position = findPositionConfig(department, designation);
+          const permissions = position && position.module_permissions ? position.module_permissions : {};
+          currentPositionPermissionMap = permissions;
+          const subsectionEntries = buildSubsectionAccessEntries(permissions);
+
+          if (subsectionEntries.length > 0) {
+            accessHint.textContent = 'Sub-section access is loaded from the selected position matrix (read-only here).';
+            subsectionEntries.forEach((entry) => {
+              accessList.appendChild(createAccessChip(entry.key, entry.level, entry.section));
+            });
+            return;
+          }
+
+          accessHint.textContent = 'No sub-section access is configured on this position yet.';
+          return;
+        }
+
+        const deptConfig = getDepartmentConfigs().find(
+          (item) => item.name.toLowerCase() === department.toLowerCase()
+        );
+        const modules = deptConfig && Array.isArray(deptConfig.options) ? deptConfig.options : [];
+
+        if (!modules.length) {
+          accessHint.textContent = 'No module access is configured for this department.';
+          return;
+        }
+
+        accessHint.textContent = 'Fallback: department module access. Set position matrix in Position page for detailed control.';
+        modules.forEach((moduleName) => {
+          accessList.appendChild(createAccessChip(moduleName, '', 'Department'));
+        });
+      }
+
+      function getSelectedAccess() {
+        return Array.from(document.querySelectorAll('input[name="employeeAccess"]:checked')).map((input) => input.value);
+      }
+
+      function getSelectedAccessPermissions() {
+        const map = {};
+        Object.entries(currentPositionPermissionMap || {}).forEach(([moduleName, level]) => {
+          const key = (moduleName || '').toString().trim();
+          if (!key) return;
+          map[key] = normalizePermissionLevel(level);
+        });
+        return map;
+      }
+
+      function composeEmployeeEmail() {
+        const user = (mailUserInput.value || '').trim().toLowerCase();
+        return user ? `${user}${FIXED_DOMAIN}` : '';
+      }
+
+      function getPasswordStrength(password) {
+        let score = 0;
+        if (password.length >= 8) score += 1;
+        if (/[A-Z]/.test(password)) score += 1;
+        if (/[a-z]/.test(password)) score += 1;
+        if (/\d/.test(password)) score += 1;
+        if (/[^A-Za-z0-9]/.test(password)) score += 1;
+        return score;
+      }
+
+      function paintPasswordStrength() {
+        const value = passwordInput.value || '';
+        const score = getPasswordStrength(value);
+        const width = Math.min(score, 5) * 20;
+        strengthFill.style.width = `${width}%`;
+
+        if (score <= 1) {
+          strengthFill.style.backgroundColor = '#ef4444';
+          strengthLabel.textContent = 'Strength: weak';
+        } else if (score <= 3) {
+          strengthFill.style.backgroundColor = '#f59e0b';
+          strengthLabel.textContent = 'Strength: medium';
+        } else {
+          strengthFill.style.backgroundColor = '#10b981';
+          strengthLabel.textContent = 'Strength: strong';
+        }
+      }
+
+      function hasDuplicateEntry(employees, nid, phone, mail) {
+        const normalizedNid = (nid || '').trim().toLowerCase();
+        const normalizedPhone = (phone || '').trim().toLowerCase();
+        const normalizedMail = (mail || '').trim().toLowerCase();
+
+        return employees.find((item) => {
+          const itemNid = (item.employeeNid || '').toString().trim().toLowerCase();
+          const itemPhone = (item.employeePhone || '').toString().trim().toLowerCase();
+          const itemMail = (item.employeeMail || '').toString().trim().toLowerCase();
+          return itemNid === normalizedNid || itemPhone === normalizedPhone || itemMail === normalizedMail;
+        });
+      }
+
+      function hideToast() {
+        toast.className = 'toast';
+        toast.style.display = 'none';
+        if (toastTimer) {
+          clearTimeout(toastTimer);
+          toastTimer = null;
+        }
+      }
+
+      function showToast(message, type = 'info', autoHideMs = 0) {
+        const iconMap = {
+          success: 'fa-solid fa-circle-check',
+          error: 'fa-solid fa-circle-exclamation',
+          info: 'fa-solid fa-circle-info'
+        };
+
+        const iconClass = iconMap[type] || iconMap.info;
+        toast.className = `toast toast-${type} show`;
+        toast.innerHTML = `<span class="toast-icon"><i class="${iconClass}"></i></span><span>${message}</span>`;
+        toast.style.display = 'flex';
+
+        if (toastTimer) {
+          clearTimeout(toastTimer);
+          toastTimer = null;
+        }
+
+        if (autoHideMs > 0) {
+          toastTimer = setTimeout(() => {
+            hideToast();
+          }, autoHideMs);
+        }
+      }
+
+      function resetAccessAndId() {
+        setTimeout(() => {
+          renderAccessByDepartment();
+          assignEmployeeId();
+          hideToast();
+          passwordInput.type = 'password';
+          togglePasswordBtn.textContent = 'Show';
+          paintPasswordStrength();
+        }, 0);
+      }
+
+      passwordInput.addEventListener('input', paintPasswordStrength);
+      resetBtn.addEventListener('click', resetAccessAndId);
+      employeeForm.addEventListener('reset', resetAccessAndId);
+
+      togglePasswordBtn.addEventListener('click', () => {
+        const isHidden = passwordInput.type === 'password';
+        passwordInput.type = isHidden ? 'text' : 'password';
+        togglePasswordBtn.textContent = isHidden ? 'Hide' : 'Show';
+      });
+
+      employeeForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(employeeForm);
+        const firstName = (formData.get('employeeFirstName') || '').toString().trim();
+        const lastName = (formData.get('employeeLastName') || '').toString().trim();
+        const fullName = `${firstName} ${lastName}`.trim();
+        const selectedAccess = getSelectedAccess();
+        const selectedAccessPermissions = getSelectedAccessPermissions();
+        const employeeEmail = composeEmployeeEmail();
+        const employeeNid = formData.get('employeeNid');
+        const employeePhone = formData.get('employeePhoneNumber');
+        const employeePassword = (formData.get('employeePassword') || '').toString();
+
+        if (!selectedAccess.length) {
+          showToast('Please select at least one access module.', 'error', 3000);
+          return;
+        }
+
+        if (!employeeEmail) {
+          showToast('Please provide the employee mail username part.', 'error', 3000);
+          return;
+        }
+
+        if (!firstName || !lastName) {
+          showToast('Please provide first name and last name.', 'error', 3000);
+          return;
+        }
+
+        if (employeePassword.length < 6) {
+          showToast('Password must be at least 6 characters long.', 'error', 3000);
+          return;
+        }
+
+        const employee = {
+          employeeId: formData.get('employeeId'),
+          employeeFirstName: formData.get('employeeFirstName'),
+          employeeLastName: formData.get('employeeLastName'),
+          employeeDesignation: formData.get('employeeDesignation'),
+          employeeDepartment: formData.get('employeeDepartment'),
+          employeeJoiningDate: formData.get('employeeJoiningDate'),
+          employeeStatus: formData.get('employeeStatus') || 'Active',
+          employeeGender: formData.get('employeeGender'),
+          employeeNid: formData.get('employeeNid'),
+          employeeDob: formData.get('employeeDob'),
+          employeeBloodGroup: formData.get('employeeBloodGroup'),
+          employeeType: formData.get('employeeType'),
+          employeePhone: formData.get('employeePhoneNumber'),
+          employeeEmergencyName: formData.get('employeeEmergencyName'),
+          employeeEmergencyPhone: formData.get('employeeEmergencyPhone'),
+          employeeMail: employeeEmail,
+          employeePassword,
+          employeeManager: formData.get('employeeManager'),
+          employeeSalary: Number(formData.get('employeeSalary') || 0),
+          employeeHouseAllowance: Number(formData.get('employeeHouseAllowance') || 0),
+          employeeMedicalAllowance: Number(formData.get('employeeMedicalAllowance') || 0),
+          employeeTransportAllowance: Number(formData.get('employeeTransportAllowance') || 0),
+          employeeBankName: formData.get('employeeBankName'),
+          employeeBankAccount: formData.get('employeeBankAccount'),
+          employeeEducation: formData.get('employeeEducation'),
+          employeeExperience: Number(formData.get('employeeExperience') || 0),
+          employeePresentAddress: formData.get('employeePresentAddress'),
+          employeePermanentAddress: formData.get('employeePermanentAddress'),
+          employeeSkills: formData.get('employeeSkills'),
+          employeeNotes: formData.get('employeeNotes'),
+          employeeAccess: selectedAccess,
+          employeeAccessPermissions: selectedAccessPermissions,
+          createdAt: new Date().toISOString()
+        };
+
+        showToast('Saving employee to database...', 'info');
+
+        try {
+          const response = await fetch('backend/public/employees/create.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify(employee)
+          });
+
+          const result = await response.json();
+          if (!response.ok || !result.ok) {
+            showToast(result.message || 'Failed to save employee to database.', 'error', 3500);
+            return;
+          }
+
+          showToast(`Employee ${fullName} stored in database successfully. Refreshing...`, 'success');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1400);
+        } catch (_error) {
+          showToast('Database server is unreachable. Please check backend and try again.', 'error', 3500);
+        }
+      });
+
+      async function initializeForm() {
+        await Promise.all([
+          syncDepartmentsFromDb(),
+          syncPositionsFromDb(),
+          assignEmployeeId()
+        ]);
+
+        renderDepartments();
+        renderDesignations();
+        renderAccessByDepartment();
+        paintPasswordStrength();
+      }
+
+      initializeForm();
+
+      // When department changes, filter designations by that department
+      deptSelect.addEventListener('change', function () {
+        const selectedDept = this.value;
+        renderDesignations(selectedDept || null);
+        renderAccessByDepartment();
+      });
+
+      designationSelect.addEventListener('change', function () {
+        renderAccessByDepartment();
+      });
+    </script>
+  </body>
+</html>
+
+
+
+

@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promee International - Support Team</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+      }
+      .member-card {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      .member-avatar {
+        width: 60px;
+        height: 60px;
+        background: #f0f2f5;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: #1a3c5e;
+      }
+      .member-info h4 { margin: 0; color: #1a3c5e; }
+      .member-info p { margin: 5px 0 0; color: #666; font-size: 13px; }
+      .member-status {
+        margin-left: auto;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+      .status-online { background: #43a047; }
+      .status-offline { background: #9e9e9e; }
+    </style>
+  </head>
+  <body>
+        <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <i class="fa-solid fa-circle-nodes"></i> Promee International
+      </div>
+      <ul class="menu">
+        <!-- Dashboard -->
+        <li>
+          <a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+        </li>
+
+        <!-- Client -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-user"></i> Client
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="new_request.html"
+                ><i class="fa-regular fa-circle"></i> New Request</a
+              >
+            </li>
+            <li>
+              <a href="add_new_client.html"
+                ><i class="fa-regular fa-circle"></i> Add New</a
+              >
+            </li>
+            <li>
+              <a href="client_list.html"
+                ><i class="fa-regular fa-circle"></i> Client List</a
+              >
+            </li>
+            <li>
+              <a href="left_client.html"
+                ><i class="fa-regular fa-circle"></i> Left Client</a
+              >
+            </li>
+            <li>
+              <a href="scheduler.html"
+                ><i class="fa-regular fa-circle"></i> Scheduler</a
+              >
+            </li>
+            <li>
+              <a href="change_request.html"
+                ><i class="fa-regular fa-circle"></i> Change Request</a
+              >
+            </li>
+            <li>
+              <a href="portal_manage.html"
+                ><i class="fa-regular fa-circle"></i> Portal Manage</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Billing -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-file-invoice-dollar"></i> Billing
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="billing.html"
+                ><i class="fa-regular fa-circle"></i> Billing</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Mikrotik Server -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-server"></i> Mikrotik Server
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="Bulk_Client_Import.html"
+                ><i class="fa-regular fa-circle"></i> Bulk Client Import</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- HR & Payroll (Your Part) -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-users-gear"></i> HR & Payroll
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="employee_list.html"
+                ><i class="fa-regular fa-circle"></i> Employee List</a
+              >
+            </li>
+            <li>
+              <a href="add_employee.html"
+                ><i class="fa-regular fa-circle"></i> Add Employee</a
+              >
+            </li>
+            <li>
+              <a href="attendance.html"
+                ><i class="fa-regular fa-circle"></i> Attendance</a
+              >
+            </li>
+            <li>
+              <a href="salary_sheet.html"
+                ><i class="fa-regular fa-circle"></i> Salary Sheet</a
+              >
+            </li>
+            <li>
+              <a href="department.html"
+                ><i class="fa-regular fa-circle"></i> Department</a
+              >
+            </li>
+            <li>
+              <a href="position.html"
+                ><i class="fa-regular fa-circle"></i> Position</a
+              >
+            </li>
+            <li>
+              <a href="payhead.html"
+                ><i class="fa-regular fa-circle"></i> Payhead</a
+              >
+            </li>
+            <li>
+              <a href="payroll.html"
+                ><i class="fa-regular fa-circle"></i> Payroll</a
+              >
+            </li>
+            <li>
+              <a href="resign_rule.html"
+                ><i class="fa-regular fa-circle"></i> Resign Rule</a
+              >
+            </li>
+            <li>
+              <a href="resignation.html"
+                ><i class="fa-regular fa-circle"></i> Resignation</a
+              >
+            </li>
+            <li>
+              <a href="rejoin.html"
+                ><i class="fa-regular fa-circle"></i> Rejoin</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Leave Management -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-door-open"></i> Leave Management
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="leave_management.html"
+                ><i class="fa-regular fa-circle"></i> Leave Management</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Events & Holidays -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-calendar-days"></i> Events & Holidays
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="events_holidays.html"
+                ><i class="fa-regular fa-circle"></i> Events & Holidays</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Support & Ticketing -->
+        <li class="has-submenu open">
+          <a href="#"
+            ><i class="fa-solid fa-headset"></i> Support & Ticketing
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="ticket_list.html"
+                ><i class="fa-regular fa-circle"></i> Ticket List</a
+              >
+            </li>
+            <li>
+              <a href="new_ticket.html"
+                ><i class="fa-regular fa-circle"></i> New Ticket</a
+              >
+            </li>
+            <li>
+              <a href="complain_list.html"
+                ><i class="fa-regular fa-circle"></i> Complain List</a
+              >
+            </li>
+            <li>
+              <a href="complain_category.html"
+                ><i class="fa-regular fa-circle"></i> Complain Category</a
+              >
+            </li>
+            <li>
+              <a href="support_team.html" class="active"
+                ><i class="fa-regular fa-circle"></i> Support Team</a
+              >
+            </li>
+            <li>
+              <a href="ticket_reports.html"
+                ><i class="fa-regular fa-circle"></i> Ticket Reports</a
+              >
+            </li>
+            <li>
+              <a href="service_history.html"
+                ><i class="fa-regular fa-circle"></i> Service History</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Task Management -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-list-check"></i> Task Management
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Purchase -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-basket-shopping"></i> Purchase
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Inventory -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-boxes-stacked"></i> Inventory
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Assets -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-laptop-medical"></i> Assets
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Income -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-money-bill-trend-up"></i> Income
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </aside>
+
+    <div class="main-content">
+      <header>
+        <div class="header-left">
+          <div class="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
+          <div class="search-box">
+            <input type="text" placeholder="Search Customer" />
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="monitor">
+            <i class="fa-solid fa-desktop"></i> Online Client Monitoring
+          </div>
+          <div class="releases">
+            <i class="fa-solid fa-wrench"></i> Releases
+            <span class="badge">0</span>
+          </div>
+          <div class="notifications">
+            <i class="fa-solid fa-bell"></i> <span class="badge">0</span>
+          </div>
+          <a href="login.html" class="header-btn"><i class="fa-solid fa-house"></i> Home</a>
+          <a href="login.html" class="header-btn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+          <div class="profile"><i class="fa-solid fa-user-circle"></i></div>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <div class="content-header">
+          <h1>Support Team</h1>
+          <p>Manage support agents and their availability</p>
+        </div>
+
+        <div class="team-grid">
+          <div class="member-card">
+            <div class="member-avatar"><i class="fa-solid fa-user-tie"></i></div>
+            <div class="member-info">
+              <h4>Alex Johnson</h4>
+              <p>Senior Support Agent</p>
+            </div>
+            <div class="member-status status-online"></div>
+          </div>
+          <div class="member-card">
+            <div class="member-avatar"><i class="fa-solid fa-user-astronaut"></i></div>
+            <div class="member-info">
+              <h4>Emily Davis</h4>
+              <p>Technical Lead</p>
+            </div>
+            <div class="member-status status-online"></div>
+          </div>
+          <div class="member-card">
+            <div class="member-avatar"><i class="fa-solid fa-user-ninja"></i></div>
+            <div class="member-info">
+              <h4>Mark Wilson</h4>
+              <p>Support Representative</p>
+            </div>
+            <div class="member-status status-offline"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="assets/js/script.js"></script>
+  </body>
+</html>

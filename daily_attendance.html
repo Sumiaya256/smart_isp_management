@@ -1,0 +1,899 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Promee Internet - Daily Attendance</title>
+  <link rel="stylesheet" href="assets/css/style.css?v=20260326f"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Bungee&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --a-ink: #0b2745;
+      --a-ink-soft: #3f607f;
+      --a-sky: #0ea5e9;
+      --a-mint: #10b981;
+      --a-bg: #edf4fb;
+      --a-card: #ffffff;
+      --a-border: #dbe6f2;
+      --a-danger: #e74c3c;
+      --a-warning: #f59e0b;
+    }
+
+    .page-content {
+      position: relative;
+      isolation: isolate;
+    }
+
+    .page-content::before {
+      content: "";
+      position: absolute;
+      inset: -24px -18px auto -18px;
+      height: 240px;
+      border-radius: 18px;
+      z-index: -1;
+      background:
+        radial-gradient(circle at 16% 12%, rgba(14, 165, 233, 0.18), transparent 36%),
+        radial-gradient(circle at 83% 20%, rgba(16, 185, 129, 0.14), transparent 35%),
+        linear-gradient(150deg, #f8fbff, #eef5fc 60%, #eaf9f1);
+    }
+
+    .att-head {
+      margin-bottom: 18px;
+    }
+
+    .att-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--a-ink);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .att-sub {
+      margin-left: 35px;
+      margin-top: 4px;
+      font-size: 13px;
+      color: #7390ad;
+    }
+
+    .hero {
+      background: linear-gradient(130deg, #0b2745 0%, #123a63 42%, #16548c 100%);
+      border-radius: 14px;
+      color: #fff;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 14px 36px rgba(11, 39, 69, 0.22);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      right: -60px;
+      top: -90px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      left: 25%;
+      bottom: -120px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 14px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .hero p {
+      font-size: 13px;
+      opacity: 0.9;
+      margin-bottom: 14px;
+      max-width: 620px;
+    }
+
+    .fp-dock {
+      position: fixed;
+      left: calc(250px + 24px);
+      bottom: 22px;
+      z-index: 1040;
+      width: 250px;
+      padding: 14px;
+      border-radius: 16px;
+      background: linear-gradient(160deg, rgba(13, 27, 43, 0.93), rgba(10, 20, 34, 0.95));
+      border: 1px solid rgba(80, 140, 180, 0.4);
+      box-shadow: 0 20px 42px rgba(5, 14, 25, 0.45);
+      backdrop-filter: blur(4px);
+    }
+
+    .fp-head {
+      color: #a7daf8;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .75px;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .finger-btn {
+      width: 190px;
+      height: 190px;
+      margin: 0 auto;
+      border-radius: 50%;
+      border: 0;
+      background: radial-gradient(circle at 45% 30%, #575d66, #383d44 55%, #282d34);
+      color: #f1f5fb;
+      cursor: pointer;
+      position: relative;
+      box-shadow:
+        0 0 0 7px rgba(35, 215, 240, 0.82),
+        0 0 24px rgba(35, 215, 240, 0.75),
+        0 0 44px rgba(35, 215, 240, 0.36),
+        inset 0 4px 14px rgba(255,255,255,0.07);
+      display: grid;
+      place-items: center;
+      transition: transform .16s ease, box-shadow .2s ease;
+    }
+
+    .finger-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow:
+        0 0 0 8px rgba(35, 215, 240, 0.86),
+        0 0 28px rgba(35, 215, 240, 0.86),
+        0 0 56px rgba(35, 215, 240, 0.48),
+        inset 0 5px 15px rgba(255,255,255,0.12);
+    }
+
+    .finger-btn:disabled {
+      cursor: wait;
+      opacity: .85;
+    }
+
+    .finger-btn i {
+      font-size: 86px;
+      color: #ecf2fb;
+      filter: drop-shadow(0 4px 7px rgba(0,0,0,.42));
+      animation: fpGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes fpGlow {
+      0% { transform: scale(1); opacity: .9; }
+      50% { transform: scale(1.08); opacity: 1; }
+      100% { transform: scale(1); opacity: .9; }
+    }
+
+    .fp-label {
+      margin-top: 10px;
+      font-size: 12px;
+      text-align: center;
+      color: #caebff;
+      font-weight: 700;
+      letter-spacing: .35px;
+    }
+
+    .status-line {
+      margin-top: 8px;
+      font-size: 11px;
+      color: #9bd8fd;
+      min-height: 26px;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .scan-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1300;
+      display: none;
+      place-items: center;
+      background: radial-gradient(circle at center, rgba(10, 30, 50, 0.15), rgba(8, 14, 22, 0.84));
+      backdrop-filter: blur(3px);
+      pointer-events: none;
+    }
+
+    .scan-overlay.open {
+      display: grid;
+      animation: overlayIn .24s ease;
+    }
+
+    @keyframes overlayIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .scan-core {
+      text-align: center;
+      transform: scale(.72);
+      opacity: 0;
+      animation: scanPop .42s ease forwards;
+    }
+
+    @keyframes scanPop {
+      0% { transform: scale(.72); opacity: 0; }
+      70% { transform: scale(1.06); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .scan-ring {
+      width: 240px;
+      height: 240px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle, #3b4048 0%, #262b32 65%, #1c2026 100%);
+      box-shadow:
+        0 0 0 10px rgba(56, 224, 245, .9),
+        0 0 30px rgba(56, 224, 245, .78),
+        0 0 65px rgba(56, 224, 245, .42);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scan-ring::before,
+    .scan-ring::after {
+      content: "";
+      position: absolute;
+      inset: -10px;
+      border-radius: 50%;
+      border: 3px solid rgba(88, 242, 255, .55);
+      animation: rip 1.2s ease-out infinite;
+    }
+
+    .scan-ring::after {
+      animation-delay: .35s;
+    }
+
+    @keyframes rip {
+      from { transform: scale(.65); opacity: .78; }
+      to { transform: scale(1.22); opacity: 0; }
+    }
+
+    .scan-ring i {
+      font-size: 108px;
+      color: #f7fbff;
+      filter: drop-shadow(0 4px 7px rgba(0,0,0,.5));
+    }
+
+    .scan-message {
+      font-family: "Bungee", "Audiowide", sans-serif;
+      font-size: clamp(34px, 5.8vw, 80px);
+      line-height: 1.05;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #7df9ff, #66c8ff 35%, #fff1a8 68%, #94ffd1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 7px 24px rgba(21, 183, 255, .36);
+      max-width: min(1080px, 92vw);
+      margin: 0 auto;
+      padding: 0 12px;
+    }
+
+    .scan-sub {
+      margin-top: 10px;
+      font-family: "Audiowide", sans-serif;
+      color: #d7f2ff;
+      font-size: clamp(13px, 2.3vw, 22px);
+      letter-spacing: .8px;
+    }
+
+    .hero-mini {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .mini {
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 10px;
+    }
+
+    .mini .l {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      opacity: .8;
+      margin-bottom: 4px;
+    }
+
+    .mini .v {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .s-card {
+      background: var(--a-card);
+      border: 1px solid var(--a-border);
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .s-card .lbl {
+      color: var(--a-ink-soft);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .35px;
+    }
+
+    .s-card .val {
+      color: var(--a-ink);
+      font-size: 24px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 14px;
+    }
+
+    .panel {
+      background: #fff;
+      border: 1px solid var(--a-border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .panel-h {
+      background: #f3f8fe;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--a-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .panel-h h3 {
+      margin: 0;
+      font-size: 14px;
+      color: var(--a-ink);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-b {
+      padding: 12px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar input {
+      border: 1px solid #d3e0ee;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 13px;
+      color: #4a617b;
+      min-width: 170px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #f7fbff;
+      color: #5f7792;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .35px;
+      text-align: left;
+      padding: 10px;
+      border-bottom: 1px solid #e4eef8;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #eef4fa;
+      font-size: 13px;
+      color: #33506c;
+      white-space: nowrap;
+    }
+
+    .emp {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .av {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(130deg, #0ea5e9, #0b2745);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .st {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .st-present { background: #dcfce7; color: #166534; }
+    .st-absent { background: #fee2e2; color: #991b1b; }
+    .st-leave { background: #fef3c7; color: #92400e; }
+
+    .hours {
+      font-weight: 700;
+      color: #0b2745;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 24px;
+      color: #95acc2;
+      font-size: 13px;
+    }
+
+    .chip-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chip {
+      border: 1px solid #e5eef8;
+      border-radius: 9px;
+      padding: 10px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .chip .n {
+      font-size: 13px;
+      font-weight: 700;
+      color: #133b60;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chip .m {
+      font-size: 11px;
+      color: #7690a8;
+      margin-top: 2px;
+    }
+
+    .tag {
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .tag-bd { background: #e0f2fe; color: #075985; }
+    .tag-jn { background: #dcfce7; color: #166534; }
+
+    .small-note {
+      font-size: 11px;
+      color: #7f98b2;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 1050px) {
+      .layout { grid-template-columns: 1fr; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 680px) {
+      .stats { grid-template-columns: 1fr; }
+      .hero-mini { grid-template-columns: 1fr; }
+      .att-sub { margin-left: 0; }
+      .fp-dock {
+        left: 10px;
+        right: 10px;
+        width: auto;
+        bottom: 10px;
+      }
+      .finger-btn {
+        width: 160px;
+        height: 160px;
+      }
+      .finger-btn i {
+        font-size: 74px;
+      }
+      .scan-ring {
+        width: 180px;
+        height: 180px;
+      }
+      .scan-ring i {
+        font-size: 82px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app-header"></div>
+
+  <div class="main-content">
+    <div class="page-content">
+      <div class="att-head">
+        <div class="att-title"><i class="fa-solid fa-fingerprint"></i> Daily Attendance</div>
+        <div class="att-sub">Corporate biometric check-in/out with complete personal attendance timeline.</div>
+      </div>
+
+      <div class="hero">
+        <div class="hero-grid">
+          <div>
+            <h2 id="heroGreeting">Ready for today's attendance</h2>
+            <p>Press the fingerprint button to capture attendance. First press records entry, and subsequent presses today update your exit time.</p>
+          </div>
+          <div class="hero-mini">
+            <div class="mini">
+              <div class="l">Today Entry</div>
+              <div class="v" id="todayIn">--:--:--</div>
+            </div>
+            <div class="mini">
+              <div class="l">Today Exit</div>
+              <div class="v" id="todayOut">--:--:--</div>
+            </div>
+            <div class="mini">
+              <div class="l">Today Hours</div>
+              <div class="v" id="todayHours">0.00h</div>
+            </div>
+            <div class="mini">
+              <div class="l">Date</div>
+              <div class="v" id="todayDateLabel">--</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="s-card"><div class="lbl">My Total Records</div><div class="val" id="stTotal">0</div></div>
+        <div class="s-card"><div class="lbl">This Month Days</div><div class="val" id="stMonth">0</div></div>
+        <div class="s-card"><div class="lbl">Avg Hours</div><div class="val" id="stAvg">0.00</div></div>
+        <div class="s-card"><div class="lbl">Today Present Team</div><div class="val" id="stPresent">0</div></div>
+      </div>
+
+      <div class="layout">
+        <div class="panel">
+          <div class="panel-h">
+            <h3><i class="fa-solid fa-clock-rotate-left"></i> My Entry / Exit Records</h3>
+            <div class="toolbar">
+              <input type="date" id="fromDate"/>
+              <input type="date" id="toDate"/>
+              <input type="text" id="searchText" placeholder="Search remark or status"/>
+            </div>
+          </div>
+          <div class="panel-b">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Entry</th>
+                    <th>Exit</th>
+                    <th>Worked Hours</th>
+                    <th>Remarks</th>
+                  </tr>
+                </thead>
+                <tbody id="recordsBody"></tbody>
+              </table>
+            </div>
+            <div class="empty" id="recordsEmpty" style="display:none">No attendance record found for this filter.</div>
+          </div>
+        </div>
+
+        <div style="display:grid;gap:14px;align-content:start;">
+          <div class="panel">
+            <div class="panel-h"><h3><i class="fa-solid fa-cake-candles"></i> Upcoming Birthdays</h3></div>
+            <div class="panel-b">
+              <div class="chip-list" id="birthdaysList"></div>
+              <div class="small-note">Showing upcoming birthdays from employee database.</div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-h"><h3><i class="fa-solid fa-user-plus"></i> New Joined Employees</h3></div>
+            <div class="panel-b">
+              <div class="chip-list" id="joinersList"></div>
+              <div class="small-note">Recently joined team members (latest from employee join date).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fp-dock">
+    <div class="fp-head">Biometric Attendance</div>
+    <button class="finger-btn" id="fingerBtn" type="button" aria-label="Fingerprint Attendance">
+      <i class="fa-solid fa-fingerprint"></i>
+    </button>
+    <div class="fp-label">Tap Fingerprint To Mark Attendance</div>
+    <div class="status-line" id="fingerStatus">Waiting for fingerprint action...</div>
+  </div>
+
+  <div class="scan-overlay" id="scanOverlay" aria-live="polite" aria-atomic="true">
+    <div class="scan-core">
+      <div class="scan-ring"><i class="fa-solid fa-fingerprint"></i></div>
+      <div class="scan-message" id="scanMessage">Fingerprint Scanning</div>
+      <div class="scan-sub" id="scanSub">Please keep your finger steady...</div>
+    </div>
+  </div>
+
+  <script>
+    const API = {
+      dashboard: "backend/public/attendance/dashboard.php",
+      records: "backend/public/attendance/my_records.php",
+      fingerprint: "backend/public/attendance/fingerprint.php",
+    };
+
+    let allRecords = [];
+    let employee = null;
+
+    function esc(v) {
+      return String(v == null ? "" : v)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function initials(name) {
+      return String(name || "").split(" ").map((w) => w[0] || "").join("").slice(0, 2).toUpperCase() || "NA";
+    }
+
+    async function api(path, opts) {
+      const res = await fetch(path, Object.assign({ credentials: "include" }, opts || {}));
+      let data;
+      try {
+        data = await res.json();
+      } catch (_e) {
+        throw new Error("Invalid server response");
+      }
+      if (!res.ok || !data.ok) {
+        throw new Error((data && data.message) || "Request failed");
+      }
+      return data;
+    }
+
+    function fmtDate(d) {
+      if (!d) return "-";
+      const dt = new Date(d + "T00:00:00");
+      return dt.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+    }
+
+    function hoursFromMinutes(mins) {
+      return (Number(mins || 0) / 60).toFixed(2);
+    }
+
+    function statusClass(st) {
+      const k = String(st || "").toLowerCase();
+      if (k === "present") return "st-present";
+      if (k === "leave") return "st-leave";
+      return "st-absent";
+    }
+
+    function showScanOverlay(message, subMessage) {
+      const overlay = document.getElementById("scanOverlay");
+      const msg = document.getElementById("scanMessage");
+      const sub = document.getElementById("scanSub");
+      if (!overlay || !msg || !sub) return;
+
+      msg.textContent = message || "Fingerprint Scanning";
+      sub.textContent = subMessage || "Please keep your finger steady...";
+
+      overlay.classList.remove("open");
+      void overlay.offsetWidth;
+      overlay.classList.add("open");
+
+      clearTimeout(window.__scanOverlayTimer);
+      window.__scanOverlayTimer = setTimeout(() => {
+        overlay.classList.remove("open");
+      }, 2000);
+    }
+
+    function renderRecords(records) {
+      const body = document.getElementById("recordsBody");
+      const empty = document.getElementById("recordsEmpty");
+      if (!records.length) {
+        body.innerHTML = "";
+        empty.style.display = "";
+        return;
+      }
+      empty.style.display = "none";
+      body.innerHTML = records.map((r) =>
+        '<tr>' +
+          '<td>' + esc(fmtDate(r.date)) + '</td>' +
+          '<td><span class="st ' + statusClass(r.status) + '">' + esc(r.status) + '</span></td>' +
+          '<td>' + esc(r.check_in_time || "--:--:--") + '</td>' +
+          '<td>' + esc(r.check_out_time || "--:--:--") + '</td>' +
+          '<td class="hours">' + esc(Number(r.worked_hours || 0).toFixed(2)) + 'h</td>' +
+          '<td>' + esc(r.remarks || "-") + '</td>' +
+        '</tr>'
+      ).join("");
+    }
+
+    function applyRecordFilters() {
+      const from = document.getElementById("fromDate").value;
+      const to = document.getElementById("toDate").value;
+      const q = (document.getElementById("searchText").value || "").trim().toLowerCase();
+
+      const filtered = allRecords.filter((r) => {
+        const dateOk = (!from || r.date >= from) && (!to || r.date <= to);
+        const textOk = !q || String(r.status || "").toLowerCase().includes(q) || String(r.remarks || "").toLowerCase().includes(q);
+        return dateOk && textOk;
+      });
+
+      renderRecords(filtered);
+    }
+
+    function renderBanners(birthdays, joiners) {
+      const bEl = document.getElementById("birthdaysList");
+      const jEl = document.getElementById("joinersList");
+
+      bEl.innerHTML = (birthdays || []).slice(0, 8).map((b) =>
+        '<div class="chip">' +
+          '<div>' +
+            '<div class="n"><span class="av">' + esc(initials(b.full_name)) + '</span> ' + esc(b.full_name) + '</div>' +
+            '<div class="m">' + esc(b.department_name || "-") + ' · ' + esc(fmtDate(b.dob)) + '</div>' +
+          '</div>' +
+          '<span class="tag tag-bd">' + (Number(b.days_left || 0) === 0 ? 'Today' : esc(String(b.days_left)) + ' day(s)') + '</span>' +
+        '</div>'
+      ).join("") || '<div class="empty" style="padding:8px">No upcoming birthdays</div>';
+
+      jEl.innerHTML = (joiners || []).slice(0, 8).map((j) =>
+        '<div class="chip">' +
+          '<div>' +
+            '<div class="n"><span class="av">' + esc(initials(j.full_name)) + '</span> ' + esc(j.full_name) + '</div>' +
+            '<div class="m">' + esc(j.department_name || "-") + ' · Joined ' + esc(fmtDate(j.join_date)) + '</div>' +
+          '</div>' +
+          '<span class="tag tag-jn">' + esc(String(j.days_since_join || 0)) + ' day(s)</span>' +
+        '</div>'
+      ).join("") || '<div class="empty" style="padding:8px">No recent joiners</div>';
+    }
+
+    function renderToday(today) {
+      const rec = (today && today.employee_record) ? today.employee_record : null;
+      document.getElementById("todayIn").textContent = rec && rec.check_in_time ? rec.check_in_time : "--:--:--";
+      document.getElementById("todayOut").textContent = rec && rec.check_out_time ? rec.check_out_time : "--:--:--";
+      document.getElementById("todayHours").textContent = rec ? (Number(rec.worked_hours || 0).toFixed(2) + "h") : "0.00h";
+      document.getElementById("todayDateLabel").textContent = fmtDate(today && today.date ? today.date : new Date().toISOString().slice(0, 10));
+      document.getElementById("stPresent").textContent = String(today && today.present_count ? today.present_count : 0);
+
+      if (employee && employee.full_name) {
+        document.getElementById("heroGreeting").textContent = employee.full_name + (rec && rec.check_in_time ? " - attendance captured" : " - ready to check in");
+      }
+    }
+
+    function renderStats(records) {
+      const total = records.length;
+      const now = new Date();
+      const monthKey = now.toISOString().slice(0, 7);
+      const monthCount = records.filter((r) => String(r.date || "").slice(0, 7) === monthKey).length;
+      const totalHours = records.reduce((acc, r) => acc + Number(r.worked_hours || 0), 0);
+      const avg = total ? (totalHours / total) : 0;
+
+      document.getElementById("stTotal").textContent = String(total);
+      document.getElementById("stMonth").textContent = String(monthCount);
+      document.getElementById("stAvg").textContent = avg.toFixed(2);
+    }
+
+    async function loadDashboard() {
+      const data = await api(API.dashboard);
+      renderToday(data.today || {});
+      renderBanners(data.upcoming_birthdays || [], data.new_joiners || []);
+    }
+
+    async function loadRecords() {
+      const data = await api(API.records + "?limit=730");
+      employee = data.employee || null;
+      allRecords = Array.isArray(data.records) ? data.records : [];
+      renderStats(allRecords);
+      applyRecordFilters();
+    }
+
+    async function doFingerprint() {
+      const btn = document.getElementById("fingerBtn");
+      const status = document.getElementById("fingerStatus");
+      btn.disabled = true;
+      status.textContent = "Verifying biometric fingerprint...";
+      showScanOverlay("Fingerprint Scanning", "Authenticating biometric identity...");
+
+      try {
+        const data = await api(API.fingerprint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ source: "fingerprint" }),
+        });
+
+        status.textContent = data.mode === "check_in"
+          ? "Entry time captured. You are checked in for today."
+          : "Exit time updated successfully for today.";
+
+        showScanOverlay(
+          data.mode === "check_in" ? "Check-In Success" : "Check-Out Updated",
+          data.mode === "check_in" ? "Welcome! Have a productive day." : "Great work today. Exit time saved."
+        );
+
+        await Promise.all([loadDashboard(), loadRecords()]);
+      } catch (err) {
+        status.textContent = err.message || "Unable to process fingerprint attendance";
+        showScanOverlay("Scan Failed", "Please try again or contact admin.");
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function wireFilters() {
+      ["fromDate", "toDate", "searchText"].forEach((id) => {
+        document.getElementById(id).addEventListener(id === "searchText" ? "input" : "change", applyRecordFilters);
+      });
+    }
+
+    async function init() {
+      wireFilters();
+      document.getElementById("fingerBtn").addEventListener("click", doFingerprint);
+      await Promise.all([loadDashboard(), loadRecords()]);
+    }
+
+    init();
+  </script>
+  <script src="assets/js/header-loader.js?v=20260328i"></script>
+</body>
+</html>

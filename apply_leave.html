@@ -1,0 +1,1300 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Promee Internet – Apply Leave</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/style.css?v=20260326f" />
+    <link rel="stylesheet" href="leave_management.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      /* ── Apply Leave Page Styles ── */
+      :root {
+        --al-navy: #0f2740;
+        --al-teal: #0a6c74;
+        --al-ice: #edf5fa;
+        --al-ink: #0f172a;
+      }
+      .page-content {
+        position: relative;
+        isolation: isolate;
+      }
+      .page-content::before {
+        content: "";
+        position: absolute;
+        inset: -18px -14px auto -14px;
+        height: 220px;
+        z-index: -1;
+        border-radius: 18px;
+        background:
+          radial-gradient(circle at 85% 30%, rgba(45, 212, 191, 0.22), transparent 36%),
+          radial-gradient(circle at 10% 15%, rgba(59, 130, 246, 0.20), transparent 34%),
+          linear-gradient(140deg, #f7fbff, #ebf4fb 55%, #eaf6f7);
+      }
+      .apply-leave-grid {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        gap: 24px;
+        align-items: start;
+        animation: fadeSlideUp 0.45s ease;
+      }
+
+      @media (max-width: 1024px) {
+        .apply-leave-grid { grid-template-columns: 1fr; }
+      }
+
+      /* Form Card */
+      .form-card {
+        background: #fff;
+        border-radius: 14px;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+        overflow: hidden;
+      }
+
+      .form-card-header {
+        background: linear-gradient(135deg, var(--al-navy) 0%, var(--al-teal) 100%);
+        padding: 22px 28px;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .form-card-header i { font-size: 22px; opacity: 0.9; }
+      .form-card-header h2 { margin: 0; font-size: 18px; font-weight: 600; }
+      .form-card-header p { margin: 4px 0 0 0; font-size: 13px; opacity: 0.75; }
+
+      .form-card-body { padding: 28px; }
+
+      /* Form Grid */
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .form-grid .form-group.full { grid-column: 1 / -1; }
+
+      @media (max-width: 640px) {
+        .form-grid { grid-template-columns: 1fr; }
+        .form-grid .form-group.full { grid-column: 1; }
+      }
+
+      .form-group { display: flex; flex-direction: column; }
+
+      .form-group label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 7px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .form-group label .required { color: #ef4444; }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        padding: 10px 14px;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 7px;
+        font-size: 14px;
+        color: #1f2937;
+        background: #fafafa;
+        transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+        font-family: inherit;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: #3b82f6;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+      }
+
+      .form-group textarea { resize: vertical; min-height: 100px; }
+
+      .form-group input.error,
+      .form-group select.error,
+      .form-group textarea.error {
+        border-color: #ef4444;
+        box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
+      }
+
+      .error-msg {
+        font-size: 12px;
+        color: #ef4444;
+        margin-top: 4px;
+        display: none;
+      }
+
+      .error-msg.show { display: block; }
+
+      /* Days Count Display */
+      .days-display {
+        background: linear-gradient(135deg, #eff6ff, #dbeafe);
+        border: 1.5px solid #bfdbfe;
+        border-radius: 7px;
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 4px;
+      }
+
+      .days-display i { color: #3b82f6; font-size: 18px; }
+      .days-display .days-count { font-size: 22px; font-weight: 700; color: #1e40af; }
+      .days-display .days-label { font-size: 13px; color: #6b7280; }
+
+      /* Leave Type Cards */
+      .leave-type-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+
+      @media (max-width: 640px) {
+        .leave-type-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+
+      .leave-type-card {
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 12px;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.2s;
+        background: #fafafa;
+        position: relative;
+      }
+
+      .leave-type-card:hover { border-color: #93c5fd; background: #eff6ff; }
+
+      .leave-type-card.selected {
+        border-color: #3b82f6;
+        background: #eff6ff;
+        box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+      }
+
+      .leave-type-card .ltc-icon { font-size: 20px; margin-bottom: 6px; }
+      .leave-type-card .ltc-name { font-size: 12px; font-weight: 600; color: #374151; }
+      .leave-type-card .ltc-balance { font-size: 11px; color: #6b7280; margin-top: 2px; }
+
+      .leave-type-card .ltc-check {
+        position: absolute;
+        top: 6px; right: 6px;
+        width: 18px; height: 18px;
+        background: #3b82f6;
+        border-radius: 50%;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 10px;
+      }
+
+      .leave-type-card.selected .ltc-check { display: flex; }
+
+      /* File Upload */
+      .file-upload-area {
+        border: 2px dashed #d1d5db;
+        border-radius: 8px;
+        padding: 24px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: #fafafa;
+      }
+
+      .file-upload-area:hover { border-color: #3b82f6; background: #eff6ff; }
+      .file-upload-area.dragover { border-color: #3b82f6; background: #dbeafe; }
+
+      .file-upload-area i { font-size: 28px; color: #9ca3af; margin-bottom: 8px; }
+      .file-upload-area p { margin: 0; font-size: 14px; color: #6b7280; }
+      .file-upload-area span { font-size: 12px; color: #9ca3af; }
+
+      .file-list { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+
+      .file-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #f3f4f6;
+        border-radius: 6px;
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+
+      .file-item i { color: #3b82f6; }
+      .file-item span { flex: 1; color: #374151; }
+      .file-item .remove-file { cursor: pointer; color: #ef4444; font-size: 14px; }
+
+      /* Submit Buttons */
+      .form-actions {
+        display: flex;
+        gap: 12px;
+        padding-top: 10px;
+      }
+
+      .btn-submit {
+        background: linear-gradient(135deg, #1e3a8a, #2563eb);
+        color: white;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+        justify-content: center;
+      }
+
+      .btn-submit:hover { background: linear-gradient(135deg, #1e40af, #1d4ed8); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+      .btn-submit:active { transform: translateY(0); }
+
+      .btn-draft {
+        background: #f3f4f6;
+        color: #374151;
+        border: 1.5px solid #e5e7eb;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-draft:hover { background: #e5e7eb; }
+
+      /* Sidebar Panel */
+      .info-panel { display: flex; flex-direction: column; gap: 16px; }
+
+      .info-card {
+        background: #fff;
+        border-radius: 14px;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        box-shadow: 0 18px 36px rgba(15, 23, 42, 0.08);
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .info-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 24px 44px rgba(15, 23, 42, 0.12);
+      }
+
+      .info-card-header {
+        padding: 14px 18px;
+        font-size: 13px;
+        font-weight: 700;
+        color: #1e3a8a;
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #f8fafc;
+      }
+
+      .info-card-body { padding: 16px 18px; }
+
+      /* Balance Bars */
+      .balance-item { margin-bottom: 14px; }
+      .balance-item:last-child { margin-bottom: 0; }
+
+      .balance-header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        margin-bottom: 6px;
+      }
+
+      .balance-header .b-name { font-weight: 600; color: #374151; }
+      .balance-header .b-count { color: #6b7280; font-size: 12px; }
+
+      .balance-bar {
+        height: 6px;
+        background: #e5e7eb;
+        border-radius: 99px;
+        overflow: hidden;
+      }
+
+      .balance-fill {
+        height: 100%;
+        border-radius: 99px;
+        transition: width 0.5s ease;
+      }
+
+      /* Employee Info */
+      .emp-info-card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 4px 0 12px;
+        border-bottom: 1px solid #f3f4f6;
+        margin-bottom: 12px;
+      }
+
+      .emp-info-avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 18px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .emp-info-name { font-weight: 700; color: #1f2937; font-size: 15px; }
+      .emp-info-role { font-size: 12px; color: #6b7280; margin-top: 2px; }
+      .emp-info-id { font-size: 11px; color: #9ca3af; margin-top: 1px; }
+
+      .emp-detail-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        padding: 5px 0;
+        border-bottom: 1px solid #f9fafb;
+      }
+
+      .emp-detail-row .edr-label { color: #6b7280; }
+      .emp-detail-row .edr-value { font-weight: 600; color: #1f2937; }
+
+      /* Policy Tips */
+      .policy-item {
+        display: flex;
+        gap: 10px;
+        padding: 10px;
+        border-radius: 7px;
+        background: #f8fafc;
+        margin-bottom: 8px;
+        font-size: 13px;
+        color: #4b5563;
+        align-items: flex-start;
+      }
+
+      .policy-item:last-child { margin-bottom: 0; }
+      .policy-item i { color: #3b82f6; margin-top: 2px; flex-shrink: 0; }
+
+      /* Success Toast */
+      .toast {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: #1f2937;
+        color: white;
+        padding: 16px 22px;
+        border-radius: 10px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        z-index: 9999;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        min-width: 280px;
+      }
+
+      .toast.show { transform: translateY(0); opacity: 1; }
+      .toast i { font-size: 20px; color: #34d399; }
+      .toast .toast-title { font-weight: 600; font-size: 14px; }
+      .toast .toast-msg { font-size: 12px; color: #9ca3af; margin-top: 2px; }
+
+      /* Page Header */
+      .page-header-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+      }
+
+      .page-header-bar h1 { font-size: 22px; color: #1e3a8a; font-weight: 700; margin: 0; }
+
+      .breadcrumb {
+        font-size: 13px;
+        color: #6b7280;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 4px;
+      }
+
+      .breadcrumb a { color: #3b82f6; text-decoration: none; }
+      .breadcrumb a:hover { text-decoration: underline; }
+
+      .back-btn {
+        background: #f3f4f6;
+        color: #374151;
+        border: 1.5px solid #e5e7eb;
+        padding: 8px 16px;
+        border-radius: 7px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: background 0.2s;
+      }
+
+      .back-btn:hover { background: #e5e7eb; }
+
+      /* Section divider */
+      .form-section-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin: 8px 0 16px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #f3f4f6;
+      }
+
+      .request-chip {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 3px 9px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+      .request-chip.pending { background: #fef3c7; color: #92400e; }
+      .request-chip.approved { background: #dcfce7; color: #166534; }
+      .request-chip.rejected { background: #fee2e2; color: #991b1b; }
+      .request-chip.cancelled { background: #e5e7eb; color: #374151; }
+
+      .mini-history { display: grid; gap: 10px; }
+      .mini-history-item {
+        border: 1px solid #e5e7eb;
+        border-radius: 9px;
+        padding: 9px 10px;
+        background: #fbfdff;
+      }
+      .mini-history-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 6px;
+      }
+      .mini-history-title {
+        font-size: 12px;
+        font-weight: 700;
+        color: #0f172a;
+      }
+      .mini-history-meta {
+        font-size: 11px;
+        color: #64748b;
+      }
+
+      .saving-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.35);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 6000;
+      }
+      .saving-overlay.active { display: flex; }
+      .saving-box {
+        background: #fff;
+        border-radius: 12px;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 16px 32px rgba(0,0,0,0.2);
+      }
+      .saving-spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid #cbd5e1;
+        border-top-color: #2563eb;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin { to { transform: rotate(360deg); } }
+      @keyframes fadeSlideUp {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app-header"></div>
+<!-- Main Content -->
+    <div class="main-content">
+<div class="page-content">
+
+        <!-- Page Header -->
+        <div class="page-header-bar">
+          <div>
+            <h1><i class="fa-solid fa-paper-plane" style="color:#3b82f6;margin-right:8px"></i>Apply for Leave</h1>
+            <div class="breadcrumb">
+              <a href="index.html">Dashboard</a>
+              <i class="fa-solid fa-chevron-right" style="font-size:10px"></i>
+              <a href="leave_management.html">Leave Management</a>
+              <i class="fa-solid fa-chevron-right" style="font-size:10px"></i>
+              <span>Apply Leave</span>
+            </div>
+          </div>
+          <a href="leave_management.html" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i> Back to List
+          </a>
+        </div>
+
+        <div class="apply-leave-grid">
+          <!-- LEFT: Form -->
+          <div class="form-card">
+            <div class="form-card-header">
+              <i class="fa-solid fa-file-circle-plus"></i>
+              <div>
+                <h2>Leave Application Form</h2>
+                <p>Fill in the details below to submit your leave request</p>
+              </div>
+            </div>
+            <div class="form-card-body">
+
+              <!-- Employee Info Section -->
+              <div class="form-section-title"><i class="fa-solid fa-user" style="margin-right:6px"></i>Employee Information</div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Employee ID <span class="required">*</span></label>
+                  <input type="text" id="empId" placeholder="e.g. EMP001" readonly />
+                  <span class="error-msg" id="empIdError">Employee ID is required.</span>
+                </div>
+                <div class="form-group">
+                  <label>Employee Name <span class="required">*</span></label>
+                  <input type="text" id="empName" placeholder="Full name" readonly />
+                  <span class="error-msg" id="empNameError">Employee name is required.</span>
+                </div>
+                <div class="form-group">
+                  <label>Department <span class="required">*</span></label>
+                  <input type="text" id="department" placeholder="Department" readonly />
+                  <span class="error-msg" id="deptError">Please select a department.</span>
+                </div>
+                <div class="form-group">
+                  <label>Reporting Manager <span class="required">*</span></label>
+                  <select id="manager">
+                    <option value="">-- Select Manager --</option>
+                  </select>
+                  <span class="error-msg" id="managerError">Please select your reporting manager.</span>
+                </div>
+              </div>
+
+              <!-- Leave Type Section -->
+              <div class="form-section-title" style="margin-top:24px"><i class="fa-solid fa-tags" style="margin-right:6px"></i>Leave Type</div>
+              <div class="leave-type-grid" id="leaveTypeGrid">
+                <div class="leave-type-card" onclick="selectLeaveType(this, 'sick')" data-type="sick">
+                  <div class="ltc-check"><i class="fa-solid fa-check"></i></div>
+                  <div class="ltc-icon"><i class="fa-solid fa-notes-medical"></i></div>
+                  <div class="ltc-name">Sick Leave</div>
+                  <div class="ltc-balance" data-balance-for="sick">0 days left</div>
+                </div>
+                <div class="leave-type-card" onclick="selectLeaveType(this, 'casual')" data-type="casual">
+                  <div class="ltc-check"><i class="fa-solid fa-check"></i></div>
+                  <div class="ltc-icon"><i class="fa-solid fa-mug-hot"></i></div>
+                  <div class="ltc-name">Casual Leave</div>
+                  <div class="ltc-balance" data-balance-for="casual">0 days left</div>
+                </div>
+                <div class="leave-type-card" onclick="selectLeaveType(this, 'annual')" data-type="annual">
+                  <div class="ltc-check"><i class="fa-solid fa-check"></i></div>
+                  <div class="ltc-icon"><i class="fa-solid fa-umbrella-beach"></i></div>
+                  <div class="ltc-name">Annual Leave</div>
+                  <div class="ltc-balance" data-balance-for="annual">0 days left</div>
+                </div>
+                <div class="leave-type-card" onclick="selectLeaveType(this, 'maternity')" data-type="maternity">
+                  <div class="ltc-check"><i class="fa-solid fa-check"></i></div>
+                  <div class="ltc-icon"><i class="fa-solid fa-baby"></i></div>
+                  <div class="ltc-name">Maternity Leave</div>
+                  <div class="ltc-balance" data-balance-for="maternity">0 days left</div>
+                </div>
+                <div class="leave-type-card" onclick="selectLeaveType(this, 'emergency')" data-type="emergency">
+                  <div class="ltc-check"><i class="fa-solid fa-check"></i></div>
+                  <div class="ltc-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                  <div class="ltc-name">Emergency Leave</div>
+                  <div class="ltc-balance" data-balance-for="emergency">0 days left</div>
+                </div>
+                <div class="leave-type-card" onclick="selectLeaveType(this, 'unpaid')" data-type="unpaid">
+                  <div class="ltc-check"><i class="fa-solid fa-check"></i></div>
+                  <div class="ltc-icon"><i class="fa-solid fa-file-circle-minus"></i></div>
+                  <div class="ltc-name">Unpaid Leave</div>
+                  <div class="ltc-balance" data-balance-for="unpaid">On request</div>
+                </div>
+              </div>
+              <input type="hidden" id="selectedLeaveType" />
+              <span class="error-msg" id="leaveTypeError" style="display:none;margin-top:8px">Please select a leave type.</span>
+
+              <!-- Date Section -->
+              <div class="form-section-title" style="margin-top:24px"><i class="fa-solid fa-calendar" style="margin-right:6px"></i>Leave Duration</div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Start Date <span class="required">*</span></label>
+                  <input type="date" id="startDate" onchange="calculateDays()" />
+                  <span class="error-msg" id="startDateError">Please select a start date.</span>
+                </div>
+                <div class="form-group">
+                  <label>End Date <span class="required">*</span></label>
+                  <input type="date" id="endDate" onchange="calculateDays()" />
+                  <span class="error-msg" id="endDateError">Please select an end date.</span>
+                </div>
+                <div class="form-group">
+                  <label>Session</label>
+                  <select id="session">
+                    <option value="full">Full Day</option>
+                    <option value="first_half">First Half</option>
+                    <option value="second_half">Second Half</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Total Leave Days</label>
+                  <div class="days-display" id="daysDisplay">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <span class="days-count" id="daysCount">0</span>
+                    <div>
+                      <div class="days-label">Working days</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Reason Section -->
+              <div class="form-section-title" style="margin-top:24px"><i class="fa-solid fa-pen-to-square" style="margin-right:6px"></i>Details</div>
+              <div class="form-grid">
+                <div class="form-group full">
+                  <label>Reason for Leave <span class="required">*</span></label>
+                  <textarea id="reason" placeholder="Please describe the reason for your leave request in detail..."></textarea>
+                  <span class="error-msg" id="reasonError">Please provide a reason for the leave.</span>
+                </div>
+
+                <div class="form-group">
+                  <label>Contact During Leave</label>
+                  <input type="tel" id="contactNumber" placeholder="Phone number" />
+                </div>
+
+                <div class="form-group">
+                  <label>Alternate Contact (Email)</label>
+                  <input type="email" id="altEmail" placeholder="alternate@email.com" />
+                </div>
+
+                <div class="form-group full">
+                  <label>Work Handover Plan</label>
+                  <textarea id="handover" placeholder="Who will handle your work? Any specific tasks to be transferred..." style="min-height:80px"></textarea>
+                </div>
+
+                <!-- File Upload -->
+                <div class="form-group full">
+                  <label>Supporting Documents <span style="font-weight:400;color:#9ca3af">(Optional – Medical certificate, etc.)</span></label>
+                  <div class="file-upload-area" id="fileUploadArea" onclick="document.getElementById('fileInput').click()"
+                    ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <p>Click to upload or drag & drop files here</p>
+                    <span>PDF, JPG, PNG – Max 5MB each</span>
+                  </div>
+                  <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="handleFileSelect(event)" />
+                  <div class="file-list" id="fileList"></div>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="form-actions" style="margin-top:24px">
+                <button class="btn-draft" onclick="saveDraft()"><i class="fa-solid fa-floppy-disk"></i> Save Draft</button>
+                <button class="btn-submit" onclick="submitLeave()"><i class="fa-solid fa-paper-plane"></i> Submit Leave Request</button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- RIGHT: Info Panel -->
+          <div class="info-panel">
+
+            <!-- Employee Card -->
+            <div class="info-card">
+              <div class="info-card-header"><i class="fa-solid fa-id-card"></i> My Profile</div>
+              <div class="info-card-body">
+                <div class="emp-info-card">
+                  <div class="emp-info-avatar" id="profileAvatar">--</div>
+                  <div>
+                    <div class="emp-info-name" id="profileName">Loading...</div>
+                    <div class="emp-info-role" id="profileRole">-</div>
+                    <div class="emp-info-id" id="profileEmpId">ID: -</div>
+                  </div>
+                </div>
+                <div class="emp-detail-row"><span class="edr-label">Department</span><span class="edr-value" id="profileDepartment">-</span></div>
+                <div class="emp-detail-row"><span class="edr-label">Join Date</span><span class="edr-value" id="profileJoinDate">-</span></div>
+                <div class="emp-detail-row"><span class="edr-label">Manager</span><span class="edr-value" id="profileManager">-</span></div>
+                <div class="emp-detail-row"><span class="edr-label">Pending Requests</span><span class="edr-value" id="profilePending">0</span></div>
+              </div>
+            </div>
+
+            <!-- Leave Balance -->
+            <div class="info-card">
+              <div class="info-card-header"><i class="fa-solid fa-chart-pie"></i> Leave Balance (2026)</div>
+              <div class="info-card-body">
+
+                <div class="balance-item">
+                  <div class="balance-header">
+                    <span class="b-name">🤒 Sick Leave</span>
+                    <span class="b-count" id="balLabelSick">0 / 14 days</span>
+                  </div>
+                  <div class="balance-bar"><div class="balance-fill" id="balFillSick" style="width:0%;background:#ef4444"></div></div>
+                </div>
+
+                <div class="balance-item">
+                  <div class="balance-header">
+                    <span class="b-name">☀️ Casual Leave</span>
+                    <span class="b-count" id="balLabelCasual">0 / 10 days</span>
+                  </div>
+                  <div class="balance-bar"><div class="balance-fill" id="balFillCasual" style="width:0%;background:#3b82f6"></div></div>
+                </div>
+
+                <div class="balance-item">
+                  <div class="balance-header">
+                    <span class="b-name">🏖️ Annual Leave</span>
+                    <span class="b-count" id="balLabelAnnual">0 / 24 days</span>
+                  </div>
+                  <div class="balance-bar"><div class="balance-fill" id="balFillAnnual" style="width:0%;background:#10b981"></div></div>
+                </div>
+
+                <div class="balance-item">
+                  <div class="balance-header">
+                    <span class="b-name">🚨 Emergency Leave</span>
+                    <span class="b-count" id="balLabelEmergency">0 / 5 days</span>
+                  </div>
+                  <div class="balance-bar"><div class="balance-fill" id="balFillEmergency" style="width:0%;background:#f59e0b"></div></div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header"><i class="fa-solid fa-clock-rotate-left"></i> Recent Requests</div>
+              <div class="info-card-body">
+                <div class="mini-history" id="recentRequestsList">
+                  <div class="policy-item" style="margin:0"><i class="fa-solid fa-spinner"></i> Loading recent requests...</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Policy Notes -->
+            <div class="info-card">
+              <div class="info-card-header"><i class="fa-solid fa-circle-info"></i> Leave Policy</div>
+              <div class="info-card-body">
+                <div class="policy-item"><i class="fa-solid fa-circle-check"></i> Submit requests at least 3 days in advance for planned leaves.</div>
+                <div class="policy-item"><i class="fa-solid fa-circle-check"></i> Sick leave must be supported by a medical certificate for 3+ consecutive days.</div>
+                <div class="policy-item"><i class="fa-solid fa-circle-check"></i> Emergency leave applications can be submitted on the day itself.</div>
+                <div class="policy-item"><i class="fa-solid fa-circle-check"></i> Annual leave cannot be carried forward beyond 5 days into the next year.</div>
+                <div class="policy-item"><i class="fa-solid fa-circle-check"></i> Maternity leave entitlement is 90 days per childbirth as per Bangladesh Labour Law.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div class="toast" id="toast">
+      <i class="fa-solid fa-circle-check"></i>
+      <div>
+        <div class="toast-title">Leave Request Submitted!</div>
+        <div class="toast-msg">Your application is pending manager approval.</div>
+      </div>
+    </div>
+
+    <div class="saving-overlay" id="savingOverlay">
+      <div class="saving-box">
+        <span class="saving-spinner"></span>
+        <span id="savingText">Saving leave request...</span>
+      </div>
+    </div>
+
+    <script src="assets/js/header-loader.js?v=20260328i"></script>
+    <script>
+      let selectedType = '';
+      let uploadedFiles = [];
+      let contextData = null;
+
+      const API = {
+        context: 'backend/public/leave/apply_context.php',
+        upsert: 'backend/public/leave/upsert.php',
+        uploadAttachment: 'backend/public/leave/upload_attachment.php',
+      };
+
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('startDate').min = today;
+      document.getElementById('endDate').min = today;
+
+      function escapeHtml(value) {
+        const div = document.createElement('div');
+        div.textContent = value == null ? '' : String(value);
+        return div.innerHTML;
+      }
+
+      function toggleSaving(active, text) {
+        const overlay = document.getElementById('savingOverlay');
+        overlay.classList.toggle('active', !!active);
+        if (text) {
+          document.getElementById('savingText').textContent = text;
+        }
+      }
+
+      function showToast(title, message, iconColor) {
+        const toast = document.getElementById('toast');
+        toast.querySelector('.toast-title').textContent = title;
+        toast.querySelector('.toast-msg').textContent = message;
+        toast.querySelector('i').style.color = iconColor || '#34d399';
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3500);
+      }
+
+      function initials(name) {
+        const words = String(name || '').trim().split(/\s+/).filter(Boolean);
+        return words.slice(0, 2).map((w) => w[0]?.toUpperCase() || '').join('') || '--';
+      }
+
+      function formatDateLabel(value) {
+        if (!value) return '-';
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return value;
+        return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: '2-digit' });
+      }
+
+      function daysBetween(start, end) {
+        const s = new Date(start);
+        const e = new Date(end);
+        let count = 0;
+        const cur = new Date(s);
+        while (cur <= e) {
+          if (cur.getDay() !== 0) count += 1;
+          cur.setDate(cur.getDate() + 1);
+        }
+        return count;
+      }
+
+      function calculateDays() {
+        const start = document.getElementById('startDate').value;
+        const end = document.getElementById('endDate').value;
+        if (!start || !end) {
+          document.getElementById('daysCount').textContent = '0';
+          return;
+        }
+        if (end < start) {
+          document.getElementById('endDate').value = start;
+        }
+        const count = daysBetween(document.getElementById('startDate').value, document.getElementById('endDate').value);
+        document.getElementById('daysCount').textContent = String(Math.max(1, count));
+      }
+
+      function selectLeaveType(card, type) {
+        document.querySelectorAll('.leave-type-card').forEach((c) => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedType = type;
+        document.getElementById('selectedLeaveType').value = type;
+        document.getElementById('leaveTypeError').style.display = 'none';
+      }
+
+      function handleDragOver(e) {
+        e.preventDefault();
+        document.getElementById('fileUploadArea').classList.add('dragover');
+      }
+
+      function handleDragLeave() {
+        document.getElementById('fileUploadArea').classList.remove('dragover');
+      }
+
+      function handleDrop(e) {
+        e.preventDefault();
+        document.getElementById('fileUploadArea').classList.remove('dragover');
+        addFiles(e.dataTransfer.files);
+      }
+
+      function handleFileSelect(e) {
+        addFiles(e.target.files);
+      }
+
+      function addFiles(files) {
+        Array.from(files).forEach((file) => {
+          if (file.size > 5 * 1024 * 1024) {
+            alert(file.name + ' exceeds 5MB limit.');
+            return;
+          }
+          if (!/(pdf|jpeg|jpg|png)$/i.test(file.name)) {
+            alert(file.name + ' type is not allowed.');
+            return;
+          }
+          uploadedFiles.push(file);
+        });
+        renderFiles();
+      }
+
+      function renderFiles() {
+        const list = document.getElementById('fileList');
+        list.innerHTML = uploadedFiles.map((f, i) => {
+          const icon = f.type.includes('pdf') ? 'pdf' : 'image';
+          return '<div class="file-item">'
+            + '<i class="fa-solid fa-file-' + icon + '"></i>'
+            + '<span>' + escapeHtml(f.name) + ' <span style="color:#9ca3af">(' + (f.size / 1024).toFixed(1) + ' KB)</span></span>'
+            + '<span class="remove-file" onclick="removeFile(' + i + ')"><i class="fa-solid fa-xmark"></i></span>'
+            + '</div>';
+        }).join('');
+      }
+
+      function removeFile(index) {
+        uploadedFiles.splice(index, 1);
+        renderFiles();
+      }
+
+      function validateForm() {
+        let valid = true;
+        const fields = [
+          { id: 'empId', errId: 'empIdError' },
+          { id: 'empName', errId: 'empNameError' },
+          { id: 'department', errId: 'deptError' },
+          { id: 'manager', errId: 'managerError' },
+          { id: 'startDate', errId: 'startDateError' },
+          { id: 'endDate', errId: 'endDateError' },
+          { id: 'reason', errId: 'reasonError' },
+        ];
+
+        fields.forEach((f) => {
+          const el = document.getElementById(f.id);
+          const err = document.getElementById(f.errId);
+          if (!el || !err) return;
+          if (!String(el.value || '').trim()) {
+            el.classList.add('error');
+            err.classList.add('show');
+            valid = false;
+          } else {
+            el.classList.remove('error');
+            err.classList.remove('show');
+          }
+        });
+
+        if (!selectedType) {
+          document.getElementById('leaveTypeError').style.display = 'block';
+          valid = false;
+        }
+
+        const start = document.getElementById('startDate').value;
+        const end = document.getElementById('endDate').value;
+        if (start && end && end < start) {
+          document.getElementById('endDate').classList.add('error');
+          document.getElementById('endDateError').textContent = 'End date cannot be before start date.';
+          document.getElementById('endDateError').classList.add('show');
+          valid = false;
+        }
+
+        return valid;
+      }
+
+      function buildRichReasonText() {
+        const reason = document.getElementById('reason').value.trim();
+        const handover = document.getElementById('handover').value.trim();
+        const contact = document.getElementById('contactNumber').value.trim();
+        const altEmail = document.getElementById('altEmail').value.trim();
+        const session = document.getElementById('session').value;
+        const manager = document.getElementById('manager').value;
+        const attachmentNames = uploadedFiles.map((f) => f.name);
+
+        const blocks = [];
+        blocks.push('Reason: ' + reason);
+        blocks.push('Session: ' + session);
+        blocks.push('Reporting Manager: ' + manager);
+        if (contact) blocks.push('Contact During Leave: ' + contact);
+        if (altEmail) blocks.push('Alternate Email: ' + altEmail);
+        if (handover) blocks.push('Handover Plan: ' + handover);
+        if (attachmentNames.length) blocks.push('Attachments: ' + attachmentNames.join(', '));
+
+        return blocks.join('\n');
+      }
+
+      function hasDateOverlap() {
+        if (!contextData || !Array.isArray(contextData.recent_requests)) return false;
+        const start = document.getElementById('startDate').value;
+        const end = document.getElementById('endDate').value;
+        if (!start || !end) return false;
+
+        const startTs = new Date(start).getTime();
+        const endTs = new Date(end).getTime();
+        return contextData.recent_requests.some((req) => {
+          const status = String(req.status_label || '').toLowerCase();
+          if (status !== 'pending' && status !== 'approved') return false;
+          const rs = new Date(req.start_date).getTime();
+          const re = new Date(req.end_date).getTime();
+          return startTs <= re && endTs >= rs;
+        });
+      }
+
+      async function submitLeave() {
+        if (!validateForm()) {
+          const first = document.querySelector('.error, .error-msg.show');
+          if (first && first.scrollIntoView) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+
+        if (hasDateOverlap()) {
+          alert('Selected date range overlaps with an existing pending or approved leave request.');
+          return;
+        }
+
+        const payload = {
+          employee_code: document.getElementById('empId').value.trim(),
+          employee_name: document.getElementById('empName').value.trim(),
+          department_name: document.getElementById('department').value.trim(),
+          leave_type: selectedType,
+          start_date: document.getElementById('startDate').value,
+          end_date: document.getElementById('endDate').value,
+          reason_text: buildRichReasonText(),
+          status_label: 'pending',
+        };
+
+        try {
+          toggleSaving(true, 'Submitting leave request...');
+          const res = await fetch(API.upsert, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          const data = await res.json();
+          if (!res.ok || !data.ok) {
+            const details = data && data.error ? ('\n\nDetails: ' + data.error) : '';
+            alert(((data && data.message) || 'Failed to submit leave request') + details);
+            return;
+          }
+
+          const leaveId = Number(data.id || 0);
+          if (leaveId > 0 && uploadedFiles.length) {
+            toggleSaving(true, 'Uploading supporting documents...');
+            await uploadAllAttachments(leaveId);
+          }
+
+          showToast('Leave Request Submitted', 'Your application has been recorded and sent for review.', '#34d399');
+          localStorage.removeItem('leaveApplyDraft');
+          resetFormForNextRequest();
+          await loadContext();
+        } catch (e) {
+          alert('Network error while submitting leave request');
+        } finally {
+          toggleSaving(false);
+        }
+      }
+
+      async function uploadAllAttachments(leaveId) {
+        for (const file of uploadedFiles) {
+          const form = new FormData();
+          form.append('leave_id', String(leaveId));
+          form.append('attachment', file, file.name);
+
+          const res = await fetch(API.uploadAttachment, {
+            method: 'POST',
+            credentials: 'same-origin',
+            body: form,
+          });
+          const data = await res.json();
+          if (!res.ok || !data.ok) {
+            const details = data && data.error ? (': ' + data.error) : '';
+            throw new Error(((data && data.message) || ('Attachment upload failed for ' + file.name)) + details);
+          }
+        }
+      }
+
+      function saveDraft() {
+        const draft = {
+          selectedType,
+          manager: document.getElementById('manager').value,
+          startDate: document.getElementById('startDate').value,
+          endDate: document.getElementById('endDate').value,
+          session: document.getElementById('session').value,
+          reason: document.getElementById('reason').value,
+          handover: document.getElementById('handover').value,
+          contactNumber: document.getElementById('contactNumber').value,
+          altEmail: document.getElementById('altEmail').value,
+          files: uploadedFiles.map((f) => ({ name: f.name, size: f.size, type: f.type })),
+          savedAt: new Date().toISOString(),
+        };
+        localStorage.setItem('leaveApplyDraft', JSON.stringify(draft));
+        showToast('Draft Saved', 'Draft is stored in your browser for this account.', '#f59e0b');
+      }
+
+      function applyDraftIfAny() {
+        const raw = localStorage.getItem('leaveApplyDraft');
+        if (!raw) return;
+        try {
+          const draft = JSON.parse(raw);
+          if (draft.manager) document.getElementById('manager').value = draft.manager;
+          if (draft.startDate) document.getElementById('startDate').value = draft.startDate;
+          if (draft.endDate) document.getElementById('endDate').value = draft.endDate;
+          if (draft.session) document.getElementById('session').value = draft.session;
+          if (draft.reason) document.getElementById('reason').value = draft.reason;
+          if (draft.handover) document.getElementById('handover').value = draft.handover;
+          if (draft.contactNumber) document.getElementById('contactNumber').value = draft.contactNumber;
+          if (draft.altEmail) document.getElementById('altEmail').value = draft.altEmail;
+
+          if (draft.selectedType) {
+            const card = document.querySelector('.leave-type-card[data-type="' + draft.selectedType + '"]');
+            if (card) selectLeaveType(card, draft.selectedType);
+          }
+          calculateDays();
+        } catch (_e) {
+          localStorage.removeItem('leaveApplyDraft');
+        }
+      }
+
+      function renderRecentRequests(items) {
+        const root = document.getElementById('recentRequestsList');
+        if (!Array.isArray(items) || items.length === 0) {
+          root.innerHTML = '<div class="policy-item" style="margin:0"><i class="fa-solid fa-circle-info"></i> No leave history found.</div>';
+          return;
+        }
+
+        root.innerHTML = items.slice(0, 6).map((item) => {
+          const status = String(item.status_label || 'pending').toLowerCase();
+          return '<div class="mini-history-item">'
+            + '<div class="mini-history-head">'
+            + '<div class="mini-history-title">' + escapeHtml(String(item.leave_type || '').replace(/_/g, ' ')) + '</div>'
+            + '<span class="request-chip ' + escapeHtml(status) + '">' + escapeHtml(status) + '</span>'
+            + '</div>'
+            + '<div class="mini-history-meta">' + escapeHtml(item.start_date || '') + ' to ' + escapeHtml(item.end_date || '') + ' • ' + escapeHtml(item.total_days || 0) + ' days</div>'
+            + '</div>';
+        }).join('');
+      }
+
+      function applyBalanceCard(type, ids) {
+        if (!contextData || !contextData.balances || !contextData.balances[type]) return;
+        const b = contextData.balances[type];
+        const left = Number(b.left || 0);
+        const quota = Math.max(1, Number(b.quota || 0));
+        const used = Number(b.used || 0);
+        const percent = Math.max(0, Math.min(100, (left / quota) * 100));
+
+        if (ids.label) document.getElementById(ids.label).textContent = left + ' / ' + quota + ' days';
+        if (ids.fill) document.getElementById(ids.fill).style.width = percent + '%';
+
+        const tile = document.querySelector('[data-balance-for="' + type + '"]');
+        if (tile) {
+          tile.textContent = left + ' days left';
+          tile.title = 'Used ' + used + ' of ' + quota + ' days';
+        }
+      }
+
+      function populateManagers(managers, preferredName) {
+        const select = document.getElementById('manager');
+        const current = select.value;
+        const options = ['<option value="">-- Select Manager --</option>'];
+        (managers || []).forEach((m) => {
+          const label = m.label || m.name || '';
+          const name = m.name || '';
+          if (!name) return;
+          options.push('<option value="' + escapeHtml(name) + '">' + escapeHtml(label) + '</option>');
+        });
+        if (options.length === 1) {
+          options.push('<option value="Unassigned Manager">Unassigned Manager (configure in HR module)</option>');
+        }
+        select.innerHTML = options.join('');
+        if (preferredName) {
+          select.value = preferredName;
+        } else if (current) {
+          select.value = current;
+        }
+      }
+
+      function populateProfile(profile, pendingCount) {
+        const fullName = profile.full_name || '';
+        document.getElementById('empId').value = profile.employee_code || '';
+        document.getElementById('empName').value = fullName;
+        document.getElementById('department').value = profile.department_name || '';
+        document.getElementById('contactNumber').value = document.getElementById('contactNumber').value || (profile.phone || '');
+        document.getElementById('altEmail').value = document.getElementById('altEmail').value || (profile.email || '');
+
+        document.getElementById('profileAvatar').textContent = initials(fullName);
+        document.getElementById('profileName').textContent = fullName || 'Unknown Employee';
+        document.getElementById('profileRole').textContent = profile.position_name || 'Employee';
+        document.getElementById('profileEmpId').textContent = 'ID: ' + (profile.employee_code || '-');
+        document.getElementById('profileDepartment').textContent = profile.department_name || '-';
+        document.getElementById('profileJoinDate').textContent = formatDateLabel(profile.join_date);
+        document.getElementById('profileManager').textContent = profile.manager_name || '-';
+        document.getElementById('profilePending').textContent = String(pendingCount || 0);
+      }
+
+      async function loadContext() {
+        const res = await fetch(API.context, { credentials: 'same-origin' });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          const details = data && data.error ? (' | ' + data.error) : '';
+          throw new Error((data.message || 'Failed to load leave context') + details);
+        }
+
+        contextData = data;
+        populateProfile(data.profile || {}, data.pending_count || 0);
+        populateManagers(data.managers || [], (data.profile && data.profile.manager_name) || '');
+
+        applyBalanceCard('sick', { label: 'balLabelSick', fill: 'balFillSick' });
+        applyBalanceCard('casual', { label: 'balLabelCasual', fill: 'balFillCasual' });
+        applyBalanceCard('annual', { label: 'balLabelAnnual', fill: 'balFillAnnual' });
+        applyBalanceCard('emergency', { label: 'balLabelEmergency', fill: 'balFillEmergency' });
+        applyBalanceCard('maternity', {});
+        applyBalanceCard('unpaid', {});
+
+        renderRecentRequests(data.recent_requests || []);
+      }
+
+      function resetFormForNextRequest() {
+        document.getElementById('startDate').value = '';
+        document.getElementById('endDate').value = '';
+        document.getElementById('reason').value = '';
+        document.getElementById('handover').value = '';
+        document.getElementById('daysCount').textContent = '0';
+        document.querySelectorAll('.leave-type-card').forEach((c) => c.classList.remove('selected'));
+        selectedType = '';
+        uploadedFiles = [];
+        renderFiles();
+      }
+
+      document.querySelectorAll('input, select, textarea').forEach((el) => {
+        el.addEventListener('input', () => {
+          el.classList.remove('error');
+          const err = document.getElementById(el.id + 'Error');
+          if (err) err.classList.remove('show');
+        });
+      });
+
+      (async function initPage() {
+        try {
+          toggleSaving(true, 'Loading leave data...');
+          await loadContext();
+          applyDraftIfAny();
+        } catch (e) {
+          alert(e.message || 'Failed to initialize leave page');
+        } finally {
+          toggleSaving(false);
+        }
+      })();
+    </script>
+  </body>
+</html>
+
+
+
+

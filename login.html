@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Promee International</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy-primary: #0f1d3f;
+            --navy-secondary: #1a2a4d;
+            --bg-light: #f8f9fa;
+            --text-dark: #333;
+            --text-muted: #666;
+            --yellow-accent: #fffbe6;
+            --border-color: #ddd;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .login-container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Left Side */
+        .brand-section {
+            flex: 0 0 33%;
+            background-color: var(--navy-primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .logo-placeholder {
+            width: 180px;
+            height: 180px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .logo-placeholder i {
+            font-size: 80px;
+            color: var(--navy-primary);
+        }
+
+        .brand-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .version-tag {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        /* Right Side */
+        .form-section {
+            flex: 1;
+            background-color: var(--bg-light);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .client-reg-btn {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            background: white;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .client-reg-btn:hover {
+            background-color: #eee;
+        }
+
+        .login-form-box {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            display: flex;
+            margin-bottom: 1rem;
+            height: 45px;
+        }
+
+        .input-icon {
+            width: 45px;
+            background-color: var(--navy-primary);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .input-field {
+            flex: 1;
+            border: 1px solid var(--border-color);
+            border-left: none;
+            padding: 0 15px;
+            background-color: var(--yellow-accent);
+            font-size: 1rem;
+            color: var(--text-dark);
+            border-radius: 0 4px 4px 0;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-color: var(--navy-primary);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .remember-me input {
+            margin-right: 8px;
+        }
+
+        .forgot-password {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .login-btn {
+            background-color: var(--navy-primary);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .login-btn:hover {
+            background-color: var(--navy-secondary);
+        }
+
+        .copyright {
+            position: absolute;
+            bottom: 20px;
+            right: 40px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .copyright span {
+            color: #3b82f6;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+            }
+            .brand-section {
+                flex: 0 0 30%;
+            }
+            .logo-placeholder {
+                width: 100px;
+                height: 100px;
+            }
+            .logo-placeholder i {
+                font-size: 40px;
+            }
+            .brand-name {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <!-- Left Side -->
+        <div class="brand-section">
+            <div class="logo-placeholder">
+                <!-- Placeholder for logo -->
+                <i class="fa-solid fa-circle-nodes"></i>
+            </div>
+            <h1 class="brand-name">Promee International</h1>
+            <div class="version-tag">v1.0.0</div>
+        </div>
+
+        <!-- Right Side -->
+        <div class="form-section">
+            <a href="#" class="client-reg-btn">Client Registration</a>
+
+            <div class="login-form-box">
+                <h2 class="login-title">Login To Your Account</h2>
+                
+                <form id="loginForm" action="index.html">
+                    <div class="input-group">
+                        <div class="input-icon">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <input type="text" class="input-field" placeholder="admin" required>
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-icon">
+                            <i class="fa-solid fa-key"></i>
+                        </div>
+                        <input type="password" class="input-field" placeholder="********" required>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox"> Remember Me
+                        </label>
+                        <a href="#" class="forgot-password">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit" class="login-btn">Login</button>
+                </form>
+            </div>
+
+            <div class="copyright">
+                Copyright © 2026 <span style="color: #3b82f6; cursor: pointer;">Promee International</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            console.log('Login attempted');
+        });
+    </script>
+</body>
+</html>

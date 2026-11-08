@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/style.css?v=20260326f" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <title>Internet Packages</title>
+    <style>
+      :root {
+        --pkg-ink: #1f2937;
+        --pkg-subtle: #64748b;
+        --pkg-bg: #f4f8ff;
+        --pkg-white: #ffffff;
+        --pkg-primary: #0ea5e9;
+        --pkg-accent: #ef4444;
+        --pkg-gold: #f59e0b;
+      }
+
+      .pkg-shell {
+        position: relative;
+        padding: 22px;
+        border-radius: 22px;
+        background: radial-gradient(circle at 10% 10%, rgba(14, 165, 233, 0.2), transparent 40%),
+          radial-gradient(circle at 90% 0%, rgba(239, 68, 68, 0.18), transparent 45%),
+          linear-gradient(135deg, #e0f2fe 0%, #f8fafc 45%, #ffe4e6 100%);
+        overflow: hidden;
+      }
+
+      .pkg-shell::before,
+      .pkg-shell::after {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+      }
+
+      .pkg-shell::before {
+        width: 340px;
+        height: 340px;
+        background: radial-gradient(circle, rgba(14, 165, 233, 0.24), transparent 65%);
+        top: -180px;
+        right: -100px;
+        animation: driftA 10s ease-in-out infinite;
+      }
+
+      .pkg-shell::after {
+        width: 260px;
+        height: 260px;
+        background: radial-gradient(circle, rgba(239, 68, 68, 0.2), transparent 68%);
+        bottom: -130px;
+        left: -80px;
+        animation: driftB 12s ease-in-out infinite;
+      }
+
+      @keyframes driftA {
+        0%,
+        100% {
+          transform: translateY(0px) scale(1);
+        }
+        50% {
+          transform: translateY(16px) scale(1.06);
+        }
+      }
+
+      @keyframes driftB {
+        0%,
+        100% {
+          transform: translateY(0px) scale(1);
+        }
+        50% {
+          transform: translateY(-18px) scale(0.97);
+        }
+      }
+
+      .pkg-hero {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 18px;
+        margin-bottom: 18px;
+      }
+
+      .pkg-hero-card {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(148, 163, 184, 0.26);
+        border-radius: 18px;
+        padding: 20px;
+        backdrop-filter: blur(2px);
+        box-shadow: 0 14px 28px rgba(15, 23, 42, 0.09);
+      }
+
+      .pkg-hero-title {
+        margin: 0;
+        font-size: 30px;
+        letter-spacing: 0.3px;
+        color: var(--pkg-ink);
+      }
+
+      .pkg-hero-title span {
+        color: var(--pkg-accent);
+      }
+
+      .pkg-hero-sub {
+        margin: 8px 0 0;
+        color: var(--pkg-subtle);
+      }
+
+      .pkg-metrics {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .pkg-metric {
+        background: var(--pkg-white);
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        border-radius: 12px;
+        padding: 10px 12px;
+        text-align: center;
+      }
+
+      .pkg-metric h4 {
+        margin: 0;
+        font-size: 21px;
+        color: #0f172a;
+      }
+
+      .pkg-metric p {
+        margin: 4px 0 0;
+        font-size: 12px;
+        color: var(--pkg-subtle);
+      }
+
+      .pkg-form-wrap {
+        position: relative;
+        z-index: 1;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        border-radius: 18px;
+        box-shadow: 0 14px 28px rgba(15, 23, 42, 0.09);
+        padding: 16px;
+      }
+
+      .pkg-form-wrap h3 {
+        margin: 0 0 12px;
+        color: var(--pkg-ink);
+        font-size: 18px;
+      }
+
+      .pkg-grid {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .pkg-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .pkg-field label {
+        font-size: 12px;
+        color: #334155;
+        font-weight: 700;
+      }
+
+      .pkg-field input,
+      .pkg-field select,
+      .pkg-field textarea {
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        padding: 9px 11px;
+        font-size: 14px;
+        background: #fff;
+      }
+
+      .pkg-field textarea {
+        resize: vertical;
+        min-height: 76px;
+      }
+
+      .pkg-col-3 {
+        grid-column: span 3;
+      }
+
+      .pkg-col-4 {
+        grid-column: span 4;
+      }
+
+      .pkg-col-6 {
+        grid-column: span 6;
+      }
+
+      .pkg-col-12 {
+        grid-column: span 12;
+      }
+
+      .pkg-checks {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .pkg-check {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: #1e293b;
+      }
+
+      .pkg-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .pkg-btn {
+        border: 0;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .pkg-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 9px 18px rgba(15, 23, 42, 0.14);
+      }
+
+      .pkg-btn-primary {
+        background: linear-gradient(135deg, #0284c7, #0ea5e9);
+        color: #fff;
+      }
+
+      .pkg-btn-alt {
+        background: #f1f5f9;
+        color: #0f172a;
+      }
+
+      .pkg-btn-danger {
+        background: #fee2e2;
+        color: #b91c1c;
+      }
+
+      .pkg-btn-download {
+        background: linear-gradient(135deg, #dc2626, #f97316);
+        color: #fff;
+      }
+
+      .pkg-table-wrap {
+        position: relative;
+        z-index: 1;
+        margin-top: 18px;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        border-radius: 18px;
+        box-shadow: 0 14px 28px rgba(15, 23, 42, 0.09);
+        overflow: hidden;
+      }
+
+      .pkg-table-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 16px;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .pkg-table-head h3 {
+        margin: 0;
+        font-size: 17px;
+      }
+
+      .pkg-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .pkg-table thead {
+        background: #f8fafc;
+      }
+
+      .pkg-table th,
+      .pkg-table td {
+        border-bottom: 1px solid #edf2f7;
+        padding: 10px 8px;
+        text-align: left;
+        font-size: 13px;
+      }
+
+      .pkg-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        border-radius: 999px;
+        padding: 4px 10px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .pkg-pill-active {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      .pkg-pill-inactive {
+        background: #fee2e2;
+        color: #b91c1c;
+      }
+
+      .pkg-card-anim {
+        animation: packageReveal 0.45s ease both;
+      }
+
+      @keyframes packageReveal {
+        from {
+          opacity: 0;
+          transform: translateY(10px) scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0px) scale(1);
+        }
+      }
+
+      @media (max-width: 1200px) {
+        .pkg-hero {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .pkg-col-3,
+        .pkg-col-4,
+        .pkg-col-6 {
+          grid-column: span 12;
+        }
+
+        .pkg-table-wrap {
+          overflow-x: auto;
+        }
+
+        .pkg-table {
+          min-width: 980px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app-header"></div>
+    <div class="main-content">
+      <div class="page-content">
+        <section class="pkg-shell">
+          <div class="pkg-hero">
+            <div class="pkg-hero-card pkg-card-anim" style="animation-delay: 0.02s;">
+              <h1 class="pkg-hero-title">Internet <span>Packages</span></h1>
+              <p class="pkg-hero-sub">Create ISP-ready plans with speed tiers, support profile, pricing, and visual ad posters in one place.</p>
+              <div class="pkg-metrics">
+                <div class="pkg-metric">
+                  <h4 id="metricTotal">0</h4>
+                  <p>Total Packages</p>
+                </div>
+                <div class="pkg-metric">
+                  <h4 id="metricActive">0</h4>
+                  <p>Active</p>
+                </div>
+                <div class="pkg-metric">
+                  <h4 id="metricPopular">0</h4>
+                  <p>Popular Picks</p>
+                </div>
+              </div>
+            </div>
+            <div class="pkg-hero-card pkg-card-anim" style="animation-delay: 0.1s;">
+              <h3 style="margin: 0 0 6px;">Poster Designer</h3>
+              <p style="margin: 0; color: var(--pkg-subtle);">Every package has a dedicated Download Poster action. Choose a style template to generate a beautiful promo graphic instantly.</p>
+              <div class="pkg-field" style="margin-top: 14px;">
+                <label for="posterStyle">Poster Theme</label>
+                <select id="posterStyle">
+                  <option value="flare">Flare Red</option>
+                  <option value="midnight">Midnight Blue</option>
+                  <option value="sunrise">Sunrise Orange</option>
+                </select>
+              </div>
+              <div style="margin-top: 12px; color: #1e293b; font-size: 13px;">
+                <i class="fa-solid fa-circle-check" style="color: #10b981;"></i>
+                Posters include plan name, speed, price, and company branding.
+              </div>
+            </div>
+          </div>
+
+          <div id="packageFormCard" class="pkg-form-wrap pkg-card-anim" style="animation-delay: 0.16s;">
+            <h3><i class="fa-solid fa-wifi"></i> Create / Update Package</h3>
+            <form id="packageForm">
+              <input type="hidden" id="pkgId" />
+              <div class="pkg-grid">
+                <div class="pkg-field pkg-col-4">
+                  <label for="pkgName">Package Name</label>
+                  <input id="pkgName" required placeholder="Example: Turbo 100" />
+                </div>
+                <div class="pkg-field pkg-col-4">
+                  <label for="pkgTagline">Marketing Tagline</label>
+                  <input id="pkgTagline" placeholder="Ultra low-latency streaming" />
+                </div>
+                <div class="pkg-field pkg-col-4">
+                  <label for="pkgSupportLevel">Support Level</label>
+                  <select id="pkgSupportLevel">
+                    <option>Standard Support</option>
+                    <option>Priority Support</option>
+                    <option>24/7 Premium Desk</option>
+                  </select>
+                </div>
+
+                <div class="pkg-field pkg-col-3">
+                  <label for="pkgDownload">Download Mbps</label>
+                  <input id="pkgDownload" type="number" min="1" required placeholder="100" />
+                </div>
+                <div class="pkg-field pkg-col-3">
+                  <label for="pkgUpload">Upload Mbps</label>
+                  <input id="pkgUpload" type="number" min="0" placeholder="25" />
+                </div>
+                <div class="pkg-field pkg-col-3">
+                  <label for="pkgDataLimit">Data Limit (GB)</label>
+                  <input id="pkgDataLimit" type="number" min="0" placeholder="Leave empty for unlimited" />
+                </div>
+                <div class="pkg-field pkg-col-3">
+                  <label for="pkgPrice">Monthly Price (BDT)</label>
+                  <input id="pkgPrice" type="number" min="1" step="0.01" required placeholder="1400" />
+                </div>
+
+                <div class="pkg-field pkg-col-6">
+                  <label for="pkgInstallFee">Installation Fee (BDT)</label>
+                  <input id="pkgInstallFee" type="number" min="0" step="0.01" placeholder="0" />
+                </div>
+                <div class="pkg-field pkg-col-6">
+                  <label>Flags</label>
+                  <div class="pkg-checks">
+                    <label class="pkg-check"><input id="pkgRouterIncluded" type="checkbox" /> Router Included</label>
+                    <label class="pkg-check"><input id="pkgPopular" type="checkbox" /> Popular Package</label>
+                    <label class="pkg-check"><input id="pkgActive" type="checkbox" checked /> Active</label>
+                  </div>
+                </div>
+              </div>
+              <div class="pkg-actions">
+                <button type="button" class="pkg-btn pkg-btn-alt" id="btnResetForm"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+                <button type="submit" class="pkg-btn pkg-btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Package</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="pkg-table-wrap pkg-card-anim" style="animation-delay: 0.24s;">
+            <div class="pkg-table-head">
+              <h3><i class="fa-solid fa-list"></i> Package Inventory</h3>
+              <small id="pkgStateHint" style="color: var(--pkg-subtle);">Loading packages...</small>
+            </div>
+            <table class="pkg-table">
+              <thead>
+                <tr>
+                  <th>Package</th>
+                  <th>Speed</th>
+                  <th>Price</th>
+                  <th>Data</th>
+                  <th>Support</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="pkgTableBody">
+                <tr><td colspan="7" style="text-align:center; color: #64748b;">Loading packages...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script src="assets/js/header-loader.js?v=20260328i"></script>
+    <script>
+      const packageForm = document.getElementById('packageForm');
+      const pkgTableBody = document.getElementById('pkgTableBody');
+      const pkgStateHint = document.getElementById('pkgStateHint');
+      const metricTotal = document.getElementById('metricTotal');
+      const metricActive = document.getElementById('metricActive');
+      const metricPopular = document.getElementById('metricPopular');
+      const posterStyle = document.getElementById('posterStyle');
+
+      const fields = {
+        id: document.getElementById('pkgId'),
+        name: document.getElementById('pkgName'),
+        tagline: document.getElementById('pkgTagline'),
+        download: document.getElementById('pkgDownload'),
+        upload: document.getElementById('pkgUpload'),
+        data: document.getElementById('pkgDataLimit'),
+        support: document.getElementById('pkgSupportLevel'),
+        price: document.getElementById('pkgPrice'),
+        installationFee: document.getElementById('pkgInstallFee'),
+        routerIncluded: document.getElementById('pkgRouterIncluded'),
+        popular: document.getElementById('pkgPopular'),
+        active: document.getElementById('pkgActive')
+      };
+
+      const packagesState = [];
+
+      function esc(value) {
+        return String(value == null ? '' : value)
+          .replaceAll('&', '&amp;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('"', '&quot;')
+          .replaceAll("'", '&#39;');
+      }
+
+      function money(value) {
+        return `BDT ${Number(value || 0).toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
+      }
+
+      function readFormPayload() {
+        return {
+          id: Number(fields.id.value || 0),
+          package_name: fields.name.value.trim(),
+          tagline: fields.tagline.value.trim(),
+          speed_mbps: Number(fields.download.value || 0),
+          upload_mbps: fields.upload.value === '' ? null : Number(fields.upload.value),
+          monthly_price: Number(fields.price.value || 0),
+          data_limit_gb: fields.data.value === '' ? null : Number(fields.data.value),
+          support_level: fields.support.value,
+          router_included: fields.routerIncluded.checked,
+          installation_fee: Number(fields.installationFee.value || 0),
+          is_popular: fields.popular.checked,
+          is_active: fields.active.checked
+        };
+      }
+
+      function fillForm(pkg) {
+        fields.id.value = String(pkg.id || 0);
+        fields.name.value = pkg.package_name || '';
+        fields.tagline.value = pkg.tagline || '';
+        fields.download.value = String(Number(pkg.speed_mbps || 0));
+        fields.upload.value = pkg.upload_mbps == null ? '' : String(Number(pkg.upload_mbps));
+        fields.data.value = pkg.data_limit_gb == null ? '' : String(Number(pkg.data_limit_gb));
+        fields.support.value = pkg.support_level || 'Standard Support';
+        fields.price.value = String(Number(pkg.monthly_price || 0));
+        fields.installationFee.value = String(Number(pkg.installation_fee || 0));
+        fields.routerIncluded.checked = Number(pkg.router_included || 0) === 1;
+        fields.popular.checked = Number(pkg.is_popular || 0) === 1;
+        fields.active.checked = Number(pkg.is_active || 0) === 1;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function resetForm() {
+        packageForm.reset();
+        fields.id.value = '';
+        fields.active.checked = true;
+      }
+
+      async function postJson(url, payload) {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json().catch(() => null);
+        if (!response.ok || !result || result.ok === false) {
+          throw new Error((result && result.message) || 'Request failed');
+        }
+
+        return result;
+      }
+
+      function updateMetrics() {
+        const total = packagesState.length;
+        const active = packagesState.filter((item) => Number(item.is_active || 0) === 1).length;
+        const popular = packagesState.filter((item) => Number(item.is_popular || 0) === 1).length;
+        metricTotal.textContent = String(total);
+        metricActive.textContent = String(active);
+        metricPopular.textContent = String(popular);
+      }
+
+      function renderRows() {
+        updateMetrics();
+
+        if (packagesState.length === 0) {
+          pkgTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#64748b;">No package found. Use the form to create one.</td></tr>';
+          return;
+        }
+
+        pkgTableBody.innerHTML = packagesState.map((pkg, index) => {
+          const active = Number(pkg.is_active || 0) === 1;
+          const support = pkg.support_level || 'Standard Support';
+          const dataText = pkg.data_limit_gb == null ? 'Unlimited' : `${Number(pkg.data_limit_gb)} GB`;
+          const upload = pkg.upload_mbps == null ? '-' : `${Number(pkg.upload_mbps)} Mbps`;
+
+          return `
+            <tr style="animation-delay:${Math.min(index * 0.04, 0.32)}s" class="pkg-card-anim">
+              <td>
+                <div style="font-weight:700; color:#0f172a;">${esc(pkg.package_name || '')}</div>
+                <div style="font-size:12px; color:#64748b;">${esc(pkg.tagline || '')}</div>
+              </td>
+              <td>
+                <div>${Number(pkg.speed_mbps || 0)} Mbps</div>
+                <small style="color:#64748b;">Upload: ${upload}</small>
+              </td>
+              <td>
+                <div>${money(pkg.monthly_price || 0)}</div>
+                <small style="color:#64748b;">Install: ${money(pkg.installation_fee || 0)}</small>
+              </td>
+              <td>${esc(dataText)}</td>
+              <td>${esc(support)}</td>
+              <td>
+                <span class="pkg-pill ${active ? 'pkg-pill-active' : 'pkg-pill-inactive'}">
+                  <i class="fa-solid ${active ? 'fa-circle-check' : 'fa-circle-xmark'}"></i>
+                  ${active ? 'Active' : 'Inactive'}
+                </span>
+              </td>
+              <td style="white-space:nowrap;">
+                <button class="pkg-btn pkg-btn-alt js-package-edit" data-id="${Number(pkg.id || 0)}"><i class="fa-solid fa-pen"></i></button>
+                <button class="pkg-btn pkg-btn-alt js-package-toggle" data-id="${Number(pkg.id || 0)}" data-active="${active ? 1 : 0}"><i class="fa-solid ${active ? 'fa-toggle-on' : 'fa-toggle-off'}"></i></button>
+                <button class="pkg-btn pkg-btn-danger js-package-delete" data-id="${Number(pkg.id || 0)}"><i class="fa-solid fa-trash"></i></button>
+                <button class="pkg-btn pkg-btn-download js-package-download" data-id="${Number(pkg.id || 0)}"><i class="fa-solid fa-download"></i></button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      async function loadPackages() {
+        pkgStateHint.textContent = 'Loading packages...';
+        try {
+          const response = await fetch('backend/public/packages/list.php', {
+            method: 'GET',
+            credentials: 'same-origin',
+            cache: 'no-store'
+          });
+          const result = await response.json().catch(() => null);
+          if (!response.ok || !result || result.ok === false) {
+            throw new Error((result && result.message) || 'Failed to load packages');
+          }
+
+          packagesState.length = 0;
+          packagesState.push(...(Array.isArray(result.packages) ? result.packages : []));
+          renderRows();
+          pkgStateHint.textContent = `${packagesState.length} package(s) available`;
+        } catch (error) {
+          pkgStateHint.textContent = 'Failed to load packages';
+          pkgTableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#dc2626;">${esc(error.message || 'Load failed')}</td></tr>`;
+        }
+      }
+
+      function findPackageById(id) {
+        return packagesState.find((item) => Number(item.id || 0) === Number(id));
+      }
+
+      function drawPoster(pkg) {
+        const theme = String(posterStyle.value || 'flare');
+        const canvas = document.createElement('canvas');
+        canvas.width = 1080;
+        canvas.height = 1080;
+        const ctx = canvas.getContext('2d');
+
+        if (!ctx) {
+          throw new Error('Poster engine unavailable');
+        }
+
+        if (theme === 'midnight') {
+          const bg = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+          bg.addColorStop(0, '#0f172a');
+          bg.addColorStop(1, '#1d4ed8');
+          ctx.fillStyle = bg;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = 'rgba(125, 211, 252, 0.25)';
+        } else if (theme === 'sunrise') {
+          const bg = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+          bg.addColorStop(0, '#7c2d12');
+          bg.addColorStop(0.45, '#ea580c');
+          bg.addColorStop(1, '#f59e0b');
+          ctx.fillStyle = bg;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = 'rgba(254, 240, 138, 0.22)';
+        } else {
+          const bg = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+          bg.addColorStop(0, '#7f1d1d');
+          bg.addColorStop(0.45, '#be123c');
+          bg.addColorStop(1, '#f97316');
+          ctx.fillStyle = bg;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.16)';
+        }
+
+        for (let i = 0; i < 6; i += 1) {
+          ctx.beginPath();
+          ctx.arc(120 + i * 180, 180 + (i % 2) * 80, 160, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.fillStyle = 'rgba(255,255,255,0.95)';
+        ctx.fillRect(60, 60, 300, 72);
+        ctx.fillStyle = '#111827';
+        ctx.font = 'bold 30px Georgia';
+        ctx.fillText('Promee Internet', 82, 105);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 68px Georgia';
+        ctx.fillText('UNLIMITED', 70, 280);
+        ctx.font = 'bold 72px Georgia';
+        ctx.fillText('INTERNET', 70, 360);
+
+        ctx.fillStyle = 'rgba(255,255,255,0.92)';
+        ctx.fillRect(70, 420, 920, 176);
+        ctx.fillStyle = '#7f1d1d';
+        ctx.font = 'bold 58px Georgia';
+        ctx.fillText(String(pkg.package_name || 'Package').toUpperCase(), 96, 500);
+
+        ctx.fillStyle = '#0f172a';
+        ctx.font = '30px Georgia';
+        ctx.fillText(`${Number(pkg.speed_mbps || 0)} Mbps Download | ${pkg.upload_mbps == null ? '-' : Number(pkg.upload_mbps)} Mbps Upload`, 96, 548);
+
+        ctx.fillStyle = '#dc2626';
+        ctx.font = 'bold 54px Georgia';
+        ctx.fillText(`${Number(pkg.monthly_price || 0).toLocaleString()} BDT / month`, 96, 640);
+
+        ctx.fillStyle = 'rgba(255,255,255,0.95)';
+        ctx.fillRect(70, 706, 920, 200);
+        ctx.fillStyle = '#111827';
+        ctx.font = 'bold 32px Georgia';
+        ctx.fillText('Plan Highlights', 96, 760);
+        ctx.font = '28px Georgia';
+        ctx.fillText(`Support: ${pkg.support_level || 'Standard Support'}`, 96, 804);
+        ctx.fillText(`Data Policy: ${pkg.data_limit_gb == null ? 'Unlimited' : `${pkg.data_limit_gb} GB`}`, 96, 844);
+        ctx.fillText(`Router Included: ${Number(pkg.router_included || 0) === 1 ? 'Yes' : 'No'}`, 96, 884);
+
+        ctx.fillStyle = '#fef3c7';
+        ctx.fillRect(70, 930, 920, 88);
+        ctx.fillStyle = '#7c2d12';
+        ctx.font = 'bold 26px Georgia';
+        ctx.fillText('Call Now: 09652 345671 | Website: promeeinternet.com', 96, 983);
+
+        return canvas;
+      }
+
+      function downloadPoster(pkg) {
+        const canvas = drawPoster(pkg);
+        const a = document.createElement('a');
+        a.href = canvas.toDataURL('image/png');
+        const clean = String(pkg.package_name || 'package').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        a.download = `${clean || 'package'}-poster.png`;
+        a.click();
+      }
+
+      packageForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const payload = readFormPayload();
+
+        try {
+          await postJson('backend/public/packages/upsert.php', payload);
+          resetForm();
+          await loadPackages();
+          pkgStateHint.textContent = 'Package saved successfully';
+        } catch (error) {
+          pkgStateHint.textContent = error.message || 'Failed to save package';
+        }
+      });
+
+      document.getElementById('btnResetForm').addEventListener('click', () => {
+        resetForm();
+      });
+
+      pkgTableBody.addEventListener('click', async (event) => {
+        const editBtn = event.target.closest('.js-package-edit');
+        const toggleBtn = event.target.closest('.js-package-toggle');
+        const deleteBtn = event.target.closest('.js-package-delete');
+        const posterBtn = event.target.closest('.js-package-download');
+
+        if (editBtn) {
+          const pkg = findPackageById(Number(editBtn.dataset.id || 0));
+          if (pkg) fillForm(pkg);
+          return;
+        }
+
+        if (toggleBtn) {
+          const pkg = findPackageById(Number(toggleBtn.dataset.id || 0));
+          if (!pkg) return;
+          try {
+            await postJson('backend/public/packages/upsert.php', {
+              ...pkg,
+              is_active: Number(pkg.is_active || 0) !== 1,
+              router_included: Number(pkg.router_included || 0) === 1,
+              is_popular: Number(pkg.is_popular || 0) === 1
+            });
+            await loadPackages();
+          } catch (error) {
+            pkgStateHint.textContent = error.message || 'Toggle failed';
+          }
+          return;
+        }
+
+        if (deleteBtn) {
+          const id = Number(deleteBtn.dataset.id || 0);
+          if (id <= 0) return;
+          if (!confirm('Delete this package? If already assigned to clients, it will be deactivated.')) {
+            return;
+          }
+          try {
+            await postJson('backend/public/packages/delete.php', { id });
+            await loadPackages();
+          } catch (error) {
+            pkgStateHint.textContent = error.message || 'Delete failed';
+          }
+          return;
+        }
+
+        if (posterBtn) {
+          const pkg = findPackageById(Number(posterBtn.dataset.id || 0));
+          if (!pkg) return;
+          downloadPoster(pkg);
+        }
+      });
+
+      loadPackages();
+    </script>
+  </body>
+</html>

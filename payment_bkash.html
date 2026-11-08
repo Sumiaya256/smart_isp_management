@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bKash Payment - Promee Internet</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root { --brand: #e2136e; --bg: #fef2f8; --card: #ffffff; --ink: #1f2937; --muted: #6b7280; }
+    * { box-sizing: border-box; font-family: Segoe UI, Arial, sans-serif; }
+    body { margin: 0; background: linear-gradient(140deg, #fff1f7, #fdf2f8); color: var(--ink); }
+    .wrap { min-height: 100vh; display: grid; place-items: center; padding: 20px; }
+    .card { width: 100%; max-width: 520px; background: var(--card); border-radius: 16px; box-shadow: 0 16px 35px rgba(226, 19, 110, 0.18); overflow: hidden; border: 1px solid #fbcfe8; }
+    .head { background: var(--brand); color: #fff; padding: 18px 20px; display: flex; align-items: center; gap: 10px; }
+    .body { padding: 20px; display: grid; gap: 14px; }
+    label { font-size: 13px; font-weight: 700; color: #374151; display: block; margin-bottom: 6px; }
+    input { width: 100%; padding: 11px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; }
+    input[readonly] { background: #f9fafb; color: #111827; }
+    .hint { font-size: 12px; color: var(--muted); }
+    .btn { width: 100%; border: none; border-radius: 10px; background: var(--brand); color: #fff; padding: 12px; font-weight: 700; cursor: pointer; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .msg { font-size: 13px; min-height: 18px; }
+    .top-link { text-align: center; margin-top: 12px; }
+    .top-link a { color: var(--brand); text-decoration: none; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="head"><i class="fa-solid fa-mobile-screen-button"></i><strong>bKash Payment</strong></div>
+      <div class="body">
+        <div>
+          <label>Current Month</label>
+          <input id="billingMonth" type="text" readonly />
+        </div>
+        <div>
+          <label>Fixed Amount (BDT)</label>
+          <input id="amount" type="text" readonly />
+        </div>
+        <div>
+          <label>Receiver No</label>
+          <input id="receiver" type="text" readonly value="01756202157" />
+        </div>
+        <div>
+          <label>Your bKash Number</label>
+          <input id="payerRef" type="text" placeholder="01XXXXXXXXX" />
+        </div>
+        <div>
+          <label>bKash TrxID</label>
+          <input id="trx" type="text" placeholder="Transaction ID" />
+        </div>
+        <button id="payBtn" class="btn"><i class="fa-solid fa-check"></i> Pay Now</button>
+        <div id="msg" class="msg"></div>
+        <div class="top-link"><a href="indexClient.html">Back to Portal</a></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function fetchJson(url, options = {}) {
+      const response = await fetch(url, { credentials: 'same-origin', ...options });
+      const data = await response.json().catch(() => null);
+      if (!response.ok || !data || data.ok === false) {
+        throw new Error((data && data.message) || 'Request failed');
+      }
+      return data;
+    }
+
+    function setMsg(text, isError) {
+      const msg = document.getElementById('msg');
+      msg.textContent = text;
+      msg.style.color = isError ? '#dc2626' : '#059669';
+    }
+
+    async function loadContext() {
+      const data = await fetchJson('backend/public/client_portal/payment_context.php');
+      document.getElementById('amount').value = String(Number(data.context.fixed_amount || 0));
+      document.getElementById('billingMonth').value = data.context.current_month_label || data.context.current_month;
+      document.getElementById('receiver').value = data.context.receivers && data.context.receivers.bkash ? data.context.receivers.bkash : '01756202157';
+    }
+
+    async function submitPayment() {
+      const payerRef = document.getElementById('payerRef').value.trim();
+      const trx = document.getElementById('trx').value.trim();
+      if (!payerRef || !trx) {
+        setMsg('Please enter your number and TrxID.', true);
+        return;
+      }
+
+      const payBtn = document.getElementById('payBtn');
+      payBtn.disabled = true;
+      setMsg('Submitting payment...', false);
+      try {
+        const res = await fetchJson('backend/public/client_portal/submit_payment.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ method: 'bkash', payer_reference: payerRef + ' / ' + trx })
+        });
+
+        alert(res.message + '\nPayslip: ' + res.payment.payslip_no);
+        window.location.href = 'indexClient.html#history';
+      } catch (error) {
+        setMsg(error.message || 'Payment failed', true);
+      } finally {
+        payBtn.disabled = false;
+      }
+    }
+
+    document.getElementById('payBtn').addEventListener('click', submitPayment);
+    loadContext().catch((e) => {
+      setMsg(e.message || 'Failed to load payment context', true);
+      if ((e.message || '').toLowerCase().includes('unauthorized')) {
+        window.location.replace('login.html');
+      }
+    });
+  </script>
+</body>
+</html>

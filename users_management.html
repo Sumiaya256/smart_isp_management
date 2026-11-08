@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promee Internet - Users Management</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=20260326f" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      .users-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .panel {
+        background: #fff;
+        border: 1px solid #d8dee5;
+        border-radius: 8px;
+        padding: 16px;
+      }
+
+      .panel h3 {
+        margin-bottom: 12px;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .form-group label {
+        display: block;
+        font-size: 13px;
+        margin-bottom: 4px;
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #cfd5dd;
+        border-radius: 4px;
+      }
+
+      .btn-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .status-message {
+        font-size: 13px;
+        min-height: 18px;
+        margin-bottom: 8px;
+      }
+
+      .users-table-wrap {
+        overflow-x: auto;
+      }
+
+      .users-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .users-table th,
+      .users-table td {
+        border: 1px solid #e2e8f0;
+        padding: 8px;
+        font-size: 13px;
+        text-align: left;
+      }
+
+      .users-table th {
+        background: #132544;
+        color: #fff;
+      }
+
+      .action-btn {
+        border: 1px solid #d1d5db;
+        background: #fff;
+        padding: 4px 8px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+
+      @media (max-width: 992px) {
+        .users-grid,
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app-header"></div>
+<div class="main-content">
+<!-- Search Results Modal -->
+      <div id="searchModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+        <div style="background: white; width: 90%; max-width: 1200px; margin: 5% auto; border-radius: 8px; padding: 20px; max-height: 80vh; overflow-y: auto;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>Search Results</h2>
+            <button onclick="closeSearchModal()" style="background: #ff6b6b; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;"><i class="fa-solid fa-times"></i> Close</button>
+          </div>
+          <div id="searchResults" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
+            <!-- Search results will be populated here -->
+          </div>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><i class="fa-solid fa-users"></i> Users Management</div>
+          </div>
+
+          <div class="users-grid">
+            <div class="panel">
+              <h3>Create User</h3>
+              <p id="createMessage" class="status-message"></p>
+              <form id="createUserForm" novalidate>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="createFullName">Full Name</label>
+                    <input id="createFullName" type="text" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="createEmail">Email</label>
+                    <input id="createEmail" type="email" required />
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="createPhone">Phone</label>
+                    <input id="createPhone" type="text" />
+                  </div>
+                  <div class="form-group">
+                    <label for="createRole">Role</label>
+                    <select id="createRole" required></select>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="createPassword">Password</label>
+                    <input id="createPassword" type="password" required />
+                  </div>
+                </div>
+                <div class="btn-row">
+                  <button class="btn btn-navy" type="submit"><i class="fa-solid fa-user-plus"></i> Create User</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="panel">
+              <h3>Update User</h3>
+              <p id="updateMessage" class="status-message"></p>
+              <form id="updateUserForm" novalidate>
+                <input id="updateUserId" type="hidden" />
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="updateFullName">Full Name</label>
+                    <input id="updateFullName" type="text" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="updateEmail">Email</label>
+                    <input id="updateEmail" type="email" required />
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="updatePhone">Phone</label>
+                    <input id="updatePhone" type="text" />
+                  </div>
+                  <div class="form-group">
+                    <label for="updateRole">Role</label>
+                    <select id="updateRole" required></select>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="updateActive">Active</label>
+                    <select id="updateActive">
+                      <option value="1">Active</option>
+                      <option value="0">Inactive</option>
+                    </select>
+                  </div>
+                  <div class="form-group"></div>
+                </div>
+                <div class="btn-row">
+                  <button class="btn btn-navy" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+                  <button class="btn btn-secondary" type="button" id="clearUpdateForm">Clear</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>User List</h3>
+            <div class="users-table-wrap">
+              <table class="users-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3>Delete Role</h3>
+            <p id="roleDeleteMessage" class="status-message"></p>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="deleteRoleSelect">Role</label>
+                <select id="deleteRoleSelect"></select>
+              </div>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-danger" type="button" id="deleteRoleBtn"><i class="fa-solid fa-trash"></i> Delete Role</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/js/header-loader.js?v=20260328i"></script>
+    <script>
+      (async function () {
+        const usersTableBody = document.getElementById('usersTableBody');
+        const searchInput = document.getElementById('userSearch');
+        const createRole = document.getElementById('createRole');
+        const updateRole = document.getElementById('updateRole');
+        const deleteRoleSelect = document.getElementById('deleteRoleSelect');
+        const deleteRoleBtn = document.getElementById('deleteRoleBtn');
+        const createForm = document.getElementById('createUserForm');
+        const updateForm = document.getElementById('updateUserForm');
+        const clearUpdateFormBtn = document.getElementById('clearUpdateForm');
+        const createMessage = document.getElementById('createMessage');
+        const updateMessage = document.getElementById('updateMessage');
+        const roleDeleteMessage = document.getElementById('roleDeleteMessage');
+
+        let allUsers = [];
+        let roles = [];
+
+        function esc(text) {
+          return String(text == null ? '' : text)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+        }
+
+        function setMessage(element, text, isError) {
+          element.textContent = text || '';
+          element.style.color = isError ? '#dc2626' : '#15803d';
+        }
+
+        async function requireAuth() {
+          const res = await fetch('backend/public/auth/me.php', { credentials: 'same-origin' });
+          if (!res.ok) {
+            window.location.href = 'login.html';
+            return false;
+          }
+          return true;
+        }
+
+        async function loadRoles() {
+          const res = await fetch('backend/public/users/roles.php', { credentials: 'same-origin' });
+          const data = await res.json();
+          if (!res.ok || !data.ok) {
+            throw new Error(data.message || 'Failed to load roles');
+          }
+
+          roles = data.roles || [];
+          const options = roles
+            .map(function (r) {
+              return '<option value="' + r.id + '">' + esc(r.name) + '</option>';
+            })
+            .join('');
+          createRole.innerHTML = options;
+          updateRole.innerHTML = options;
+          deleteRoleSelect.innerHTML = options;
+        }
+
+        async function loadUsers() {
+          const res = await fetch('backend/public/users/list.php', { credentials: 'same-origin' });
+          const data = await res.json();
+          if (!res.ok || !data.ok) {
+            throw new Error(data.message || 'Failed to load users');
+          }
+
+          allUsers = data.users || [];
+          renderUsers(searchInput.value.trim());
+        }
+
+        function fillUpdateForm(user) {
+          document.getElementById('updateUserId').value = user.id;
+          document.getElementById('updateFullName').value = user.full_name || '';
+          document.getElementById('updateEmail').value = user.email || '';
+          document.getElementById('updatePhone').value = user.phone || '';
+
+          const role = roles.find(function (r) { return r.name === user.role_name; });
+          if (role) {
+            updateRole.value = role.id;
+          }
+
+          document.getElementById('updateActive').value = user.is_active ? '1' : '0';
+          setMessage(updateMessage, 'Selected user #' + user.id + ' for editing', false);
+        }
+
+        function renderUsers(filterText) {
+          const filtered = !filterText
+            ? allUsers
+            : allUsers.filter(function (u) {
+                const hay = (u.full_name + ' ' + u.email + ' ' + (u.phone || '') + ' ' + u.role_name).toLowerCase();
+                return hay.includes(filterText.toLowerCase());
+              });
+
+          if (!filtered.length) {
+            usersTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No users found</td></tr>';
+            return;
+          }
+
+          usersTableBody.innerHTML = filtered
+            .map(function (u) {
+              return '<tr>' +
+                '<td>' + esc(u.id) + '</td>' +
+                '<td>' + esc(u.full_name) + '</td>' +
+                '<td>' + esc(u.email) + '</td>' +
+                '<td>' + esc(u.phone || '-') + '</td>' +
+                '<td>' + esc(u.role_name) + '</td>' +
+                '<td>' + (u.is_active ? 'Active' : 'Inactive') + '</td>' +
+                '<td>' +
+                '<button class="action-btn" data-action="edit" data-id="' + esc(u.id) + '">Edit</button> ' +
+                '<button class="action-btn" data-action="reset" data-id="' + esc(u.id) + '">Reset Password</button> ' +
+                '<button class="action-btn" data-action="deactivate" data-id="' + esc(u.id) + '">Deactivate</button>' +
+                '</td>' +
+                '</tr>';
+            })
+            .join('');
+        }
+
+        async function callJson(url, method, body) {
+          const res = await fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            body: body ? JSON.stringify(body) : undefined
+          });
+          const data = await res.json();
+          if (!res.ok || !data.ok) {
+            throw new Error(data.message || 'Request failed');
+          }
+          return data;
+        }
+
+        createForm.addEventListener('submit', async function (event) {
+          event.preventDefault();
+          try {
+            const payload = {
+              full_name: document.getElementById('createFullName').value.trim(),
+              email: document.getElementById('createEmail').value.trim(),
+              phone: document.getElementById('createPhone').value.trim(),
+              password: document.getElementById('createPassword').value,
+              role_id: Number(createRole.value)
+            };
+
+            await callJson('backend/public/users/create.php', 'POST', payload);
+            setMessage(createMessage, 'User created successfully', false);
+            createForm.reset();
+            await loadUsers();
+          } catch (error) {
+            setMessage(createMessage, error.message, true);
+          }
+        });
+
+        updateForm.addEventListener('submit', async function (event) {
+          event.preventDefault();
+          try {
+            const userId = Number(document.getElementById('updateUserId').value);
+            if (!userId) {
+              throw new Error('Select a user from table first');
+            }
+
+            const payload = {
+              user_id: userId,
+              full_name: document.getElementById('updateFullName').value.trim(),
+              email: document.getElementById('updateEmail').value.trim(),
+              phone: document.getElementById('updatePhone').value.trim(),
+              role_id: Number(updateRole.value),
+              is_active: document.getElementById('updateActive').value === '1'
+            };
+
+            await callJson('backend/public/users/update.php', 'POST', payload);
+            setMessage(updateMessage, 'User updated successfully', false);
+            await loadUsers();
+          } catch (error) {
+            setMessage(updateMessage, error.message, true);
+          }
+        });
+
+        clearUpdateFormBtn.addEventListener('click', function () {
+          updateForm.reset();
+          document.getElementById('updateUserId').value = '';
+          setMessage(updateMessage, '', false);
+        });
+
+        deleteRoleBtn.addEventListener('click', async function () {
+          const roleId = Number(deleteRoleSelect.value);
+          if (!roleId) {
+            setMessage(roleDeleteMessage, 'Please select a role', true);
+            return;
+          }
+
+          const selectedRole = roles.find(function (r) { return Number(r.id) === roleId; });
+          const roleName = selectedRole ? selectedRole.name : ('ID ' + roleId);
+
+          if (!window.confirm('Delete role "' + roleName + '" and all related users/employees data from database?')) {
+            return;
+          }
+
+          try {
+            await callJson('backend/public/users/delete_role.php', 'POST', { role_id: roleId });
+            setMessage(roleDeleteMessage, 'Role deleted successfully', false);
+            await loadRoles();
+            await loadUsers();
+          } catch (error) {
+            setMessage(roleDeleteMessage, error.message, true);
+          }
+        });
+
+        usersTableBody.addEventListener('click', async function (event) {
+          const button = event.target.closest('button[data-action]');
+          if (!button) {
+            return;
+          }
+
+          const action = button.getAttribute('data-action');
+          const userId = Number(button.getAttribute('data-id'));
+          const user = allUsers.find(function (u) { return Number(u.id) === userId; });
+          if (!user) {
+            return;
+          }
+
+          try {
+            if (action === 'edit') {
+              fillUpdateForm(user);
+              return;
+            }
+
+            if (action === 'reset') {
+              const newPassword = window.prompt('Enter new password (min 8 chars):');
+              if (!newPassword) {
+                return;
+              }
+              await callJson('backend/public/users/reset_password.php', 'POST', {
+                user_id: userId,
+                new_password: newPassword
+              });
+              setMessage(updateMessage, 'Password reset successful', false);
+              return;
+            }
+
+            if (action === 'deactivate') {
+              if (!window.confirm('Deactivate user ' + user.full_name + '?')) {
+                return;
+              }
+              await callJson('backend/public/users/deactivate.php', 'POST', { user_id: userId });
+              setMessage(updateMessage, 'User deactivated successfully', false);
+              await loadUsers();
+            }
+          } catch (error) {
+            setMessage(updateMessage, error.message, true);
+          }
+        });
+
+        searchInput.addEventListener('input', function () {
+          renderUsers(searchInput.value.trim());
+        });
+
+        try {
+          const ok = await requireAuth();
+          if (!ok) {
+            return;
+          }
+          await loadRoles();
+          await loadUsers();
+        } catch (error) {
+          usersTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#dc2626;">' + esc(error.message) + '</td></tr>';
+        }
+      })();
+    </script>
+  </body>
+</html>
+
+
+

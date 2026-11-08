@@ -1,0 +1,799 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promee International - Change Request</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <!-- FontAwesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+            <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <i class="fa-solid fa-circle-nodes"></i> Promee International
+      </div>
+      <ul class="menu">
+        <!-- Dashboard -->
+        <li>
+          <a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+        </li>
+
+        <!-- Client -->
+        <li class="has-submenu open">
+          <a href="#"
+            ><i class="fa-solid fa-user"></i> Client
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="new_request.html"
+                ><i class="fa-regular fa-circle"></i> New Request</a
+              >
+            </li>
+            <li>
+              <a href="add_new_client.html"
+                ><i class="fa-regular fa-circle"></i> Add New</a
+              >
+            </li>
+            <li>
+              <a href="client_list.html"
+                ><i class="fa-regular fa-circle"></i> Client List</a
+              >
+            </li>
+            <li>
+              <a href="left_client.html"
+                ><i class="fa-regular fa-circle"></i> Left Client</a
+              >
+            </li>
+            <li>
+              <a href="scheduler.html"
+                ><i class="fa-regular fa-circle"></i> Scheduler</a
+              >
+            </li>
+            <li>
+              <a href="change_request.html" class="active"
+                ><i class="fa-regular fa-circle"></i> Change Request</a
+              >
+            </li>
+            <li>
+              <a href="portal_manage.html"
+                ><i class="fa-regular fa-circle"></i> Portal Manage</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Billing -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-file-invoice-dollar"></i> Billing
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="billing.html"
+                ><i class="fa-regular fa-circle"></i> Billing</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Mikrotik Server -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-server"></i> Mikrotik Server
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="Bulk_Client_Import.html"
+                ><i class="fa-regular fa-circle"></i> Bulk Client Import</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- HR & Payroll (Your Part) -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-users-gear"></i> HR & Payroll
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="employee_list.html"
+                ><i class="fa-regular fa-circle"></i> Employee List</a
+              >
+            </li>
+            <li>
+              <a href="add_employee.html"
+                ><i class="fa-regular fa-circle"></i> Add Employee</a
+              >
+            </li>
+            <li>
+              <a href="attendance.html"
+                ><i class="fa-regular fa-circle"></i> Attendance</a
+              >
+            </li>
+            <li>
+              <a href="salary_sheet.html"
+                ><i class="fa-regular fa-circle"></i> Salary Sheet</a
+              >
+            </li>
+            <li>
+              <a href="department.html"
+                ><i class="fa-regular fa-circle"></i> Department</a
+              >
+            </li>
+            <li>
+              <a href="position.html"
+                ><i class="fa-regular fa-circle"></i> Position</a
+              >
+            </li>
+            <li>
+              <a href="payhead.html"
+                ><i class="fa-regular fa-circle"></i> Payhead</a
+              >
+            </li>
+            <li>
+              <a href="payroll.html"
+                ><i class="fa-regular fa-circle"></i> Payroll</a
+              >
+            </li>
+            <li>
+              <a href="resign_rule.html"
+                ><i class="fa-regular fa-circle"></i> Resign Rule</a
+              >
+            </li>
+            <li>
+              <a href="resignation.html"
+                ><i class="fa-regular fa-circle"></i> Resignation</a
+              >
+            </li>
+            <li>
+              <a href="rejoin.html"
+                ><i class="fa-regular fa-circle"></i> Rejoin</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Leave Management -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-door-open"></i> Leave Management
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="leave_management.html"
+                ><i class="fa-regular fa-circle"></i> Leave Management</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Events & Holidays -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-calendar-days"></i> Events & Holidays
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="events_holidays.html"
+                ><i class="fa-regular fa-circle"></i> Events & Holidays</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Support & Ticketing -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-headset"></i> Support & Ticketing
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="ticket_list.html"
+                ><i class="fa-regular fa-circle"></i> Ticket List</a
+              >
+            </li>
+            <li>
+              <a href="new_ticket.html"
+                ><i class="fa-regular fa-circle"></i> New Ticket</a
+              >
+            </li>
+            <li>
+              <a href="complain_list.html"
+                ><i class="fa-regular fa-circle"></i> Complain List</a
+              >
+            </li>
+            <li>
+              <a href="complain_category.html"
+                ><i class="fa-regular fa-circle"></i> Complain Category</a
+              >
+            </li>
+            <li>
+              <a href="support_team.html"
+                ><i class="fa-regular fa-circle"></i> Support Team</a
+              >
+            </li>
+            <li>
+              <a href="ticket_reports.html"
+                ><i class="fa-regular fa-circle"></i> Ticket Reports</a
+              >
+            </li>
+            <li>
+              <a href="service_history.html"
+                ><i class="fa-regular fa-circle"></i> Service History</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Task Management -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-list-check"></i> Task Management
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Purchase -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-basket-shopping"></i> Purchase
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Inventory -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-boxes-stacked"></i> Inventory
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Assets -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-laptop-medical"></i> Assets
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Income -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-money-bill-trend-up"></i> Income
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+      <!-- Header -->
+      <header>
+        <div class="header-left">
+          <div class="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
+          <div class="search-box">
+            <input type="text" placeholder="Search Customer" />
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="monitor">
+            <i class="fa-solid fa-desktop"></i> Online Client Monitoring
+          </div>
+          <div class="releases">
+            <i class="fa-solid fa-wrench"></i> Releases
+            <span class="badge">0</span>
+          </div>
+          <div class="notifications">
+            <i class="fa-solid fa-bell"></i> <span class="badge">0</span>
+          </div>
+          <a href="login.html" class="header-btn"><i class="fa-solid fa-house"></i> Home</a>
+          <a href="login.html" class="header-btn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+          <div class="profile"><i class="fa-solid fa-user-circle"></i></div>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-content">
+        <div class="content-header">
+          <h1><i class="fa-solid fa-arrows-rotate"></i> Change Request</h1>
+          <p>Manage client service modification requests</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fa-solid fa-clock"></i>
+            </div>
+            <div class="stat-info">
+              <h3>8</h3>
+              <p>Pending Requests</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fa-solid fa-spinner"></i>
+            </div>
+            <div class="stat-info">
+              <h3>5</h3>
+              <p>In Progress</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fa-solid fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+              <h3>23</h3>
+              <p>Completed This Month</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fa-solid fa-wifi"></i>
+            </div>
+            <div class="stat-info">
+              <h3>12</h3>
+              <p>Package Upgrades</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-grid">
+          <!-- New Change Request Form -->
+          <div class="card">
+            <div class="card-header">
+              <h3>
+                <i class="fa-solid fa-plus-circle"></i> New Change Request
+              </h3>
+            </div>
+            <div class="card-body">
+              <form class="change-request-form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="client-id">Client ID *</label>
+                    <input
+                      type="text"
+                      id="client-id"
+                      required
+                      placeholder="Enter client ID"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="request-type">Request Type *</label>
+                    <select id="request-type" required>
+                      <option value="">Select Type</option>
+                      <option value="package-change">Package Change</option>
+                      <option value="address-change">Address Change</option>
+                      <option value="contact-update">Contact Update</option>
+                      <option value="equipment-upgrade">
+                        Equipment Upgrade
+                      </option>
+                      <option value="billing-change">Billing Change</option>
+                      <option value="temporary-suspension">
+                        Temporary Suspension
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="current-package">Current Package</label>
+                    <input
+                      type="text"
+                      id="current-package"
+                      readonly
+                      placeholder="Auto-filled"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="new-package">New Package</label>
+                    <select id="new-package">
+                      <option value="">Select Package</option>
+                      <option value="basic">
+                        Basic - 5 Mbps - 500 BDT/month
+                      </option>
+                      <option value="standard">
+                        Standard - 10 Mbps - 800 BDT/month
+                      </option>
+                      <option value="premium">
+                        Premium - 20 Mbps - 1200 BDT/month
+                      </option>
+                      <option value="ultra">
+                        Ultra - 50 Mbps - 2000 BDT/month
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="effective-date">Effective Date *</label>
+                    <input type="date" id="effective-date" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="priority">Priority</label>
+                    <select id="priority">
+                      <option value="normal">Normal</option>
+                      <option value="urgent">Urgent</option>
+                      <option value="emergency">Emergency</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="request-reason">Reason for Change *</label>
+                  <textarea
+                    id="request-reason"
+                    rows="3"
+                    required
+                    placeholder="Explain why this change is needed..."
+                  ></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label for="additional-notes">Additional Notes</label>
+                  <textarea
+                    id="additional-notes"
+                    rows="2"
+                    placeholder="Any additional information..."
+                  ></textarea>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-navy">
+                    <i class="fa-solid fa-paper-plane"></i> Submit Request
+                  </button>
+                  <button type="reset" class="btn btn-navy">
+                    <i class="fa-solid fa-undo"></i> Clear Form
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Recent Change Requests -->
+          <div class="card">
+            <div class="card-header">
+              <h3>
+                <i class="fa-solid fa-clock-rotate-left"></i> Recent Requests
+              </h3>
+            </div>
+            <div class="card-body">
+              <div class="request-list">
+                <div class="request-item">
+                  <div class="request-info">
+                    <h4>Package Upgrade</h4>
+                    <p>
+                      <i class="fa-solid fa-user"></i> Ahmed Rahman (#CLT001)
+                    </p>
+                    <p><i class="fa-solid fa-wifi"></i> Standard → Premium</p>
+                    <p>
+                      <i class="fa-solid fa-calendar"></i> Effective: Jan 20,
+                      2024
+                    </p>
+                  </div>
+                  <div class="request-status">
+                    <span class="status-badge pending">Pending</span>
+                    <small>2 hours ago</small>
+                  </div>
+                </div>
+
+                <div class="request-item">
+                  <div class="request-info">
+                    <h4>Address Change</h4>
+                    <p><i class="fa-solid fa-user"></i> Sarah Khan (#CLT002)</p>
+                    <p>
+                      <i class="fa-solid fa-location-dot"></i> Dhanmondi →
+                      Gulshan
+                    </p>
+                    <p>
+                      <i class="fa-solid fa-calendar"></i> Effective: Jan 18,
+                      2024
+                    </p>
+                  </div>
+                  <div class="request-status">
+                    <span class="status-badge in-progress">In Progress</span>
+                    <small>5 hours ago</small>
+                  </div>
+                </div>
+
+                <div class="request-item">
+                  <div class="request-info">
+                    <h4>Contact Update</h4>
+                    <p>
+                      <i class="fa-solid fa-user"></i> Mohammad Ali (#CLT003)
+                    </p>
+                    <p>
+                      <i class="fa-solid fa-phone"></i> Phone number updated
+                    </p>
+                    <p>
+                      <i class="fa-solid fa-calendar"></i> Effective: Jan 15,
+                      2024
+                    </p>
+                  </div>
+                  <div class="request-status">
+                    <span class="status-badge completed">Completed</span>
+                    <small>1 day ago</small>
+                  </div>
+                </div>
+
+                <div class="request-item">
+                  <div class="request-info">
+                    <h4>Equipment Upgrade</h4>
+                    <p>
+                      <i class="fa-solid fa-user"></i> Fatima Begum (#CLT004)
+                    </p>
+                    <p><i class="fa-solid fa-router"></i> ONU Device Upgrade</p>
+                    <p>
+                      <i class="fa-solid fa-calendar"></i> Effective: Jan 22,
+                      2024
+                    </p>
+                  </div>
+                  <div class="request-status">
+                    <span class="status-badge scheduled">Scheduled</span>
+                    <small>2 days ago</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Change Requests Table -->
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-list"></i> All Change Requests</h3>
+            <div class="card-actions">
+              <button class="btn btn-navy">
+                <i class="fa-solid fa-download"></i> Export
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="filter-row">
+              <div class="filter-group">
+                <label for="filter-status">Status</label>
+                <select id="filter-status">
+                  <option value="">All Status</option>
+                  <option value="pending">Pending</option>
+                  <option value="in-progress">In Progress</option>
+                  <option value="scheduled">Scheduled</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label for="filter-type">Request Type</label>
+                <select id="filter-type">
+                  <option value="">All Types</option>
+                  <option value="package-change">Package Change</option>
+                  <option value="address-change">Address Change</option>
+                  <option value="contact-update">Contact Update</option>
+                  <option value="equipment-upgrade">Equipment Upgrade</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label for="filter-search">Search</label>
+                <input
+                  type="text"
+                  id="filter-search"
+                  placeholder="Search by client ID or name"
+                />
+              </div>
+              <button class="btn btn-navy">
+                <i class="fa-solid fa-search"></i> Filter
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Request ID</th>
+                    <th>Client</th>
+                    <th>Type</th>
+                    <th>Details</th>
+                    <th>Request Date</th>
+                    <th>Effective Date</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>#REQ001</td>
+                    <td>Ahmed Rahman (#CLT001)</td>
+                    <td>Package Change</td>
+                    <td>Standard → Premium</td>
+                    <td>2024-01-15</td>
+                    <td>2024-01-20</td>
+                    <td><span class="status-badge pending">Pending</span></td>
+                    <td><span class="priority-badge normal">Normal</span></td>
+                    <td>
+                      <button
+                        class="btn btn-sm btn-info btn-navy"
+                        title="View Details"
+                      >
+                        <i class="fa-solid fa-eye"></i>
+                      </button>
+                      <button
+                        class="btn btn-sm btn-success btn-navy"
+                        title="Approve"
+                      >
+                        <i class="fa-solid fa-check"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>#REQ002</td>
+                    <td>Sarah Khan (#CLT002)</td>
+                    <td>Address Change</td>
+                    <td>Dhanmondi → Gulshan</td>
+                    <td>2024-01-14</td>
+                    <td>2024-01-18</td>
+                    <td>
+                      <span class="status-badge in-progress">In Progress</span>
+                    </td>
+                    <td><span class="priority-badge urgent">Urgent</span></td>
+                    <td>
+                      <button
+                        class="btn btn-sm btn-info btn-navy"
+                        title="View Details"
+                      >
+                        <i class="fa-solid fa-eye"></i>
+                      </button>
+                      <button
+                        class="btn btn-sm btn-warning btn-navy"
+                        title="Schedule"
+                      >
+                        <i class="fa-solid fa-calendar"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>#REQ003</td>
+                    <td>Mohammad Ali (#CLT003)</td>
+                    <td>Contact Update</td>
+                    <td>Phone number change</td>
+                    <td>2024-01-12</td>
+                    <td>2024-01-15</td>
+                    <td>
+                      <span class="status-badge completed">Completed</span>
+                    </td>
+                    <td><span class="priority-badge normal">Normal</span></td>
+                    <td>
+                      <button
+                        class="btn btn-sm btn-info btn-navy"
+                        title="View Details"
+                      >
+                        <i class="fa-solid fa-eye"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>#REQ004</td>
+                    <td>Fatima Begum (#CLT004)</td>
+                    <td>Equipment Upgrade</td>
+                    <td>ONU Device Upgrade</td>
+                    <td>2024-01-10</td>
+                    <td>2024-01-22</td>
+                    <td>
+                      <span class="status-badge scheduled">Scheduled</span>
+                    </td>
+                    <td><span class="priority-badge normal">Normal</span></td>
+                    <td>
+                      <button
+                        class="btn btn-sm btn-info btn-navy"
+                        title="View Details"
+                      >
+                        <i class="fa-solid fa-eye"></i>
+                      </button>
+                      <button
+                        class="btn btn-sm btn-danger btn-navy"
+                        title="Cancel"
+                      >
+                        <i class="fa-solid fa-times"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/js/script.js"></script>
+  </body>
+</html>

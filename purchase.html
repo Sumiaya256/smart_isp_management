@@ -1,0 +1,1875 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promee International - Purchase Orders</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      .page-header {
+        margin-bottom: 22px;
+      }
+      .page-header h2 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #1a3c5e;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .page-header p {
+        font-size: 13px;
+        color: #888;
+        margin-top: 4px;
+        margin-left: 34px;
+      }
+
+      .subnav {
+        display: flex;
+        border-bottom: 2px solid #e8ecf4;
+        margin-bottom: 20px;
+      }
+      .subnav a {
+        padding: 9px 18px;
+        font-size: 13px;
+        color: #777;
+        text-decoration: none;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -2px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: color 0.2s;
+      }
+      .subnav a:hover {
+        color: #1a3c5e;
+      }
+      .subnav a.active {
+        color: #1a3c5e;
+        border-bottom-color: #1a3c5e;
+        font-weight: 600;
+      }
+
+      /* Stat row */
+      .stat-row {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 14px;
+        margin-bottom: 22px;
+      }
+      .s-card {
+        background: #fff;
+        border-radius: 4px;
+        padding: 15px 17px;
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+        border-left: 4px solid #ccc;
+        cursor: pointer;
+        transition:
+          box-shadow 0.2s,
+          transform 0.15s;
+        user-select: none;
+      }
+      .s-card:hover {
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.11);
+        transform: translateY(-1px);
+      }
+      .s-card.s-active {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);
+      }
+      .sc-all {
+        border-left-color: #1a3c5e;
+      }
+      .sc-pending {
+        border-left-color: #f39c12;
+      }
+      .sc-approved {
+        border-left-color: #3498db;
+      }
+      .sc-received {
+        border-left-color: #27ae60;
+      }
+      .sc-cancelled {
+        border-left-color: #e74c3c;
+      }
+      .s-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        flex-shrink: 0;
+      }
+      .sc-all .s-icon {
+        background: #eaf0f7;
+        color: #1a3c5e;
+      }
+      .sc-pending .s-icon {
+        background: #fef6e4;
+        color: #f39c12;
+      }
+      .sc-approved .s-icon {
+        background: #e8f4fd;
+        color: #3498db;
+      }
+      .sc-received .s-icon {
+        background: #e9f7ef;
+        color: #27ae60;
+      }
+      .sc-cancelled .s-icon {
+        background: #fdf0f0;
+        color: #e74c3c;
+      }
+      .s-num {
+        font-size: 22px;
+        font-weight: 700;
+        color: #222;
+        line-height: 1;
+      }
+      .s-lbl {
+        font-size: 12px;
+        color: #888;
+        margin-top: 3px;
+      }
+
+      /* Toolbar */
+      .t-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+      .t-bar-l {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .t-bar-r {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .flt {
+        height: 33px;
+        border: 1px solid #ddd;
+        background: #fafafa;
+        border-radius: 3px;
+        padding: 0 10px;
+        font-size: 13px;
+        color: #555;
+      }
+      .flt:focus {
+        border-color: #3498db;
+        outline: none;
+      }
+      .srch-wrap {
+        position: relative;
+      }
+      .srch-wrap i {
+        position: absolute;
+        left: 9px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #bbb;
+        font-size: 12px;
+        pointer-events: none;
+      }
+      .srch {
+        height: 33px;
+        border: 1px solid #ddd;
+        background: #fafafa;
+        border-radius: 3px;
+        padding: 0 10px 0 30px;
+        font-size: 13px;
+        color: #555;
+        width: 195px;
+      }
+      .srch:focus {
+        border-color: #3498db;
+        outline: none;
+      }
+
+      .rc {
+        font-size: 12px;
+        color: #999;
+        margin-bottom: 14px;
+      }
+      .rc strong {
+        color: #444;
+      }
+
+      /* Table */
+      .po-table-wrap {
+        overflow-x: auto;
+      }
+      .po-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      .po-table thead th {
+        background: #1b2e4b;
+        color: #fff;
+        padding: 10px 12px;
+        text-align: left;
+        font-weight: 500;
+        white-space: nowrap;
+        font-size: 12px;
+      }
+      .po-table tbody td {
+        padding: 10px 12px;
+        border-bottom: 1px solid #f2f2f2;
+        color: #555;
+        vertical-align: middle;
+      }
+      .po-table tbody tr:last-child td {
+        border-bottom: none;
+      }
+      .po-table tbody tr:hover td {
+        background: #fafbfc;
+      }
+
+      /* Badges */
+      .bp {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 12px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      .bs-pending {
+        background: #fff3cd;
+        color: #856404;
+      }
+      .bs-approved {
+        background: #cce5ff;
+        color: #004085;
+      }
+      .bs-received {
+        background: #d4edda;
+        color: #155724;
+      }
+      .bs-cancelled {
+        background: #f8d7da;
+        color: #721c24;
+      }
+      .bs-partial {
+        background: #e2d9f3;
+        color: #6f42c1;
+      }
+
+      .act-btns {
+        display: flex;
+        gap: 4px;
+      }
+      .act-btns button {
+        padding: 4px 9px;
+        border: none;
+        border-radius: 3px;
+        font-size: 11px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        transition: opacity 0.15s;
+      }
+      .act-btns button:hover {
+        opacity: 0.82;
+      }
+      .btn-v {
+        background: #1a3c5e;
+        color: #fff;
+      }
+      .btn-e {
+        background: #f39c12;
+        color: #fff;
+      }
+      .btn-approve {
+        background: #27ae60;
+        color: #fff;
+      }
+      .btn-x {
+        background: #e74c3c;
+        color: #fff;
+      }
+
+      /* Summary total */
+      .po-amount {
+        font-weight: 700;
+        color: #1a3c5e;
+      }
+
+      /* Modal */
+      .mo {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1050;
+        align-items: center;
+        justify-content: center;
+      }
+      .mo.open {
+        display: flex;
+      }
+      .mo-box {
+        background: #fff;
+        border-radius: 5px;
+        width: 680px;
+        max-width: 96vw;
+        max-height: 92vh;
+        overflow-y: auto;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+        animation: mIn 0.16s ease;
+      }
+      @keyframes mIn {
+        from {
+          transform: translateY(-14px);
+          opacity: 0;
+        }
+        to {
+          transform: none;
+          opacity: 1;
+        }
+      }
+      .mo-hd {
+        background: #0d1b2a;
+        color: #fff;
+        padding: 13px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 5px 5px 0 0;
+      }
+      .mo-hd h3 {
+        font-size: 14px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .mo-close {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 19px;
+        cursor: pointer;
+      }
+      .mo-body {
+        padding: 20px;
+      }
+      .mo-ft {
+        padding: 13px 20px;
+        border-top: 1px solid #eee;
+        display: flex;
+        justify-content: flex-end;
+        gap: 9px;
+      }
+      .sec-lbl {
+        font-size: 10px;
+        font-weight: 700;
+        color: #1a3c5e;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid #edf0f5;
+        padding-bottom: 5px;
+        margin-bottom: 12px;
+        margin-top: 6px;
+      }
+
+      /* Items table in modal */
+      .items-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        margin-top: 8px;
+      }
+      .items-table th {
+        background: #f5f7fa;
+        color: #555;
+        padding: 8px 10px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 11px;
+        border-bottom: 2px solid #e8ecf4;
+      }
+      .items-table td {
+        padding: 7px 10px;
+        border-bottom: 1px solid #f2f2f2;
+      }
+      .items-table tfoot td {
+        font-weight: 700;
+        background: #f9fafc;
+        border-top: 2px solid #e8ecf4;
+      }
+      .add-item-row {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+        align-items: flex-end;
+      }
+      .add-item-row input,
+      .add-item-row select {
+        flex: 1;
+        height: 32px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        padding: 0 8px;
+        font-size: 12px;
+      }
+      .add-item-row button {
+        height: 32px;
+        padding: 0 12px;
+      }
+
+      /* View modal detail grid */
+      .vm-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+      .vm-item .vi-l {
+        font-size: 11px;
+        color: #999;
+        margin-bottom: 2px;
+      }
+      .vm-item .vi-v {
+        font-size: 13px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .btn-success {
+        background: #27ae60 !important;
+        color: #fff !important;
+      }
+      .btn-info {
+        background: #3498db !important;
+        color: #fff !important;
+      }
+
+      .empty {
+        text-align: center;
+        padding: 50px 20px;
+        color: #ccc;
+      }
+      .empty i {
+        font-size: 44px;
+        display: block;
+        margin-bottom: 12px;
+      }
+      .empty p {
+        font-size: 14px;
+        color: #bbb;
+      }
+
+      /* pagination */
+      .tbl-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 14px;
+        font-size: 12px;
+        color: #888;
+      }
+      .page-btns {
+        display: flex;
+        gap: 4px;
+      }
+      .page-btns button {
+        padding: 4px 10px;
+        border: 1px solid #ddd;
+        background: #fff;
+        border-radius: 3px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .page-btns button.active {
+        background: #1a3c5e;
+        color: #fff;
+        border-color: #1a3c5e;
+      }
+      .page-btns button:hover:not(.active) {
+        background: #f5f5f5;
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <i class="fa-solid fa-circle-nodes"></i> Promee International
+      </div>
+      <ul class="menu">
+        <li>
+          <a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-user"></i> Client
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="new_request.html"
+                ><i class="fa-regular fa-circle"></i> New Request</a
+              >
+            </li>
+            <li>
+              <a href="add_new_client.html"
+                ><i class="fa-regular fa-circle"></i> Add New</a
+              >
+            </li>
+            <li>
+              <a href="client_list.html"
+                ><i class="fa-regular fa-circle"></i> Client List</a
+              >
+            </li>
+            <li>
+              <a href="left_client.html"
+                ><i class="fa-regular fa-circle"></i> Left Client</a
+              >
+            </li>
+            <li>
+              <a href="scheduler.html"
+                ><i class="fa-regular fa-circle"></i> Scheduler</a
+              >
+            </li>
+            <li>
+              <a href="change_request.html"
+                ><i class="fa-regular fa-circle"></i> Change Request</a
+              >
+            </li>
+            <li>
+              <a href="portal_manage.html"
+                ><i class="fa-regular fa-circle"></i> Portal Manage</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-file-invoice-dollar"></i> Billing
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="billing.html"
+                ><i class="fa-regular fa-circle"></i> Billing</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-server"></i> Mikrotik Server
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="Bulk_Client_Import.html"
+                ><i class="fa-regular fa-circle"></i> Bulk Client Import</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-users-gear"></i> HR &amp; Payroll
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="employee_list.html"
+                ><i class="fa-regular fa-circle"></i> Employee List</a
+              >
+            </li>
+            <li>
+              <a href="add_employee.html"
+                ><i class="fa-regular fa-circle"></i> Add Employee</a
+              >
+            </li>
+            <li>
+              <a href="attendance.html"
+                ><i class="fa-regular fa-circle"></i> Attendance</a
+              >
+            </li>
+            <li>
+              <a href="salary_sheet.html"
+                ><i class="fa-regular fa-circle"></i> Salary Sheet</a
+              >
+            </li>
+            <li>
+              <a href="department.html"
+                ><i class="fa-regular fa-circle"></i> Department</a
+              >
+            </li>
+            <li>
+              <a href="position.html"
+                ><i class="fa-regular fa-circle"></i> Position</a
+              >
+            </li>
+            <li>
+              <a href="payhead.html"
+                ><i class="fa-regular fa-circle"></i> Payhead</a
+              >
+            </li>
+            <li>
+              <a href="payroll.html"
+                ><i class="fa-regular fa-circle"></i> Payroll</a
+              >
+            </li>
+            <li>
+              <a href="resign_rule.html"
+                ><i class="fa-regular fa-circle"></i> Resign Rule</a
+              >
+            </li>
+            <li>
+              <a href="resignation.html"
+                ><i class="fa-regular fa-circle"></i> Resignation</a
+              >
+            </li>
+            <li>
+              <a href="rejoin.html"
+                ><i class="fa-regular fa-circle"></i> Rejoin</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-door-open"></i> Leave Management
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="leave_management.html"
+                ><i class="fa-regular fa-circle"></i> Leave Management</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-calendar-days"></i> Events &amp; Holidays
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="events_holidays.html"
+                ><i class="fa-regular fa-circle"></i> Events &amp; Holidays</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-headset"></i> Support &amp; Ticketing
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="ticket_list.html"
+                ><i class="fa-regular fa-circle"></i> Ticket List</a
+              >
+            </li>
+            <li>
+              <a href="new_ticket.html"
+                ><i class="fa-regular fa-circle"></i> New Ticket</a
+              >
+            </li>
+            <li>
+              <a href="complain_list.html"
+                ><i class="fa-regular fa-circle"></i> Complain List</a
+              >
+            </li>
+            <li>
+              <a href="complain_category.html"
+                ><i class="fa-regular fa-circle"></i> Complain Category</a
+              >
+            </li>
+            <li>
+              <a href="support_team.html"
+                ><i class="fa-regular fa-circle"></i> Support Team</a
+              >
+            </li>
+            <li>
+              <a href="ticket_reports.html"
+                ><i class="fa-regular fa-circle"></i> Ticket Reports</a
+              >
+            </li>
+            <li>
+              <a href="service_history.html"
+                ><i class="fa-regular fa-circle"></i> Service History</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-list-check"></i> Task Management
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="task_management.html"
+                ><i class="fa-regular fa-circle"></i> Task List</a
+              >
+            </li>
+            <li>
+              <a href="task_category.html"
+                ><i class="fa-regular fa-circle"></i> Task Category</a
+              >
+            </li>
+            <li>
+              <a href="task_assign.html"
+                ><i class="fa-regular fa-circle"></i> Task Assignment</a
+              >
+            </li>
+            <li>
+              <a href="task_report.html"
+                ><i class="fa-regular fa-circle"></i> Task Report</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-basket-shopping"></i> Purchase
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="purchase.html"
+                ><i class="fa-regular fa-circle"></i> Purchase Orders</a
+              >
+            </li>
+            <li>
+              <a href="vendor_list.html"
+                ><i class="fa-regular fa-circle"></i> Vendor List</a
+              >
+            </li>
+            <li>
+              <a href="purchase_report.html"
+                ><i class="fa-regular fa-circle"></i> Purchase Report</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-boxes-stacked"></i> Inventory
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="inventory.html"
+                ><i class="fa-regular fa-circle"></i> Stock List</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-laptop-medical"></i> Assets
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="assets.html"
+                ><i class="fa-regular fa-circle"></i> Asset List</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-money-bill-trend-up"></i> Income
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i
+          ></a>
+          <ul class="submenu">
+            <li>
+              <a href="income.html"
+                ><i class="fa-regular fa-circle"></i> Income List</a
+              >
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </aside>
+
+    <div class="main-content">
+      <header>
+        <div class="header-left">
+          <div class="sidebar-toggle" id="sidebarToggle">
+            <i class="fa-solid fa-bars"></i>
+          </div>
+          <div class="search-box">
+            <input type="text" placeholder="Search Customer" />
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+        </div>
+        <div class="header-right">
+          <div>
+            <i class="fa-solid fa-desktop"></i> Online Client Monitoring
+          </div>
+          <div>
+            <i class="fa-solid fa-wrench"></i> Releases
+            <span class="badge">0</span>
+          </div>
+          <div>
+            <i class="fa-solid fa-bell"></i> <span class="badge">3</span>
+          </div>
+          <a href="index.html" class="header-btn"
+            ><i class="fa-solid fa-house"></i> Home</a
+          >
+          <a href="login.html" class="header-btn"
+            ><i class="fa-solid fa-right-from-bracket"></i> Log Out</a
+          >
+          <div>
+            <i class="fa-solid fa-user-circle" style="font-size: 22px"></i>
+          </div>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <div class="page-header">
+          <h2>
+            <i class="fa-solid fa-basket-shopping"></i> Purchase Management
+          </h2>
+          <p>
+            Create and track purchase orders, manage vendors, and monitor
+            procurement activity.
+          </p>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="stat-row">
+          <div
+            class="s-card sc-all s-active"
+            onclick="filterStat('')"
+            id="sc-all"
+          >
+            <div class="s-icon"><i class="fa-solid fa-layer-group"></i></div>
+            <div>
+              <div class="s-num" id="cnt-all">0</div>
+              <div class="s-lbl">Total Orders</div>
+            </div>
+          </div>
+          <div
+            class="s-card sc-pending"
+            onclick="filterStat('Pending')"
+            id="sc-pending"
+          >
+            <div class="s-icon"><i class="fa-solid fa-clock"></i></div>
+            <div>
+              <div class="s-num" id="cnt-pending">0</div>
+              <div class="s-lbl">Pending</div>
+            </div>
+          </div>
+          <div
+            class="s-card sc-approved"
+            onclick="filterStat('Approved')"
+            id="sc-approved"
+          >
+            <div class="s-icon"><i class="fa-solid fa-thumbs-up"></i></div>
+            <div>
+              <div class="s-num" id="cnt-approved">0</div>
+              <div class="s-lbl">Approved</div>
+            </div>
+          </div>
+          <div
+            class="s-card sc-received"
+            onclick="filterStat('Received')"
+            id="sc-received"
+          >
+            <div class="s-icon"><i class="fa-solid fa-circle-check"></i></div>
+            <div>
+              <div class="s-num" id="cnt-received">0</div>
+              <div class="s-lbl">Received</div>
+            </div>
+          </div>
+          <div
+            class="s-card sc-cancelled"
+            onclick="filterStat('Cancelled')"
+            id="sc-cancelled"
+          >
+            <div class="s-icon"><i class="fa-solid fa-ban"></i></div>
+            <div>
+              <div class="s-num" id="cnt-cancelled">0</div>
+              <div class="s-lbl">Cancelled</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div
+            class="card-header"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              padding-bottom: 14px;
+              border-bottom: 1px solid #f0f0f0;
+            "
+          >
+            <div class="card-title">
+              <i class="fa-solid fa-file-invoice"></i> Purchase Orders
+            </div>
+            <div style="font-size: 11px; color: #aaa">
+              Purchase &rsaquo; Purchase Orders
+            </div>
+          </div>
+
+          <!-- Sub-nav -->
+          <div class="subnav" style="margin-top: 16px">
+            <a href="purchase.html" class="active"
+              ><i class="fa-solid fa-file-invoice"></i> Purchase Orders</a
+            >
+            <a href="vendor_list.html"
+              ><i class="fa-solid fa-truck"></i> Vendors</a
+            >
+            <a href="purchase_report.html"
+              ><i class="fa-solid fa-chart-bar"></i> Reports</a
+            >
+          </div>
+
+          <!-- Toolbar -->
+          <div class="t-bar">
+            <div class="t-bar-l">
+              <button class="btn btn-navy" onclick="openMo('addMo')">
+                <i class="fa-solid fa-plus"></i> New Order
+              </button>
+              <button class="btn btn-success">
+                <i class="fa-solid fa-file-excel"></i> Export
+              </button>
+              <button class="btn btn-info">
+                <i class="fa-solid fa-print"></i> Print
+              </button>
+            </div>
+            <div class="t-bar-r">
+              <select class="flt" id="f-sts" onchange="applyF()">
+                <option value="">All Status</option>
+                <option>Pending</option>
+                <option>Approved</option>
+                <option>Received</option>
+                <option>Partial</option>
+                <option>Cancelled</option>
+              </select>
+              <select class="flt" id="f-vendor" onchange="applyF()">
+                <option value="">All Vendors</option>
+                <option>TechPoint BD</option>
+                <option>NetGear Supplies</option>
+                <option>FiberLink Co.</option>
+                <option>MikroNet Solutions</option>
+                <option>CableKing Ltd.</option>
+              </select>
+              <select class="flt" id="f-cat" onchange="applyF()">
+                <option value="">All Category</option>
+                <option>Network Equipment</option>
+                <option>Fiber &amp; Cables</option>
+                <option>Office Supplies</option>
+                <option>Server Hardware</option>
+                <option>Tools &amp; Misc</option>
+              </select>
+              <div class="srch-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input
+                  class="srch"
+                  type="text"
+                  id="f-srch"
+                  placeholder="Search orders…"
+                  oninput="applyF()"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="rc">Showing <strong id="rc-num">0</strong> order(s)</div>
+
+          <div class="po-table-wrap">
+            <table class="po-table" id="poTable">
+              <thead>
+                <tr>
+                  <th>
+                    <input
+                      type="checkbox"
+                      id="selectAll"
+                      onclick="toggleAll(this)"
+                    />
+                  </th>
+                  <th>PO #</th>
+                  <th>Date</th>
+                  <th>Vendor</th>
+                  <th>Category</th>
+                  <th>Items</th>
+                  <th>Total Amount</th>
+                  <th>Requested By</th>
+                  <th>Delivery Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="poBody"></tbody>
+            </table>
+            <div class="empty" id="emptyEl" style="display: none">
+              <i class="fa-solid fa-inbox"></i>
+              <p>No purchase orders found.</p>
+            </div>
+          </div>
+          <div class="tbl-footer">
+            <span id="footer-info">Showing 0–0 of 0 entries</span>
+            <div class="page-btns" id="pageBtns"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD/EDIT MODAL -->
+    <div class="mo" id="addMo">
+      <div class="mo-box">
+        <div class="mo-hd">
+          <h3 id="addMoTitle">
+            <i class="fa-solid fa-plus"></i> New Purchase Order
+          </h3>
+          <button class="mo-close" onclick="closeMo('addMo')">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="mo-body">
+          <input type="hidden" id="ei" />
+          <div class="sec-lbl">Order Information</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Vendor *</label>
+              <select id="i-vendor">
+                <option value="">-- Select Vendor --</option>
+                <option>TechPoint BD</option>
+                <option>NetGear Supplies</option>
+                <option>FiberLink Co.</option>
+                <option>MikroNet Solutions</option>
+                <option>CableKing Ltd.</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Category *</label>
+              <select id="i-cat">
+                <option value="">-- Select --</option>
+                <option>Network Equipment</option>
+                <option>Fiber &amp; Cables</option>
+                <option>Office Supplies</option>
+                <option>Server Hardware</option>
+                <option>Tools &amp; Misc</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Order Date *</label>
+              <input type="date" id="i-date" />
+            </div>
+            <div class="form-group">
+              <label>Expected Delivery</label>
+              <input type="date" id="i-delivery" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Requested By</label>
+              <select id="i-reqby">
+                <option>Admin</option>
+                <option>Rakib Hasan</option>
+                <option>Tanvir Ahmed</option>
+                <option>Sumaiya Akter</option>
+                <option>Jahidul Islam</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select id="i-sts">
+                <option>Pending</option>
+                <option>Approved</option>
+                <option>Received</option>
+                <option>Partial</option>
+                <option>Cancelled</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="sec-lbl">Order Items</div>
+          <table class="items-table" id="itemsTable">
+            <thead>
+              <tr>
+                <th>Item Name</th>
+                <th>Qty</th>
+                <th>Unit Price (৳)</th>
+                <th>Total (৳)</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="itemsBody"></tbody>
+            <tfoot>
+              <tr>
+                <td colspan="3" style="text-align: right; padding-right: 12px">
+                  Grand Total:
+                </td>
+                <td id="grandTotal">৳ 0.00</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+          <div class="add-item-row">
+            <input type="text" id="new-item-name" placeholder="Item name" />
+            <input
+              type="number"
+              id="new-item-qty"
+              placeholder="Qty"
+              min="1"
+              style="max-width: 70px"
+            />
+            <input
+              type="number"
+              id="new-item-price"
+              placeholder="Unit price"
+              min="0"
+              step="0.01"
+              style="max-width: 110px"
+            />
+            <button
+              class="btn btn-navy"
+              onclick="addItem()"
+              style="height: 32px; padding: 0 12px; font-size: 12px"
+            >
+              <i class="fa-solid fa-plus"></i> Add
+            </button>
+          </div>
+
+          <div class="sec-lbl" style="margin-top: 14px">Notes</div>
+          <div class="form-row">
+            <div class="form-group" style="flex: 1">
+              <textarea
+                id="i-notes"
+                rows="2"
+                placeholder="Additional notes or instructions…"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="mo-ft">
+          <button class="btn btn-default" onclick="closeMo('addMo')">
+            <i class="fa-solid fa-xmark"></i> Cancel
+          </button>
+          <button class="btn btn-navy" onclick="saveOrder()">
+            <i class="fa-solid fa-floppy-disk"></i> Save Order
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW MODAL -->
+    <div class="mo" id="viewMo">
+      <div class="mo-box">
+        <div class="mo-hd">
+          <h3><i class="fa-solid fa-eye"></i> Purchase Order Details</h3>
+          <button class="mo-close" onclick="closeMo('viewMo')">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="mo-body" id="viewBody"></div>
+        <div class="mo-ft">
+          <button class="btn btn-default" onclick="closeMo('viewMo')">
+            <i class="fa-solid fa-xmark"></i> Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-widget">
+      <i class="fa-solid fa-comment"></i> Send message
+    </div>
+
+    <script>
+      // Sidebar
+      document
+        .getElementById("sidebarToggle")
+        .addEventListener("click", function () {
+          document.getElementById("sidebar").classList.toggle("active");
+        });
+      document.querySelectorAll(".has-submenu > a").forEach(function (a) {
+        a.addEventListener("click", function (e) {
+          e.preventDefault();
+          var li = a.parentElement;
+          var isOpen = li.classList.contains("open");
+          document.querySelectorAll(".has-submenu").forEach(function (x) {
+            x.classList.remove("open");
+          });
+          if (!isOpen) li.classList.add("open");
+        });
+      });
+      var pm = document.getElementById("purchase-menu");
+      if (pm) pm.classList.add("open");
+    </script>
+
+    <script>
+      var orders = [
+        {
+          id: "PO-001",
+          date: "2026-02-01",
+          vendor: "TechPoint BD",
+          cat: "Network Equipment",
+          items: [
+            { name: "MikroTik RB951Ui-2HnD", qty: 5, price: 8500 },
+            { name: "TP-Link TL-SG108", qty: 10, price: 3200 },
+          ],
+          reqby: "Admin",
+          delivery: "2026-02-08",
+          sts: "Received",
+          notes: "Urgent restock for Zone A expansion.",
+        },
+        {
+          id: "PO-002",
+          date: "2026-02-03",
+          vendor: "FiberLink Co.",
+          cat: "Fiber & Cables",
+          items: [
+            { name: "SM Fiber Patch Cable 10m", qty: 100, price: 350 },
+            { name: "SC/APC Connector", qty: 200, price: 120 },
+          ],
+          reqby: "Rakib Hasan",
+          delivery: "2026-02-10",
+          sts: "Received",
+          notes: "",
+        },
+        {
+          id: "PO-003",
+          date: "2026-02-05",
+          vendor: "MikroNet Solutions",
+          cat: "Server Hardware",
+          items: [
+            { name: "16GB DDR4 RAM", qty: 4, price: 12000 },
+            { name: "2TB SATA HDD", qty: 2, price: 8500 },
+          ],
+          reqby: "Tanvir Ahmed",
+          delivery: "2026-02-15",
+          sts: "Approved",
+          notes: "For billing server upgrade.",
+        },
+        {
+          id: "PO-004",
+          date: "2026-02-07",
+          vendor: "CableKing Ltd.",
+          cat: "Fiber & Cables",
+          items: [
+            { name: "Cat6 UTP Cable (305m)", qty: 5, price: 6800 },
+            { name: "RJ45 Keystone Jack", qty: 50, price: 180 },
+          ],
+          reqby: "Jahidul Islam",
+          delivery: "2026-02-14",
+          sts: "Pending",
+          notes: "Field installation stock.",
+        },
+        {
+          id: "PO-005",
+          date: "2026-02-09",
+          vendor: "NetGear Supplies",
+          cat: "Network Equipment",
+          items: [
+            { name: "Cisco SFP Module", qty: 8, price: 4500 },
+            { name: "Patch Panel 24-port", qty: 3, price: 7200 },
+          ],
+          reqby: "Admin",
+          delivery: "2026-02-20",
+          sts: "Approved",
+          notes: "",
+        },
+        {
+          id: "PO-006",
+          date: "2026-02-10",
+          vendor: "TechPoint BD",
+          cat: "Office Supplies",
+          items: [
+            { name: "A4 Paper Ream", qty: 20, price: 550 },
+            { name: "Printer Toner HP", qty: 3, price: 3800 },
+          ],
+          reqby: "Sumaiya Akter",
+          delivery: "2026-02-12",
+          sts: "Received",
+          notes: "",
+        },
+        {
+          id: "PO-007",
+          date: "2026-02-11",
+          vendor: "FiberLink Co.",
+          cat: "Fiber & Cables",
+          items: [{ name: "ADSS 48-Core Fiber (1km)", qty: 2, price: 95000 }],
+          reqby: "Rakib Hasan",
+          delivery: "2026-03-01",
+          sts: "Pending",
+          notes: "Zone D backbone fiber.",
+        },
+        {
+          id: "PO-008",
+          date: "2026-02-12",
+          vendor: "MikroNet Solutions",
+          cat: "Tools & Misc",
+          items: [
+            { name: "Fusion Splicer Fujikura", qty: 1, price: 180000 },
+            { name: "OTDR Tester", qty: 1, price: 95000 },
+          ],
+          reqby: "Admin",
+          delivery: "2026-02-25",
+          sts: "Approved",
+          notes: "Lab equipment for fiber team.",
+        },
+        {
+          id: "PO-009",
+          date: "2026-02-13",
+          vendor: "NetGear Supplies",
+          cat: "Network Equipment",
+          items: [
+            { name: "Nokia 7360 OLT", qty: 1, price: 450000 },
+            { name: "GPON ONU Module", qty: 24, price: 4800 },
+          ],
+          reqby: "Tanvir Ahmed",
+          delivery: "2026-02-28",
+          sts: "Partial",
+          notes: "OLT delivered, ONU modules pending.",
+        },
+        {
+          id: "PO-010",
+          date: "2026-02-14",
+          vendor: "CableKing Ltd.",
+          cat: "Fiber & Cables",
+          items: [
+            { name: "Fiber Closure 24-port", qty: 10, price: 4200 },
+            { name: "Fiber Splice Tray", qty: 20, price: 800 },
+          ],
+          reqby: "Jahidul Islam",
+          delivery: "2026-02-22",
+          sts: "Pending",
+          notes: "",
+        },
+        {
+          id: "PO-011",
+          date: "2026-02-15",
+          vendor: "TechPoint BD",
+          cat: "Network Equipment",
+          items: [{ name: "UPS 1500VA APC", qty: 3, price: 25000 }],
+          reqby: "Admin",
+          delivery: "2026-02-23",
+          sts: "Cancelled",
+          notes: "Vendor could not supply within deadline. Re-order pending.",
+        },
+        {
+          id: "PO-012",
+          date: "2026-02-16",
+          vendor: "FiberLink Co.",
+          cat: "Fiber & Cables",
+          items: [
+            { name: "Drop Cable 2-Core (500m)", qty: 10, price: 7500 },
+            { name: "FTTH Box 16-port", qty: 15, price: 2800 },
+          ],
+          reqby: "Rakib Hasan",
+          delivery: "2026-03-05",
+          sts: "Pending",
+          notes: "New residential block cabling.",
+        },
+      ];
+
+      var modalItems = [];
+      var activeStat = "";
+      var currentPage = 1;
+      var pageSize = 10;
+
+      var stsCls = {
+        Pending: "bs-pending",
+        Approved: "bs-approved",
+        Received: "bs-received",
+        Cancelled: "bs-cancelled",
+        Partial: "bs-partial",
+      };
+
+      function calcTotal(items) {
+        return items.reduce(function (s, i) {
+          return s + i.qty * i.price;
+        }, 0);
+      }
+      function fmt(n) {
+        return (
+          "৳ " +
+          n.toLocaleString("en-BD", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })
+        );
+      }
+
+      function renderTable(list) {
+        var body = document.getElementById("poBody");
+        var empty = document.getElementById("emptyEl");
+        document.getElementById("rc-num").textContent = list.length;
+
+        if (!list.length) {
+          body.innerHTML = "";
+          empty.style.display = "";
+          renderPaging(0);
+          return;
+        }
+        empty.style.display = "none";
+
+        var start = (currentPage - 1) * pageSize;
+        var end = Math.min(start + pageSize, list.length);
+        var page = list.slice(start, end);
+
+        body.innerHTML = page
+          .map(function (o) {
+            var total = calcTotal(o.items);
+            return (
+              "<tr>" +
+              '<td><input type="checkbox" class="row-cb"/></td>' +
+              '<td style="font-weight:700;color:#1a3c5e;">' +
+              o.id +
+              "</td>" +
+              "<td>" +
+              o.date +
+              "</td>" +
+              '<td><i class="fa-solid fa-truck" style="color:#1a3c5e;margin-right:4px"></i>' +
+              o.vendor +
+              "</td>" +
+              "<td>" +
+              o.cat +
+              "</td>" +
+              '<td style="text-align:center;"><span style="background:#eaf0f7;color:#1a3c5e;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;">' +
+              o.items.length +
+              " item(s)</span></td>" +
+              '<td class="po-amount">' +
+              fmt(total) +
+              "</td>" +
+              "<td>" +
+              o.reqby +
+              "</td>" +
+              "<td>" +
+              o.delivery +
+              "</td>" +
+              '<td><span class="bp ' +
+              (stsCls[o.sts] || "") +
+              '">' +
+              o.sts +
+              "</span></td>" +
+              '<td><div class="act-btns">' +
+              '<button class="btn-v" onclick="viewOrder(\'' +
+              o.id +
+              '\')"><i class="fa-solid fa-eye"></i></button>' +
+              '<button class="btn-e" onclick="editOrder(\'' +
+              o.id +
+              '\')"><i class="fa-solid fa-pen"></i></button>' +
+              (o.sts === "Pending"
+                ? '<button class="btn-approve" onclick="approveOrder(\'' +
+                  o.id +
+                  '\')"><i class="fa-solid fa-check"></i></button>'
+                : "") +
+              '<button class="btn-x" onclick="deleteOrder(\'' +
+              o.id +
+              '\')"><i class="fa-solid fa-trash"></i></button>' +
+              "</div></td>" +
+              "</tr>"
+            );
+          })
+          .join("");
+
+        document.getElementById("footer-info").textContent =
+          "Showing " +
+          (start + 1) +
+          "–" +
+          end +
+          " of " +
+          list.length +
+          " entries";
+        renderPaging(list.length);
+      }
+
+      function renderPaging(total) {
+        var pages = Math.ceil(total / pageSize);
+        var pb = document.getElementById("pageBtns");
+        if (pages <= 1) {
+          pb.innerHTML = "";
+          return;
+        }
+        var html = "";
+        if (currentPage > 1)
+          html +=
+            '<button onclick="goPage(' +
+            (currentPage - 1) +
+            ')"><i class="fa-solid fa-chevron-left"></i></button>';
+        for (var i = 1; i <= pages; i++) {
+          html +=
+            '<button class="' +
+            (i === currentPage ? "active" : "") +
+            '" onclick="goPage(' +
+            i +
+            ')">' +
+            i +
+            "</button>";
+        }
+        if (currentPage < pages)
+          html +=
+            '<button onclick="goPage(' +
+            (currentPage + 1) +
+            ')"><i class="fa-solid fa-chevron-right"></i></button>';
+        pb.innerHTML = html;
+      }
+
+      function goPage(p) {
+        currentPage = p;
+        applyF();
+      }
+
+      function getFiltered() {
+        var s = (document.getElementById("f-srch").value || "").toLowerCase();
+        var st = document.getElementById("f-sts").value;
+        var v = document.getElementById("f-vendor").value;
+        var c = document.getElementById("f-cat").value;
+        return orders.filter(function (o) {
+          return (
+            (!activeStat || o.sts === activeStat) &&
+            (!st || o.sts === st) &&
+            (!v || o.vendor === v) &&
+            (!c || o.cat === c) &&
+            (!s ||
+              o.id.toLowerCase().includes(s) ||
+              o.vendor.toLowerCase().includes(s) ||
+              o.cat.toLowerCase().includes(s) ||
+              o.reqby.toLowerCase().includes(s))
+          );
+        });
+      }
+
+      function applyF() {
+        renderTable(getFiltered());
+      }
+
+      function filterStat(s) {
+        activeStat = s;
+        currentPage = 1;
+        document.querySelectorAll(".s-card").forEach(function (c) {
+          c.classList.remove("s-active");
+        });
+        var m = {
+          "": "sc-all",
+          Pending: "sc-pending",
+          Approved: "sc-approved",
+          Received: "sc-received",
+          Cancelled: "sc-cancelled",
+        };
+        var el = document.getElementById(m[s]);
+        if (el) el.classList.add("s-active");
+        applyF();
+      }
+
+      function updateCnts() {
+        var c = function (s) {
+          return orders.filter(function (o) {
+            return o.sts === s;
+          }).length;
+        };
+        document.getElementById("cnt-all").textContent = orders.length;
+        document.getElementById("cnt-pending").textContent = c("Pending");
+        document.getElementById("cnt-approved").textContent = c("Approved");
+        document.getElementById("cnt-received").textContent = c("Received");
+        document.getElementById("cnt-cancelled").textContent = c("Cancelled");
+      }
+
+      function toggleAll(cb) {
+        document.querySelectorAll(".row-cb").forEach(function (c) {
+          c.checked = cb.checked;
+        });
+      }
+
+      // ---- Modal items management ----
+      function renderModalItems() {
+        var body = document.getElementById("itemsBody");
+        body.innerHTML = modalItems
+          .map(function (it, idx) {
+            return (
+              "<tr>" +
+              "<td>" +
+              it.name +
+              "</td>" +
+              "<td>" +
+              it.qty +
+              "</td>" +
+              "<td>" +
+              it.price.toLocaleString() +
+              "</td>" +
+              "<td>৳ " +
+              (it.qty * it.price).toLocaleString() +
+              "</td>" +
+              '<td><button onclick="removeItem(' +
+              idx +
+              ')" style="border:none;background:none;color:#e74c3c;cursor:pointer;"><i class="fa-solid fa-trash"></i></button></td>' +
+              "</tr>"
+            );
+          })
+          .join("");
+        var gt = calcTotal(modalItems);
+        document.getElementById("grandTotal").textContent = fmt(gt);
+      }
+
+      function addItem() {
+        var name = document.getElementById("new-item-name").value.trim();
+        var qty = parseInt(document.getElementById("new-item-qty").value) || 0;
+        var price =
+          parseFloat(document.getElementById("new-item-price").value) || 0;
+        if (!name || !qty || !price) {
+          alert("Fill in item name, quantity and price.");
+          return;
+        }
+        modalItems.push({ name: name, qty: qty, price: price });
+        document.getElementById("new-item-name").value = "";
+        document.getElementById("new-item-qty").value = "";
+        document.getElementById("new-item-price").value = "";
+        renderModalItems();
+      }
+
+      function removeItem(idx) {
+        modalItems.splice(idx, 1);
+        renderModalItems();
+      }
+
+      function viewOrder(id) {
+        var o = orders.find(function (x) {
+          return x.id === id;
+        });
+        if (!o) return;
+        var total = calcTotal(o.items);
+        document.getElementById("viewBody").innerHTML =
+          '<div class="vm-grid">' +
+          '<div class="vm-item"><div class="vi-l">PO Number</div><div class="vi-v" style="color:#1a3c5e;">' +
+          o.id +
+          "</div></div>" +
+          '<div class="vm-item"><div class="vi-l">Status</div><div class="vi-v"><span class="bp ' +
+          (stsCls[o.sts] || "") +
+          '">' +
+          o.sts +
+          "</span></div></div>" +
+          '<div class="vm-item"><div class="vi-l">Vendor</div><div class="vi-v">' +
+          o.vendor +
+          "</div></div>" +
+          '<div class="vm-item"><div class="vi-l">Category</div><div class="vi-v">' +
+          o.cat +
+          "</div></div>" +
+          '<div class="vm-item"><div class="vi-l">Order Date</div><div class="vi-v">' +
+          o.date +
+          "</div></div>" +
+          '<div class="vm-item"><div class="vi-l">Expected Delivery</div><div class="vi-v">' +
+          o.delivery +
+          "</div></div>" +
+          '<div class="vm-item"><div class="vi-l">Requested By</div><div class="vi-v">' +
+          o.reqby +
+          "</div></div>" +
+          '<div class="vm-item"><div class="vi-l">Grand Total</div><div class="vi-v" style="color:#1a3c5e;font-size:16px;">' +
+          fmt(total) +
+          "</div></div>" +
+          "</div>" +
+          '<div class="sec-lbl">Order Items</div>' +
+          '<table class="items-table"><thead><tr><th>Item</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead><tbody>' +
+          o.items
+            .map(function (it) {
+              return (
+                "<tr><td>" +
+                it.name +
+                "</td><td>" +
+                it.qty +
+                "</td><td>৳ " +
+                it.price.toLocaleString() +
+                "</td><td>৳ " +
+                (it.qty * it.price).toLocaleString() +
+                "</td></tr>"
+              );
+            })
+            .join("") +
+          '</tbody><tfoot><tr><td colspan="3" style="text-align:right;padding-right:12px">Grand Total:</td><td style="font-weight:700;">' +
+          fmt(total) +
+          "</td></tr></tfoot></table>" +
+          (o.notes
+            ? '<div class="sec-lbl" style="margin-top:14px">Notes</div><div style="background:#f9fafc;border-radius:4px;padding:10px 13px;font-size:13px;color:#555;">' +
+              o.notes +
+              "</div>"
+            : "");
+        openMo("viewMo");
+      }
+
+      function editOrder(id) {
+        var o = orders.find(function (x) {
+          return x.id === id;
+        });
+        if (!o) return;
+        document.getElementById("ei").value = o.id;
+        document.getElementById("i-vendor").value = o.vendor;
+        document.getElementById("i-cat").value = o.cat;
+        document.getElementById("i-date").value = o.date;
+        document.getElementById("i-delivery").value = o.delivery;
+        document.getElementById("i-reqby").value = o.reqby;
+        document.getElementById("i-sts").value = o.sts;
+        document.getElementById("i-notes").value = o.notes;
+        modalItems = o.items.map(function (i) {
+          return { name: i.name, qty: i.qty, price: i.price };
+        });
+        renderModalItems();
+        document.getElementById("addMoTitle").innerHTML =
+          '<i class="fa-solid fa-pen"></i> Edit Order — ' + o.id;
+        openMo("addMo");
+      }
+
+      function approveOrder(id) {
+        var o = orders.find(function (x) {
+          return x.id === id;
+        });
+        if (o) {
+          o.sts = "Approved";
+          updateCnts();
+          applyF();
+        }
+      }
+
+      function deleteOrder(id) {
+        if (!confirm("Delete this purchase order?")) return;
+        orders = orders.filter(function (x) {
+          return x.id !== id;
+        });
+        updateCnts();
+        applyF();
+      }
+
+      function saveOrder() {
+        var vendor = document.getElementById("i-vendor").value;
+        var cat = document.getElementById("i-cat").value;
+        var date = document.getElementById("i-date").value;
+        if (!vendor || !cat || !date) {
+          alert("Please fill all required (*) fields.");
+          return;
+        }
+        if (!modalItems.length) {
+          alert("Please add at least one item.");
+          return;
+        }
+        var eid = document.getElementById("ei").value;
+        if (eid) {
+          var o = orders.find(function (x) {
+            return x.id === eid;
+          });
+          if (o) {
+            o.vendor = vendor;
+            o.cat = cat;
+            o.date = date;
+            o.delivery = document.getElementById("i-delivery").value;
+            o.reqby = document.getElementById("i-reqby").value;
+            o.sts = document.getElementById("i-sts").value;
+            o.notes = document.getElementById("i-notes").value;
+            o.items = modalItems.slice();
+          }
+        } else {
+          orders.push({
+            id: "PO-" + String(orders.length + 1).padStart(3, "0"),
+            date: date,
+            vendor: vendor,
+            cat: cat,
+            items: modalItems.slice(),
+            reqby: document.getElementById("i-reqby").value,
+            delivery: document.getElementById("i-delivery").value,
+            sts: document.getElementById("i-sts").value,
+            notes: document.getElementById("i-notes").value,
+          });
+        }
+        closeMo("addMo");
+        updateCnts();
+        applyF();
+      }
+
+      function openMo(id) {
+        document.getElementById(id).classList.add("open");
+      }
+      function closeMo(id) {
+        document.getElementById(id).classList.remove("open");
+        if (id === "addMo") {
+          document.getElementById("ei").value = "";
+          document.getElementById("addMoTitle").innerHTML =
+            '<i class="fa-solid fa-plus"></i> New Purchase Order';
+          ["i-vendor", "i-cat", "i-date", "i-delivery", "i-notes"].forEach(
+            function (f) {
+              var el = document.getElementById(f);
+              if (el) el.value = "";
+            },
+          );
+          document.getElementById("i-reqby").value = "Admin";
+          document.getElementById("i-sts").value = "Pending";
+          modalItems = [];
+          renderModalItems();
+        }
+      }
+      document.querySelectorAll(".mo").forEach(function (m) {
+        m.addEventListener("click", function (e) {
+          if (e.target === m) m.classList.remove("open");
+        });
+      });
+
+      // Init date fields
+      document.getElementById("i-date").value = new Date()
+        .toISOString()
+        .slice(0, 10);
+      modalItems = [];
+      updateCnts();
+      applyF();
+    </script>
+  </body>
+</html>

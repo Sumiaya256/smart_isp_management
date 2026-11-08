@@ -1,0 +1,219 @@
+HR AND PAYROLL MODULE FEATURES
+================================
+1. Employee management
+- Add Employee form with complete profile capture.
+- Employee List with search/filter style listing and KPI cards.
+- Employee records editing and lifecycle management support.
+- Employee account/profile linkage with role/position-based access logic.
+
+2. Department management
+- Add new department.
+- Department list with employee count per department.
+- Department update and delete operations.
+- Department actions controlled by permission level (full vs view).
+
+3. Position and access matrix management
+- Add position with department mapping.
+- Position list with permission summary.
+- Section and subsection permission assignment per position.
+- Permission legend and per-module access mode (Full Access, View Only, No Access).
+
+4. Payhead management
+- Payhead catalog/listing interface.
+- Earning, deduction, and other type grouping.
+- Active/inactive status management for payheads.
+- Search/filter support for payhead records.
+
+5. Payroll processing
+- Payroll page with KPI metrics and payroll controls.
+- Employee-wise payroll rows with editable fields and calculations.
+- Status tracking (pending/paid/hold/processed style states).
+- Payroll actions for processing and operational handling.
+
+6. Salary sheet and payslip
+- Salary Sheet view with filters, KPI cards, and tabular salary data.
+- Structured salary table with totals and summary/footer calculations.
+- Payslip page support for employee payslip display.
+
+7. Resignation and offboarding
+- Resign Rule management interface with filters and status handling.
+- Resignation workflow page with statuses (submitted, approved, rejected, relieved, cancelled).
+- Resignation list, review, and action capability.
+
+8. Rejoin support
+- Rejoin page routing/flow available in module navigation (currently redirects path).
+
+
+ATTENDANCE MODULE FEATURES
+==========================
+1. Daily attendance operations
+- Dedicated Daily Attendance page with attendance dashboard style layout.
+- Attendance KPI/stat cards and quick operational view.
+- Date and control tools for attendance actions.
+
+2. Biometric-style attendance interaction
+- Fingerprint-style attendance trigger button.
+- Scan overlay and attendance feedback flow.
+
+3. Attendance management utilities
+- Action buttons for attendance operations (marking/refresh/export style controls).
+- View controls for attendance listing sections and records.
+
+4. Attendance page routing
+- attendance.html currently redirects to daily_attendance.html for unified daily operations.
+
+
+LEAVE MANAGEMENT MODULE FEATURES
+================================
+1. Leave dashboard and analytics
+- Leave statistics cards (total employees, working today, pending approval, on leave).
+
+2. Leave request filtering
+- Filter by status (all, pending, approved, rejected).
+- Filter by leave type (sick, casual, annual, maternity, emergency).
+- Search by employee name/ID.
+- Date range filter and clear filter action.
+
+3. Leave request processing
+- Leave request table with detailed fields (employee, department, dates, reason, status).
+- Actions for approve, reject, cancel, and view details.
+- Multi-status leave flow for pending/approved/rejected records.
+
+
+EVENTS AND HOLIDAYS MODULE FEATURES
+===================================
+1. Calendar and timeline view
+- Calendar navigation by month (previous/next).
+- Highlighting for event/holiday dates.
+- Today jump and current month quick view.
+
+2. Events and holidays analytics
+- Stats cards for total events/holidays/upcoming items.
+- Countdown section for next important event.
+
+3. Event and holiday management
+- Add Event modal form (title/date/type/details flow).
+- Edit/delete style action controls per event row.
+- Type filtering and search filtering for event list.
+
+4. Export and utility actions
+- Export holidays/events to Excel.
+- Quick action buttons for add/export/navigation tasks.
+
+
+TASK MANAGEMENT MODULE FEATURES
+===============================
+1. Task list management
+- Main Task List page with status-driven cards (total, pending, in progress, completed, overdue).
+- Task cards with priority, status, SLA indicators, progress, assignee, and metadata.
+- Search/filter controls for task discovery.
+- Action buttons for view/edit/complete/delete style operations.
+
+2. Task categories
+- Task Category page with KPI cards by category.
+- Category table showing active/completed workload and owner teams.
+
+3. Task assignments
+- Assignment view per employee with active load and completion ratio.
+- Team tagging and progress bars per assignee.
+
+4. Task reports
+- Task report dashboard with KPI summary.
+- Team-wise open/closed/SLA on-time table reporting.
+
+5. Multi-view navigation
+- In-module sub-navigation: Task List, Categories, Assignments, Reports.
+
+
+PURCHASE MODULE FEATURES
+========================
+1. Purchase operations overview
+- Purchase page with operational cards and purchase workflow layout.
+- Quick purchase actions for adding and managing order records.
+
+2. Purchase order management
+- Purchase order listing with item/supplier-oriented records.
+- Add purchase flow for creating new procurement entries.
+- Edit/update style controls for existing purchase records.
+- Delete/cancel style controls for invalid or obsolete purchase entries.
+
+3. Purchase filtering and tracking
+- Filter/search support for purchase entries.
+- Status-based visibility for purchase lifecycle tracking.
+
+4. Purchase reporting utilities
+- Export/print style controls for purchase data output.
+- Purchase data visibility aligned with role/page permissions.
+
+
+ASSETS MODULE FEATURES
+======================
+1. Asset register and overview
+- Asset page with listing of assigned and unassigned assets.
+- Asset inventory visibility across operational teams.
+
+2. Asset lifecycle management
+- Add Asset modal for new asset registration.
+- Edit Asset actions for asset metadata updates.
+- Delete Asset actions for retired/invalid records.
+
+3. Asset assignment management
+- Assign Asset flow for mapping assets to employees/users.
+- Unassign Asset flow for reallocation and returns.
+
+4. Asset control and permissions
+- Asset actions controlled by module/page permission levels.
+- View-only users can see data while restricted from mutate actions.
+
+
+INVENTORY MODULE FEATURES
+=========================
+1. Inventory overview and KPIs
+- KPI cards for total items, in stock, low stock, out of stock.
+- Low stock alert banner for replenishment visibility.
+
+2. Item and category management
+- Add Item modal with item details (name, category, unit, quantities, cost fields).
+- Category cards (all, network equipment, cables/fiber, consumables) with counts.
+
+3. Inventory table operations
+- Item list table with SKU/category/stock/min level/cost/value/status.
+- Status classification (good, low, out, ordered).
+- Search and filter controls (category, status, keyword).
+
+4. Stock movement and activity tracking
+- Stock In/Out operation entry path.
+- Recent stock activity listing.
+- Value by category summary section.
+
+5. Reporting and export
+- Date-based report range selectors.
+- Export and print options.
+
+
+INCOME MODULE FEATURES
+======================
+1. Income overview dashboard
+- Hero summary for total income, collected amount, outstanding amount, and YTD.
+- Month/period tabs for quick period switching.
+- Revenue stream cards (subscription, installation, other income).
+
+2. Income transaction management
+- Transaction table with invoice/client/package/type/amount/paid/due/status.
+- Filters by type, status, and search keyword.
+- Add Entry / New Entry modal for income capture.
+
+3. Income entry operations
+- Income Entry page for creating and managing income records.
+- Fields for category, amount, method, client, receiver, date, and notes.
+- Edit/delete action buttons for individual entries.
+
+4. Income reports and analytics
+- Dedicated Income Reports page with export (PDF/Excel) controls.
+- Revenue by category visualization.
+- Revenue by payment method visualization.
+- Monthly summary report table with growth comparison.
+
+5. Billing-linked income integration (current implementation)
+- Billing collection flow can sync paid invoices into income entries.
+- Source linkage fields for invoice and payment references in income records.

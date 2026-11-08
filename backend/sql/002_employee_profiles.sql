@@ -1,0 +1,32 @@
+USE isp_management;
+
+CREATE TABLE IF NOT EXISTS employee_profiles (
+  employee_id BIGINT UNSIGNED PRIMARY KEY,
+  role_name VARCHAR(100) NULL,
+  designation_title VARCHAR(120) NULL,
+  status_label VARCHAR(40) NULL,
+  gender VARCHAR(20) NULL,
+  nid VARCHAR(50) NULL UNIQUE,
+  dob DATE NULL,
+  blood_group VARCHAR(10) NULL,
+  employee_type VARCHAR(40) NULL,
+  emergency_phone VARCHAR(30) NULL,
+  emergency_name VARCHAR(120) NULL,
+  manager_name VARCHAR(120) NULL,
+  house_allowance DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+  medical_allowance DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+  transport_allowance DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+  bank_name VARCHAR(120) NULL,
+  bank_account VARCHAR(80) NULL,
+  education VARCHAR(120) NULL,
+  experience_years INT UNSIGNED NOT NULL DEFAULT 0,
+  present_address VARCHAR(255) NULL,
+  permanent_address VARCHAR(255) NULL,
+  skills VARCHAR(255) NULL,
+  notes TEXT NULL,
+  access_modules JSON NULL,
+  password_hash VARCHAR(255) NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_employee_profiles_employee FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE
+) ENGINE=InnoDB;

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test - Header Loader</title>
+  <link rel="stylesheet" href="assets/css/style.css?v=20260326f" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    #app-page-content h1 { padding: 20px; }
+  </style>
+</head>
+<body>
+  <!-- Header loads here automatically -->
+  <div id="app-header"></div>
+
+  <div id="app-page-content" class="page-content">
+    <h1><i class="fa-solid fa-flask"></i> Header Component Test Page</h1>
+    <div style="background: white; border-radius: 8px; padding: 20px; margin: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+      <h2>✅ Header Loader Test</h2>
+      <p><strong>This page uses the new dynamic header system:</strong></p>
+      <ul>
+        <li>Header loads from <code>assets/html/header.html</code></li>
+        <li>Functionality initialized by <code>assets/js/header-loader.js?v=20260328i</code></li>
+        <li>All header features work: auth, sidebar, search, logout</li>
+        <li>Page content is separate from header</li>
+      </ul>
+      <h3>Try These:</h3>
+      <ul style="list-style: none; padding: 0;">
+        <li>✓ Click the hamburger menu (sidebar toggle)</li>
+        <li>✓ Hover over menu items to see submenus</li>
+        <li>✓ Type in the search box (minimum 2 characters)</li>
+        <li>✓ Click "Home" button to go to dashboard</li>
+        <li>✓ Click "Log Out" to test logout</li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="assets/js/header-loader.js?v=20260328i"></script>
+</body>
+</html>
+
+
+

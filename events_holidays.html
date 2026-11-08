@@ -1,0 +1,2048 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promee International - Events & Holidays</title>
+
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --navy-primary: #1e3a8a;
+        --navy-dark: #1e40af;
+        --navy-darker: #1d4ed8;
+        --navy-light: #3b82f6;
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-300: #d1d5db;
+        --gray-400: #9ca3af;
+        --gray-500: #6b7280;
+        --gray-600: #4b5563;
+        --gray-700: #374151;
+        --gray-800: #1f2937;
+        --gray-900: #111827;
+        --success: #10b981;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: var(--gray-50);
+        color: var(--gray-800);
+      }
+
+      /* Page Header */
+      .page-header {
+        background: white;
+        padding: 24px 32px;
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--gray-200);
+      }
+
+      .page-header h1 {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .page-header h1 i {
+        color: var(--navy-primary);
+      }
+
+      .page-header p {
+        color: var(--gray-500);
+        font-size: 14px;
+      }
+
+      /* Stats Grid - Compact */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .stat-card {
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-radius: 12px;
+        padding: 16px;
+        transition: all 0.2s ease;
+      }
+
+      .stat-card:hover {
+        border-color: var(--navy-primary);
+        box-shadow: 0 4px 12px rgba(30, 58, 138, 0.08);
+      }
+
+      .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 10px;
+      }
+
+      .stat-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: var(--gray-50);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        color: var(--navy-primary);
+      }
+
+      .stat-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 4px;
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: var(--gray-500);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+
+      /* Countdown Section */
+      .countdown-section {
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 24px;
+        text-align: center;
+      }
+
+      .countdown-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--gray-600);
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .countdown-event-name {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--navy-primary);
+        margin-bottom: 16px;
+      }
+
+      .countdown-display {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .countdown-item {
+        background: var(--gray-50);
+        border: 1px solid var(--gray-200);
+        padding: 12px 16px;
+        border-radius: 10px;
+        min-width: 70px;
+      }
+
+      .countdown-item .number {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--navy-primary);
+        display: block;
+        line-height: 1;
+      }
+
+      .countdown-item .label {
+        font-size: 11px;
+        color: var(--gray-500);
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-top: 6px;
+        letter-spacing: 0.3px;
+      }
+
+      /* Main Container */
+      .events-container {
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        gap: 20px;
+        margin-bottom: 24px;
+      }
+
+      .card {
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-radius: 12px;
+        padding: 20px;
+      }
+
+      /* Calendar Section */
+      .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--gray-200);
+      }
+
+      .calendar-header h3 {
+        margin: 0;
+        font-size: 16px;
+        color: var(--gray-900);
+        font-weight: 700;
+      }
+
+      .calendar-nav {
+        display: flex;
+        gap: 8px;
+      }
+
+      .calendar-nav button {
+        background: var(--gray-100);
+        color: var(--gray-700);
+        border: none;
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+      }
+
+      .calendar-nav button:hover {
+        background: var(--navy-primary);
+        color: white;
+      }
+
+      .calendar-wrapper {
+        max-height: 420px;
+        overflow-y: auto;
+      }
+
+      .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 6px;
+        text-align: center;
+        font-size: 13px;
+      }
+
+      .calendar-day {
+        font-weight: 600;
+        color: var(--gray-600);
+        padding: 6px 0;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+
+      .calendar-date {
+        padding: 8px 0;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-weight: 500;
+        position: relative;
+        color: var(--gray-700);
+      }
+
+      .calendar-date:hover {
+        background: var(--gray-100);
+      }
+
+      .calendar-date.today {
+        background: var(--navy-primary);
+        color: white;
+        font-weight: 700;
+      }
+
+      .calendar-date.holiday {
+        background: #fef2f2;
+        color: var(--danger);
+        font-weight: 600;
+      }
+
+      .calendar-date.event {
+        background: #eff6ff;
+        color: var(--navy-primary);
+        font-weight: 600;
+      }
+
+      .calendar-date.holiday::after,
+      .calendar-date.event::after {
+        content: "";
+        position: absolute;
+        bottom: 2px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+      }
+
+      .calendar-date.holiday::after {
+        background: var(--danger);
+      }
+
+      .calendar-date.event::after {
+        background: var(--navy-primary);
+      }
+
+      /* Calendar Legend */
+      .calendar-legend {
+        display: flex;
+        gap: 12px;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid var(--gray-200);
+        font-size: 11px;
+        justify-content: center;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--gray-600);
+      }
+
+      .legend-color {
+        width: 14px;
+        height: 14px;
+        border-radius: 3px;
+      }
+
+      .legend-color.today {
+        background: var(--navy-primary);
+      }
+
+      .legend-color.holiday {
+        background: #fef2f2;
+        border: 1px solid var(--danger);
+      }
+
+      .legend-color.event {
+        background: #eff6ff;
+        border: 1px solid var(--navy-primary);
+      }
+
+      /* Events List Section */
+      .section-header {
+        margin-bottom: 16px;
+      }
+
+      .section-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 12px;
+      }
+
+      .search-filter-row {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .search-box {
+        flex: 1;
+      }
+
+      .search-box input,
+      .filter-select {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid var(--gray-300);
+        border-radius: 8px;
+        font-size: 13px;
+        transition: all 0.2s ease;
+      }
+
+      .search-box input:focus,
+      .filter-select:focus {
+        outline: none;
+        border-color: var(--navy-primary);
+        box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+      }
+
+      .filter-select {
+        background: white;
+        cursor: pointer;
+        font-weight: 500;
+      }
+
+      .event-list-wrapper {
+        max-height: 380px;
+        overflow-y: auto;
+      }
+
+      .event-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--gray-50);
+        padding: 12px 14px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        border-left: 3px solid var(--gray-300);
+        transition: all 0.2s ease;
+      }
+
+      .event-item:hover {
+        background: white;
+        border-left-color: var(--navy-primary);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      .event-item.holiday-item {
+        border-left-color: var(--danger);
+        background: #fefefe;
+      }
+
+      .event-item.event-item-type {
+        border-left-color: var(--navy-primary);
+        background: #fefefe;
+      }
+
+      .event-info strong {
+        display: block;
+        color: var(--gray-900);
+        font-size: 14px;
+        margin-bottom: 4px;
+        font-weight: 600;
+      }
+
+      .event-info small {
+        color: var(--gray-500);
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .event-type-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-top: 4px;
+        letter-spacing: 0.3px;
+      }
+
+      .event-type-badge.holiday {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .event-type-badge.event {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+
+      .event-actions {
+        display: flex;
+        gap: 6px;
+      }
+
+      .event-actions button {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        padding: 6px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+        color: var(--gray-400);
+      }
+
+      .event-actions button:hover {
+        background: var(--gray-100);
+      }
+
+      .event-actions .btn-edit:hover {
+        color: var(--navy-primary);
+      }
+
+      .event-actions .btn-delete:hover {
+        color: var(--danger);
+      }
+
+      .no-events {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--gray-400);
+      }
+
+      .no-events i {
+        font-size: 40px;
+        margin-bottom: 12px;
+        opacity: 0.5;
+      }
+
+      .no-events p {
+        font-size: 14px;
+      }
+
+      /* Holiday Table */
+      .table-section {
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      .table-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--gray-200);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .table-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--gray-900);
+      }
+
+      .table-controls {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .table-search {
+        min-width: 250px;
+      }
+
+      .table-search input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid var(--gray-300);
+        border-radius: 8px;
+        font-size: 13px;
+      }
+
+      .table-search input:focus {
+        outline: none;
+        border-color: var(--navy-primary);
+        box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+      }
+
+      .holiday-table-wrapper {
+        max-height: 450px;
+        overflow-y: auto;
+      }
+
+      .holiday-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .holiday-table thead {
+        background: var(--gray-50);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .holiday-table th {
+        padding: 12px 16px;
+        text-align: left;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--gray-600);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid var(--gray-200);
+      }
+
+      .holiday-table td {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--gray-100);
+        font-size: 14px;
+        color: var(--gray-700);
+      }
+
+      .holiday-table tbody tr {
+        transition: all 0.15s ease;
+      }
+
+      .holiday-table tbody tr:hover {
+        background: var(--gray-50);
+      }
+
+      .holiday-name {
+        font-weight: 600;
+        color: var(--gray-900);
+      }
+
+      .holiday-day {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        background: var(--gray-100);
+        color: var(--gray-700);
+      }
+
+      /* Buttons */
+      .btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-primary {
+        background: var(--navy-primary);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: var(--navy-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2);
+      }
+
+      .btn-secondary {
+        background: var(--gray-100);
+        color: var(--gray-700);
+      }
+
+      .btn-secondary:hover {
+        background: var(--gray-200);
+      }
+
+      .btn-success {
+        background: var(--success);
+        color: white;
+      }
+
+      .btn-success:hover {
+        background: #059669;
+      }
+
+      /* Floating Add Button */
+      .add-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: var(--navy-primary);
+        color: white;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 20px rgba(30, 58, 138, 0.3);
+        transition: all 0.3s ease;
+        z-index: 100;
+        border: none;
+      }
+
+      .add-btn:hover {
+        background: var(--navy-dark);
+        transform: scale(1.1) rotate(90deg);
+        box-shadow: 0 8px 28px rgba(30, 58, 138, 0.4);
+      }
+
+      /* Modal */
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        animation: fadeIn 0.2s ease;
+      }
+
+      .modal.show {
+        display: flex;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 480px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideUp 0.3s ease;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .modal-header {
+        padding: 24px 24px 16px;
+        border-bottom: 1px solid var(--gray-200);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .modal-header h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--gray-900);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .close-btn {
+        background: transparent;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: var(--gray-400);
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+      }
+
+      .close-btn:hover {
+        background: var(--gray-100);
+        color: var(--gray-700);
+      }
+
+      .modal-body {
+        padding: 24px;
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--gray-700);
+        font-weight: 600;
+        font-size: 13px;
+      }
+
+      .modal-content input,
+      .modal-content select,
+      .modal-content textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--gray-300);
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        font-family: inherit;
+      }
+
+      .modal-content input:focus,
+      .modal-content select:focus,
+      .modal-content textarea:focus {
+        outline: none;
+        border-color: var(--navy-primary);
+        box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+      }
+
+      .modal-content textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      .modal-footer {
+        padding: 16px 24px;
+        border-top: 1px solid var(--gray-200);
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+      }
+
+      /* Quick Actions */
+      .quick-actions {
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 20px;
+      }
+
+      .quick-actions-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--gray-700);
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+
+      .quick-actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 8px;
+      }
+
+      .quick-action-btn {
+        padding: 10px;
+        background: var(--gray-50);
+        border: 1px solid var(--gray-200);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--gray-700);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .quick-action-btn:hover {
+        background: var(--navy-primary);
+        color: white;
+        border-color: var(--navy-primary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(30, 58, 138, 0.15);
+      }
+
+      .quick-action-btn i {
+        font-size: 16px;
+      }
+
+      /* Notification */
+      .notification {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-left: 4px solid var(--success);
+        padding: 16px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        z-index: 3000;
+        animation: slideInRight 0.3s ease;
+        max-width: 350px;
+      }
+
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(100px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 1024px) {
+        .events-container {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .table-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .table-controls {
+          width: 100%;
+          flex-direction: column;
+        }
+
+        .table-search {
+          width: 100%;
+        }
+      }
+
+      /* Custom scrollbar */
+      .calendar-wrapper::-webkit-scrollbar,
+      .event-list-wrapper::-webkit-scrollbar,
+      .holiday-table-wrapper::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .calendar-wrapper::-webkit-scrollbar-track,
+      .event-list-wrapper::-webkit-scrollbar-track,
+      .holiday-table-wrapper::-webkit-scrollbar-track {
+        background: var(--gray-100);
+        border-radius: 10px;
+      }
+
+      .calendar-wrapper::-webkit-scrollbar-thumb,
+      .event-list-wrapper::-webkit-scrollbar-thumb,
+      .holiday-table-wrapper::-webkit-scrollbar-thumb {
+        background: var(--gray-300);
+        border-radius: 10px;
+      }
+
+      .calendar-wrapper::-webkit-scrollbar-thumb:hover,
+      .event-list-wrapper::-webkit-scrollbar-thumb:hover,
+      .holiday-table-wrapper::-webkit-scrollbar-thumb:hover {
+        background: var(--gray-400);
+      }
+    </style>
+  </head>
+
+  <body>
+    <link rel="stylesheet" href="style.css" />
+            <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <i class="fa-solid fa-circle-nodes"></i> Promee International
+      </div>
+      <ul class="menu">
+        <!-- Dashboard -->
+        <li>
+          <a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+        </li>
+
+        <!-- Client -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-user"></i> Client
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="new_request.html"
+                ><i class="fa-regular fa-circle"></i> New Request</a
+              >
+            </li>
+            <li>
+              <a href="add_new_client.html"
+                ><i class="fa-regular fa-circle"></i> Add New</a
+              >
+            </li>
+            <li>
+              <a href="client_list.html"
+                ><i class="fa-regular fa-circle"></i> Client List</a
+              >
+            </li>
+            <li>
+              <a href="left_client.html"
+                ><i class="fa-regular fa-circle"></i> Left Client</a
+              >
+            </li>
+            <li>
+              <a href="scheduler.html"
+                ><i class="fa-regular fa-circle"></i> Scheduler</a
+              >
+            </li>
+            <li>
+              <a href="change_request.html"
+                ><i class="fa-regular fa-circle"></i> Change Request</a
+              >
+            </li>
+            <li>
+              <a href="portal_manage.html"
+                ><i class="fa-regular fa-circle"></i> Portal Manage</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Billing -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-file-invoice-dollar"></i> Billing
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="billing.html"
+                ><i class="fa-regular fa-circle"></i> Billing</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Mikrotik Server -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-server"></i> Mikrotik Server
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="Bulk_Client_Import.html"
+                ><i class="fa-regular fa-circle"></i> Bulk Client Import</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- HR & Payroll (Your Part) -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-users-gear"></i> HR & Payroll
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="employee_list.html"
+                ><i class="fa-regular fa-circle"></i> Employee List</a
+              >
+            </li>
+            <li>
+              <a href="add_employee.html"
+                ><i class="fa-regular fa-circle"></i> Add Employee</a
+              >
+            </li>
+            <li>
+              <a href="attendance.html"
+                ><i class="fa-regular fa-circle"></i> Attendance</a
+              >
+            </li>
+            <li>
+              <a href="salary_sheet.html"
+                ><i class="fa-regular fa-circle"></i> Salary Sheet</a
+              >
+            </li>
+            <li>
+              <a href="department.html"
+                ><i class="fa-regular fa-circle"></i> Department</a
+              >
+            </li>
+            <li>
+              <a href="position.html"
+                ><i class="fa-regular fa-circle"></i> Position</a
+              >
+            </li>
+            <li>
+              <a href="payhead.html"
+                ><i class="fa-regular fa-circle"></i> Payhead</a
+              >
+            </li>
+            <li>
+              <a href="payroll.html"
+                ><i class="fa-regular fa-circle"></i> Payroll</a
+              >
+            </li>
+            <li>
+              <a href="resign_rule.html"
+                ><i class="fa-regular fa-circle"></i> Resign Rule</a
+              >
+            </li>
+            <li>
+              <a href="resignation.html"
+                ><i class="fa-regular fa-circle"></i> Resignation</a
+              >
+            </li>
+            <li>
+              <a href="rejoin.html"
+                ><i class="fa-regular fa-circle"></i> Rejoin</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Leave Management -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-door-open"></i> Leave Management
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="leave_management.html"
+                ><i class="fa-regular fa-circle"></i> Leave Management</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Events & Holidays -->
+        <li class="has-submenu open">
+          <a href="#"
+            ><i class="fa-solid fa-calendar-days"></i> Events & Holidays
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="events_holidays.html" class="active"
+                ><i class="fa-regular fa-circle"></i> Events & Holidays</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Support & Ticketing -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-headset"></i> Support & Ticketing
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="ticket_list.html"
+                ><i class="fa-regular fa-circle"></i> Ticket List</a
+              >
+            </li>
+            <li>
+              <a href="new_ticket.html"
+                ><i class="fa-regular fa-circle"></i> New Ticket</a
+              >
+            </li>
+            <li>
+              <a href="complain_list.html"
+                ><i class="fa-regular fa-circle"></i> Complain List</a
+              >
+            </li>
+            <li>
+              <a href="complain_category.html"
+                ><i class="fa-regular fa-circle"></i> Complain Category</a
+              >
+            </li>
+            <li>
+              <a href="support_team.html"
+                ><i class="fa-regular fa-circle"></i> Support Team</a
+              >
+            </li>
+            <li>
+              <a href="ticket_reports.html"
+                ><i class="fa-regular fa-circle"></i> Ticket Reports</a
+              >
+            </li>
+            <li>
+              <a href="service_history.html"
+                ><i class="fa-regular fa-circle"></i> Service History</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Task Management -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-list-check"></i> Task Management
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Purchase -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-basket-shopping"></i> Purchase
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Inventory -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-boxes-stacked"></i> Inventory
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Assets -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-laptop-medical"></i> Assets
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Income -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-money-bill-trend-up"></i> Income
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <header>
+        <div class="header-left">
+          <div class="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
+          <div class="search-box">
+            <input type="text" placeholder="Search Customer" />
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="monitor">
+            <i class="fa-solid fa-desktop"></i> Online Client Monitoring
+          </div>
+          <div class="releases">
+            <i class="fa-solid fa-wrench"></i> Releases
+            <span class="badge">0</span>
+          </div>
+          <div class="notifications">
+            <i class="fa-solid fa-bell"></i> <span class="badge">0</span>
+          </div>
+          <a href="login.html" class="header-btn"><i class="fa-solid fa-house"></i> Home</a>
+          <a href="login.html" class="header-btn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+          <div class="profile"><i class="fa-solid fa-user-circle"></i></div>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <!-- Page Header -->
+        <div class="page-header">
+          <h1><i class="fa-solid fa-calendar-days"></i> Events & Holidays</h1>
+          <p>
+            Manage company events and track Bangladesh public holidays for 2026
+          </p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon">
+                <i class="fa-solid fa-umbrella-beach"></i>
+              </div>
+            </div>
+            <div class="stat-value" id="totalHolidays">0</div>
+            <div class="stat-label">Total Holidays</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon">
+                <i class="fa-solid fa-calendar-check"></i>
+              </div>
+            </div>
+            <div class="stat-value" id="totalEvents">0</div>
+            <div class="stat-label">Company Events</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon">
+                <i class="fa-solid fa-clock"></i>
+              </div>
+            </div>
+            <div class="stat-value" id="upcomingCount">0</div>
+            <div class="stat-label">Upcoming (30 Days)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon">
+                <i class="fa-solid fa-list"></i>
+              </div>
+            </div>
+            <div class="stat-value" id="totalAll">0</div>
+            <div class="stat-label">All Items</div>
+          </div>
+        </div>
+
+        <!-- Countdown Section -->
+        <div class="countdown-section" id="countdownSection">
+          <div class="countdown-title">
+            <i class="fa-solid fa-hourglass-half"></i> Next Holiday Countdown
+          </div>
+          <div class="countdown-event-name" id="nextHolidayName"></div>
+          <div class="countdown-display" id="countdownDisplay"></div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <div class="quick-actions-title">Quick Actions</div>
+          <div class="quick-actions-grid">
+            <button class="quick-action-btn" onclick="openAddModal()">
+              <i class="fa-solid fa-plus"></i>
+              Add Event
+            </button>
+            <button class="quick-action-btn" onclick="exportHolidaysToExcel()">
+              <i class="fa-solid fa-file-excel"></i>
+              Export Excel
+            </button>
+            <button class="quick-action-btn" onclick="goToToday()">
+              <i class="fa-solid fa-calendar-day"></i>
+              Today
+            </button>
+            <button class="quick-action-btn" onclick="viewThisMonth()">
+              <i class="fa-solid fa-eye"></i>
+              This Month
+            </button>
+          </div>
+        </div>
+
+        <!-- Calendar and Events -->
+        <div class="events-container">
+          <!-- Calendar -->
+          <div class="card">
+            <div class="calendar-header">
+              <h3 id="monthYear"></h3>
+              <div class="calendar-nav">
+                <button onclick="changeMonth(-1)">
+                  <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button onclick="changeMonth(1)">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+            <div class="calendar-wrapper">
+              <div class="calendar-grid" id="calendarGrid"></div>
+            </div>
+            <div class="calendar-legend">
+              <div class="legend-item">
+                <div class="legend-color today"></div>
+                <span>Today</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color holiday"></div>
+                <span>Holiday</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color event"></div>
+                <span>Event</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Events List -->
+          <div class="card">
+            <div class="section-header">
+              <h3 class="section-title">Events & Holidays List</h3>
+              <div class="search-filter-row">
+                <div class="search-box">
+                  <input
+                    type="text"
+                    placeholder="🔍 Search events..."
+                    oninput="filterEvents()"
+                    id="searchInput"
+                  />
+                </div>
+                <select
+                  class="filter-select"
+                  id="typeFilter"
+                  onchange="filterEvents()"
+                >
+                  <option value="all">All Types</option>
+                  <option value="holiday">Holidays Only</option>
+                  <option value="event">Events Only</option>
+                </select>
+              </div>
+            </div>
+            <div class="event-list-wrapper" id="eventList"></div>
+          </div>
+        </div>
+
+        <!-- Holiday Table -->
+        <div class="table-section">
+          <div class="table-header">
+            <div class="table-title">
+              <i class="fa-solid fa-flag"></i> Bangladesh Public Holidays 2026
+            </div>
+            <div class="table-controls">
+              <div class="table-search">
+                <input
+                  type="text"
+                  placeholder="🔍 Search holidays..."
+                  oninput="filterHolidayTable(this.value)"
+                />
+              </div>
+              <button class="btn btn-success" onclick="exportHolidaysToExcel()">
+                <i class="fa-solid fa-file-excel"></i> Export
+              </button>
+            </div>
+          </div>
+          <div class="holiday-table-wrapper">
+            <table class="holiday-table">
+              <thead>
+                <tr>
+                  <th>Sl</th>
+                  <th>Holiday Name</th>
+                  <th>Date</th>
+                  <th>Day</th>
+                  <th>Days Away</th>
+                </tr>
+              </thead>
+              <tbody id="holidayTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating Add Button -->
+    <button class="add-btn" onclick="openAddModal()">
+      <i class="fa-solid fa-plus"></i>
+    </button>
+
+    <!-- Modal -->
+    <div class="modal" id="eventModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="modalTitle">
+            <i class="fa-solid fa-calendar-plus"></i> Add New Event
+          </h3>
+          <button class="close-btn" onclick="closeModal()">
+            <i class="fa-solid fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Event Title *</label>
+            <input
+              id="eventTitle"
+              placeholder="e.g., Team Meeting, Birthday Party"
+            />
+          </div>
+          <div class="form-group">
+            <label>Date *</label>
+            <input id="eventDate" type="date" />
+          </div>
+          <div class="form-group">
+            <label>Type *</label>
+            <select id="eventType">
+              <option value="event">Company Event</option>
+              <option value="holiday">Holiday</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Description (Optional)</label>
+            <textarea
+              id="eventDescription"
+              placeholder="Add details about this event..."
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" onclick="closeModal()">
+            <i class="fa-solid fa-times"></i> Cancel
+          </button>
+          <button class="btn btn-primary" onclick="saveEvent()">
+            <i class="fa-solid fa-check"></i> Save Event
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script>
+      // Bangladesh Public Holidays 2026
+      const bdHolidays = [
+        {
+          title: "New Year's Day",
+          date: "2026-01-01",
+          type: "holiday",
+          day: "Thursday",
+        },
+        {
+          title: "Language Martyrs' Day (Shaheed Dibosh)",
+          date: "2026-02-21",
+          type: "holiday",
+          day: "Saturday",
+        },
+        {
+          title: "Birthday of Sheikh Mujibur Rahman",
+          date: "2026-03-17",
+          type: "holiday",
+          day: "Tuesday",
+        },
+        {
+          title: "Independence Day",
+          date: "2026-03-26",
+          type: "holiday",
+          day: "Thursday",
+        },
+        {
+          title: "Bengali New Year (Pohela Boishakh)",
+          date: "2026-04-14",
+          type: "holiday",
+          day: "Tuesday",
+        },
+        {
+          title: "Eid-ul-Fitr",
+          date: "2026-04-21",
+          type: "holiday",
+          day: "Tuesday",
+        },
+        {
+          title: "May Day (International Workers' Day)",
+          date: "2026-05-01",
+          type: "holiday",
+          day: "Friday",
+        },
+        {
+          title: "Eid-ul-Adha",
+          date: "2026-06-28",
+          type: "holiday",
+          day: "Sunday",
+        },
+        {
+          title: "National Mourning Day",
+          date: "2026-08-15",
+          type: "holiday",
+          day: "Saturday",
+        },
+        {
+          title: "Janmashtami",
+          date: "2026-09-05",
+          type: "holiday",
+          day: "Saturday",
+        },
+        {
+          title: "Durga Puja",
+          date: "2026-10-24",
+          type: "holiday",
+          day: "Saturday",
+        },
+        {
+          title: "Victory Day",
+          date: "2026-12-16",
+          type: "holiday",
+          day: "Wednesday",
+        },
+        {
+          title: "Christmas Day",
+          date: "2026-12-25",
+          type: "holiday",
+          day: "Friday",
+        },
+      ];
+
+      let events = [...bdHolidays];
+      let currentDate = new Date(2026, 0);
+      let filtered = [...events];
+      let editingIndex = -1;
+
+      // Initialize
+      function init() {
+        renderCalendar();
+        renderEventList();
+        updateStats();
+        updateCountdown();
+        renderHolidayTable();
+        setInterval(updateCountdown, 1000);
+      }
+
+      // Update Statistics
+      function updateStats() {
+        const holidays = events.filter((e) => e.type === "holiday").length;
+        const companyEvents = events.filter((e) => e.type === "event").length;
+        const today = new Date();
+        const thirtyDaysLater = new Date(
+          today.getTime() + 30 * 24 * 60 * 60 * 1000,
+        );
+        const upcoming = events.filter((e) => {
+          const eventDate = new Date(e.date);
+          return eventDate >= today && eventDate <= thirtyDaysLater;
+        }).length;
+
+        document.getElementById("totalHolidays").innerText = holidays;
+        document.getElementById("totalEvents").innerText = companyEvents;
+        document.getElementById("upcomingCount").innerText = upcoming;
+        document.getElementById("totalAll").innerText = events.length;
+      }
+
+      // Countdown to Next Holiday
+      function updateCountdown() {
+        const now = new Date();
+        const upcomingHolidays = events
+          .filter((e) => e.type === "holiday" && new Date(e.date) > now)
+          .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        if (upcomingHolidays.length === 0) {
+          document.getElementById("countdownSection").style.display = "none";
+          return;
+        }
+
+        const nextHoliday = upcomingHolidays[0];
+        const targetDate = new Date(nextHoliday.date);
+        const diff = targetDate - now;
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+        );
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById("nextHolidayName").innerHTML =
+          nextHoliday.title;
+
+        document.getElementById("countdownDisplay").innerHTML = `
+          <div class="countdown-item">
+            <span class="number">${days}</span>
+            <span class="label">Days</span>
+          </div>
+          <div class="countdown-item">
+            <span class="number">${hours}</span>
+            <span class="label">Hours</span>
+          </div>
+          <div class="countdown-item">
+            <span class="number">${minutes}</span>
+            <span class="label">Minutes</span>
+          </div>
+          <div class="countdown-item">
+            <span class="number">${seconds}</span>
+            <span class="label">Seconds</span>
+          </div>
+        `;
+      }
+
+      // Render Calendar
+      function renderCalendar() {
+        const grid = document.getElementById("calendarGrid");
+        grid.innerHTML = "";
+
+        const y = currentDate.getFullYear();
+        const m = currentDate.getMonth();
+
+        document.getElementById("monthYear").innerText =
+          currentDate.toLocaleString("default", {
+            month: "long",
+            year: "numeric",
+          });
+
+        ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].forEach((d) => {
+          grid.innerHTML += `<div class="calendar-day">${d}</div>`;
+        });
+
+        const first = new Date(y, m, 1).getDay();
+        const days = new Date(y, m + 1, 0).getDate();
+
+        for (let i = 0; i < first; i++) {
+          grid.innerHTML += `<div></div>`;
+        }
+
+        const today = new Date();
+        const isCurrentMonth =
+          today.getMonth() === m && today.getFullYear() === y;
+        const todayDate = today.getDate();
+
+        const monthEvents = events.filter(
+          (e) => new Date(e.date).getMonth() === m,
+        );
+        document.getElementById("holidayBadge").innerText = monthEvents.length;
+
+        for (let d = 1; d <= days; d++) {
+          const ds = `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+          const e = events.find((x) => x.date === ds);
+          const isToday = isCurrentMonth && d === todayDate;
+
+          let classes = "calendar-date";
+          if (isToday) classes += " today";
+          else if (e) classes += ` ${e.type}`;
+
+          grid.innerHTML += `<div class="${classes}">${d}</div>`;
+        }
+      }
+
+      // Render Event List
+      function renderEventList() {
+        const list = document.getElementById("eventList");
+        list.innerHTML = "";
+
+        const m = currentDate.getMonth();
+        const monthEvents = filtered.filter(
+          (e) => new Date(e.date).getMonth() === m,
+        );
+
+        if (monthEvents.length === 0) {
+          list.innerHTML = `
+            <div class="no-events">
+              <i class="fa-solid fa-calendar-xmark"></i>
+              <p>No events or holidays this month</p>
+            </div>
+          `;
+          return;
+        }
+
+        monthEvents
+          .sort((a, b) => new Date(a.date) - new Date(b.date))
+          .forEach((e, i) => {
+            const eventDate = new Date(e.date);
+            const formattedDate = eventDate.toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            });
+
+            list.innerHTML += `
+              <div class="event-item ${e.type === "holiday" ? "holiday-item" : "event-item-type"}">
+                <div class="event-info">
+                  <strong>${e.title}</strong>
+                  <small>
+                    <i class="fa-solid fa-calendar"></i> ${formattedDate}
+                    ${e.day ? ` • ${e.day}` : ""}
+                  </small>
+                  <span class="event-type-badge ${e.type}">
+                    ${e.type === "holiday" ? "Holiday" : "Event"}
+                  </span>
+                </div>
+                <div class="event-actions">
+                  ${
+                    e.type === "event"
+                      ? `
+                    <button class="btn-edit" onclick="editEvent(${events.indexOf(e)})">
+                      <i class="fa-solid fa-edit"></i>
+                    </button>
+                    <button class="btn-delete" onclick="deleteEvent(${events.indexOf(e)})">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  `
+                      : ""
+                  }
+                </div>
+              </div>
+            `;
+          });
+      }
+
+      // Render Holiday Table
+      function renderHolidayTable() {
+        const tbody = document.getElementById("holidayTableBody");
+        tbody.innerHTML = "";
+
+        const today = new Date();
+        const holidays = events.filter((e) => e.type === "holiday");
+
+        holidays
+          .sort((a, b) => new Date(a.date) - new Date(b.date))
+          .forEach((h, i) => {
+            const eventDate = new Date(h.date);
+            const formattedDate = eventDate.toLocaleDateString("en-US", {
+              day: "2-digit",
+              month: "long",
+              year: "numeric",
+            });
+
+            const daysAway = Math.ceil(
+              (eventDate - today) / (1000 * 60 * 60 * 24),
+            );
+            let daysAwayText = "";
+            if (daysAway < 0) {
+              daysAwayText = `${Math.abs(daysAway)} days ago`;
+            } else if (daysAway === 0) {
+              daysAwayText = "Today";
+            } else {
+              daysAwayText = `${daysAway} days`;
+            }
+
+            tbody.innerHTML += `
+              <tr>
+                <td>${i + 1}</td>
+                <td class="holiday-name">${h.title}</td>
+                <td>${formattedDate}</td>
+                <td><span class="holiday-day">${h.day || ""}</span></td>
+                <td>${daysAwayText}</td>
+              </tr>
+            `;
+          });
+      }
+
+      // Filter Events
+      function filterEvents() {
+        const searchVal = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const typeFilter = document.getElementById("typeFilter").value;
+
+        filtered = events.filter((e) => {
+          const matchSearch = e.title.toLowerCase().includes(searchVal);
+          const matchType = typeFilter === "all" || e.type === typeFilter;
+          return matchSearch && matchType;
+        });
+
+        renderEventList();
+      }
+
+      // Filter Holiday Table
+      function filterHolidayTable(query) {
+        const rows = document.querySelectorAll("#holidayTableBody tr");
+        rows.forEach((row) => {
+          const text = row.textContent.toLowerCase();
+          row.style.display = text.includes(query.toLowerCase()) ? "" : "none";
+        });
+      }
+
+      // Export to Excel
+      function exportHolidaysToExcel() {
+        const holidays = events
+          .filter((e) => e.type === "holiday")
+          .map((h, i) => ({
+            Sl: i + 1,
+            "Holiday Name": h.title,
+            Date: h.date,
+            Day: h.day || "",
+          }));
+
+        const worksheet = XLSX.utils.json_to_sheet(holidays);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "BD Holidays 2026");
+        XLSX.writeFile(workbook, "Bangladesh_Holidays_2026.xlsx");
+
+        showNotification("Excel file exported successfully!");
+      }
+
+      // Change Month
+      function changeMonth(step) {
+        currentDate.setMonth(currentDate.getMonth() + step);
+        renderCalendar();
+        renderEventList();
+      }
+
+      // Quick Actions
+      function goToToday() {
+        currentDate = new Date();
+        renderCalendar();
+        renderEventList();
+        showNotification("Jumped to current month");
+      }
+
+      function viewThisMonth() {
+        document.getElementById("typeFilter").value = "all";
+        document.getElementById("searchInput").value = "";
+        filtered = [...events];
+        renderEventList();
+        showNotification("Showing all events for this month");
+      }
+
+      // Modal Functions
+      function openAddModal() {
+        editingIndex = -1;
+        document.getElementById("modalTitle").innerHTML =
+          '<i class="fa-solid fa-calendar-plus"></i> Add New Event';
+        document.getElementById("eventTitle").value = "";
+        document.getElementById("eventDate").value = "";
+        document.getElementById("eventType").value = "event";
+        document.getElementById("eventDescription").value = "";
+        document.getElementById("eventModal").classList.add("show");
+      }
+
+      function editEvent(index) {
+        editingIndex = index;
+        const event = events[index];
+        document.getElementById("modalTitle").innerHTML =
+          '<i class="fa-solid fa-edit"></i> Edit Event';
+        document.getElementById("eventTitle").value = event.title;
+        document.getElementById("eventDate").value = event.date;
+        document.getElementById("eventType").value = event.type;
+        document.getElementById("eventDescription").value =
+          event.description || "";
+        document.getElementById("eventModal").classList.add("show");
+      }
+
+      function closeModal() {
+        document.getElementById("eventModal").classList.remove("show");
+      }
+
+      function saveEvent() {
+        const title = document.getElementById("eventTitle").value.trim();
+        const date = document.getElementById("eventDate").value;
+        const type = document.getElementById("eventType").value;
+        const description = document
+          .getElementById("eventDescription")
+          .value.trim();
+
+        if (!title || !date) {
+          alert("Please fill in all required fields!");
+          return;
+        }
+
+        const eventDate = new Date(date);
+        const day = eventDate.toLocaleDateString("en-US", { weekday: "long" });
+
+        const eventData = { title, date, type, day, description };
+
+        if (editingIndex >= 0) {
+          events[editingIndex] = eventData;
+        } else {
+          events.push(eventData);
+        }
+
+        filtered = [...events];
+        closeModal();
+        renderCalendar();
+        renderEventList();
+        updateStats();
+        renderHolidayTable();
+        showNotification(
+          editingIndex >= 0
+            ? "Event updated successfully!"
+            : "Event added successfully!",
+        );
+      }
+
+      function deleteEvent(index) {
+        if (confirm("Are you sure you want to delete this event?")) {
+          events.splice(index, 1);
+          filtered = [...events];
+          renderCalendar();
+          renderEventList();
+          updateStats();
+          renderHolidayTable();
+          showNotification("Event deleted successfully!");
+        }
+      }
+
+      function showNotification(message) {
+        const notification = document.createElement("div");
+        notification.className = "notification";
+        notification.innerHTML = `<i class="fa-solid fa-check-circle"></i> ${message}`;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+          notification.style.animation = "slideInRight 0.3s ease reverse";
+          setTimeout(() => notification.remove(), 300);
+        }, 3000);
+      }
+
+      // Close modal when clicking outside
+      window.onclick = function (event) {
+        const modal = document.getElementById("eventModal");
+        if (event.target == modal) {
+          closeModal();
+        }
+      };
+
+      // Initialize on load
+      init();
+    </script>
+  </body>
+</html>

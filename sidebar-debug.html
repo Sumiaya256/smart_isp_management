@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sidebar Debug - Promee Internet</title>
+  <link rel="stylesheet" href="assets/css/style.css?v=20260326f">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { font-family: monospace; padding: 20px; background: #f5f5f5; }
+    .debug-box { background: white; padding: 15px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #0f1d3f; }
+    .debug-title { font-weight: bold; color: #0f1d3f; margin-bottom: 10px; }
+    .debug-value { color: #666; word-break: break-all; }
+    .good { color: #10b981; }
+    .bad { color: #ef4444; }
+  </style>
+</head>
+<body>
+  <div id="app-header"></div>
+  <div class="main-content">
+    <div class="page-content">
+      <h1>Sidebar Debug Console</h1>
+      
+      <div class="debug-box">
+        <div class="debug-title">Page Load Information</div>
+        <div class="debug-value">
+          <p>Page URL: <span id="pageUrl"></span></p>
+          <p>Time: <span id="pageTime"></span></p>
+          <p>Header Loader Version: v20260326e</p>
+        </div>
+      </div>
+
+      <div class="debug-box">
+        <div class="debug-title">Header Injection Status</div>
+        <div class="debug-value">
+          <p>#app-header exists: <span id="appHeaderExists" class="bad">Checking...</span></p>
+          <p>Sidebar present: <span id="sidebarExists" class="bad">Checking...</span></p>
+          <p>Sidebar visible: <span id="sidebarVisible" class="bad">Checking...</span></p>
+        </div>
+      </div>
+
+      <div class="debug-box">
+        <div class="debug-title">Branding Check</div>
+        <div class="debug-value">
+          <p>Brand text content: <span id="brandText"></span></p>
+          <p>Contains "Promee Internet": <span id="hasInternet" class="bad">Checking...</span></p>
+          <p>Contains "Promee International": <span id="hasInternational" class="bad">Checking...</span></p>
+        </div>
+      </div>
+
+      <div class="debug-box">
+        <div class="debug-title">Dropdown Menu Check</div>
+        <div class="debug-value">
+          <p>HR & Payroll menu items found: <span id="hrMenuCount">0</span></p>
+          <p>Dropdown items found: <span id="dropdownCount">0</span></p>
+          <p>CSS uses .open class: <span id="cssOpen" class="bad">Checking...</span></p>
+        </div>
+      </div>
+
+      <div class="debug-box">
+        <div class="debug-title">Console Output (Check Browser Console with F12)</div>
+        <div class="debug-value">
+          <p>Open browser Developer Tools (F12) and check the Console tab for messages starting with [HeaderLoader] and [HeaderInit]</p>
+          <p>These will show detailed information about what's being loaded and injected.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/header-loader.js?v=20260328i"></script>
+  <script>
+    // Wait a bit for header to load, then run diagnostics
+    setTimeout(() => {
+      // Page info
+      document.getElementById('pageUrl').textContent = window.location.href;
+      document.getElementById('pageTime').textContent = new Date().toLocaleString();
+
+      // Header injection
+      const appHeader = document.getElementById('app-header');
+      document.getElementById('appHeaderExists').textContent = appHeader ? '✓ YES' : '✗ NO';
+      document.getElementById('appHeaderExists').className = appHeader ? 'good' : 'bad';
+
+      const sidebar = document.querySelector('.sidebar');
+      document.getElementById('sidebarExists').textContent = sidebar ? '✓ YES' : '✗ NO';
+      document.getElementById('sidebarExists').className = sidebar ? 'good' : 'bad';
+
+      if (sidebar) {
+        const isVisible = window.getComputedStyle(sidebar).display !== 'none';
+        document.getElementById('sidebarVisible').textContent = isVisible ? '✓ YES' : '✗ NO (check CSS)';
+        document.getElementById('sidebarVisible').className = isVisible ? 'good' : 'bad';
+      }
+
+      // Branding
+      const brand = document.querySelector('.brand');
+      const brandText = brand ? brand.textContent.trim() : 'NOT FOUND';
+      document.getElementById('brandText').textContent = brandText;
+
+      const hasInternet = document.body.innerHTML.includes('Promee Internet');
+      document.getElementById('hasInternet').textContent = hasInternet ? '✓ YES' : '✗ NO';
+      document.getElementById('hasInternet').className = hasInternet ? 'good' : 'bad';
+
+      const hasInternational = document.body.innerHTML.includes('Promee International');
+      document.getElementById('hasInternational').textContent = hasInternational ? '✗ FOUND (BAD)' : '✓ NOT FOUND';
+      document.getElementById('hasInternational').className = hasInternational ? 'bad' : 'good';
+
+      // Dropdowns
+      const hrMenu = document.querySelectorAll('.sidebar a[href*="employee_list"], .sidebar a[href*="attendance"]');
+      document.getElementById('hrMenuCount').textContent = hrMenu.length;
+
+      const dropdowns = document.querySelectorAll('.has-submenu > a');
+      document.getElementById('dropdownCount').textContent = dropdowns.length;
+
+      // Check CSS
+      const sheet = document.styleSheets[0];
+      let cssHasOpen = false;
+      try {
+        for (let i = 0; i < sheet.cssRules.length; i++) {
+          if (sheet.cssRules[i].selectorText && sheet.cssRules[i].selectorText.includes('.has-submenu.open')) {
+            cssHasOpen = true;
+            break;
+          }
+        }
+      } catch(e) { /* Cross-origin styles cannot be checked */ }
+      document.getElementById('cssOpen').textContent = cssHasOpen ? '✓ YES (.open class found)' : '? Unable to verify from CSS';
+      document.getElementById('cssOpen').className = cssHasOpen ? 'good' : '';
+
+      console.log('%c=== SIDEBAR DEBUG COMPLETE ===', 'font-size: 16px; font-weight: bold; color: #0f1d3f;');
+    }, 500);
+  </script>
+</body>
+</html>
+
+
+

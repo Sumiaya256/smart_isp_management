@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Promee Internet – Leave Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/style.css?v=20260326f" />
+    <link rel="stylesheet" href="leave_management.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  </head>
+  <body>
+    <div id="app-header"></div>
+<!-- Main Content -->
+    <div class="main-content">
+<div class="page-content">
+        <div class="leave-header">
+          <h1>Leave Management System</h1>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="leave-stats-grid">
+          <div class="stats-card-main">
+            <div class="stats-icon" style="background:#3b82f6"><i class="fa-solid fa-users"></i></div>
+            <div class="stats-info"><h3>Total Employees</h3><p>1832</p></div>
+          </div>
+          <div class="stats-card-main">
+            <div class="stats-icon" style="background:#10b981"><i class="fa-solid fa-user-check"></i></div>
+            <div class="stats-info"><h3>Working Today</h3><p>1796</p></div>
+          </div>
+          <div class="stats-card-main">
+            <div class="stats-icon" style="background:#f59e0b"><i class="fa-solid fa-clock"></i></div>
+            <div class="stats-info"><h3>Pending Approval</h3><p>39</p></div>
+          </div>
+          <div class="stats-card-main">
+            <div class="stats-icon" style="background:#ef4444"><i class="fa-solid fa-umbrella-beach"></i></div>
+            <div class="stats-info"><h3>On Leave</h3><p>36</p></div>
+          </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="card" style="margin-top:20px">
+          <div class="leave-filter-section">
+            <div class="filter-group">
+              <label>Status Filter</label>
+              <select id="statusFilter" onchange="filterLeaves()">
+                <option value="all">All Requests</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label>Leave Type</label>
+              <select id="typeFilter" onchange="filterLeaves()">
+                <option value="all">All Types</option>
+                <option value="sick">Sick Leave</option>
+                <option value="casual">Casual Leave</option>
+                <option value="annual">Annual Leave</option>
+                <option value="maternity">Maternity Leave</option>
+                <option value="emergency">Emergency Leave</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label>Search Employee</label>
+              <input type="text" id="searchEmployee" placeholder="Search by name or ID..." onkeyup="filterLeaves()" />
+            </div>
+            <div class="filter-group">
+              <label>Date Range</label>
+              <input type="date" id="dateFrom" onchange="filterLeaves()" />
+            </div>
+            <div class="filter-group">
+              <label>&nbsp;</label>
+              <button class="btn btn-default" onclick="clearFilters()">Clear Filters</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Leave Requests Table -->
+        <div class="card" style="margin-top:20px">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fa-solid fa-list"></i> Leave Requests</h2>
+          </div>
+          <div class="data-table-container">
+            <table class="client-table" id="leaveTable">
+              <thead>
+                <tr>
+                  <th>Employee ID</th>
+                  <th>Employee Name</th>
+                  <th>Department</th>
+                  <th>Leave Type</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Days</th>
+                  <th>Reason</th>
+                  <th>Applied On</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="leaveTableBody">
+
+                <tr data-status="pending" data-type="sick" data-employee="john doe">
+                  <td>EMP001</td>
+                  <td><div class="emp-name-cell"><div class="emp-avatar" style="background:#3b82f6">JD</div><span>John Doe</span></div></td>
+                  <td>Engineering</td>
+                  <td><span class="leave-type sick">Sick Leave</span></td>
+                  <td>2026-02-15</td><td>2026-02-17</td><td>3</td>
+                  <td>Medical treatment required</td><td>2026-02-10</td>
+                  <td><span class="status pending">Pending</span></td>
+                  <td>
+                    <button class="btn-action approve" onclick="approveLeave(this)" title="Approve"><i class="fa-solid fa-check"></i></button>
+                    <button class="btn-action reject" onclick="rejectLeave(this)" title="Reject"><i class="fa-solid fa-times"></i></button>
+                    <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details"><i class="fa-solid fa-eye"></i></button>
+                  </td>
+                </tr>
+
+                <tr data-status="approved" data-type="annual" data-employee="jane smith">
+                  <td>EMP002</td>
+                  <td><div class="emp-name-cell"><div class="emp-avatar" style="background:#10b981">JS</div><span>Jane Smith</span></div></td>
+                  <td>Marketing</td>
+                  <td><span class="leave-type annual">Annual Leave</span></td>
+                  <td>2026-02-20</td><td>2026-02-27</td><td>7</td>
+                  <td>Family vacation</td><td>2026-02-05</td>
+                  <td><span class="status approved">Approved</span></td>
+                  <td>
+                    <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details"><i class="fa-solid fa-eye"></i></button>
+                    <button class="btn-action cancel" onclick="cancelLeave(this)" title="Cancel"><i class="fa-solid fa-ban"></i></button>
+                  </td>
+                </tr>
+
+                <tr data-status="pending" data-type="casual" data-employee="robert brown">
+                  <td>EMP003</td>
+                  <td><div class="emp-name-cell"><div class="emp-avatar" style="background:#f59e0b">RB</div><span>Robert Brown</span></div></td>
+                  <td>Operations</td>
+                  <td><span class="leave-type casual">Casual Leave</span></td>
+                  <td>2026-02-12</td><td>2026-02-12</td><td>1</td>
+                  <td>Personal work</td><td>2026-02-08</td>
+                  <td><span class="status pending">Pending</span></td>
+                  <td>
+                    <button class="btn-action approve" onclick="approveLeave(this)" title="Approve"><i class="fa-solid fa-check"></i></button>
+                    <button class="btn-action reject" onclick="rejectLeave(this)" title="Reject"><i class="fa-solid fa-times"></i></button>
+                    <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details"><i class="fa-solid fa-eye"></i></button>
+                  </td>
+                </tr>
+
+                <tr data-status="rejected" data-type="casual" data-employee="emily davis">
+                  <td>EMP004</td>
+                  <td><div class="emp-name-cell"><div class="emp-avatar" style="background:#ef4444">ED</div><span>Emily Davis</span></div></td>
+                  <td>Finance</td>
+                  <td><span class="leave-type casual">Casual Leave</span></td>
+                  <td>2026-02-11</td><td>2026-02-13</td><td>3</td>
+                  <td>Personal reasons</td><td>2026-02-09</td>
+                  <td><span class="status denied">Rejected</span></td>
+                  <td><button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details"><i class="fa-solid fa-eye"></i></button></td>
+                </tr>
+
+                <tr data-status="approved" data-type="sick" data-employee="michael johnson">
+                  <td>EMP005</td>
+                  <td><div class="emp-name-cell"><div class="emp-avatar" style="background:#8b5cf6">MJ</div><span>Michael Johnson</span></div></td>
+                  <td>IT Support</td>
+                  <td><span class="leave-type sick">Sick Leave</span></td>
+                  <td>2026-02-08</td><td>2026-02-09</td><td>2</td>
+                  <td>Fever and flu symptoms</td><td>2026-02-07</td>
+                  <td><span class="status approved">Approved</span></td>
+                  <td><button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details"><i class="fa-solid fa-eye"></i></button></td>
+                </tr>
+
+                <tr data-status="pending" data-type="emergency" data-employee="sarah wilson">
+                  <td>EMP006</td>
+                  <td><div class="emp-name-cell"><div class="emp-avatar" style="background:#ec4899">SW</div><span>Sarah Wilson</span></div></td>
+                  <td>HR</td>
+                  <td><span class="leave-type emergency">Emergency Leave</span></td>
+                  <td>2026-02-11</td><td>2026-02-11</td><td>1</td>
+                  <td>Family emergency - urgent</td><td>2026-02-10</td>
+                  <td><span class="status pending">Pending</span></td>
+                  <td>
+                    <button class="btn-action approve" onclick="approveLeave(this)" title="Approve"><i class="fa-solid fa-check"></i></button>
+                    <button class="btn-action reject" onclick="rejectLeave(this)" title="Reject"><i class="fa-solid fa-times"></i></button>
+                    <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details"><i class="fa-solid fa-eye"></i></button>
+                  </td>
+                </tr>
+
+                <tr data-status="approved" data-type="annual" data-employee="david miller">
+                  <td>EMP007</td>
+                  <td><div class="emp-name-cell"><div class="emp-avatar" style="background:#06b6d4">DM</div><span>David Miller</span></div></td>
+                  <td>Sales</td>
+                  <td><span class="leave-type annual">Annual Leave</span></td>
+                  <td>2026-03-01</td><td>2026-03-10</td><td>10</td>
+                  <td>Pre-planned vacation</td><td>2026-01-15</td>
+                  <td><span class="status approved">Approved</span></td>
+                  <td>
+                    <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details"><i class="fa-solid fa-eye"></i></button>
+                    <button class="btn-action cancel" onclick="cancelLeave(this)" title="Cancel"><i class="fa-solid fa-ban"></i></button>
+                  </td>
+                </tr>
+
+                <tr data-status="pending" data-type="maternity" data-employee="lisa anderson">
+                  <td>EMP008</td>
+                  <td><div class="emp-name-cell"><div class="emp-avatar" style="background:#f43f5e">LA</div><span>Lisa Anderson</span></div></td>
+                  <td>Customer Service</td>
+                  <td><span class="leave-type maternity">Maternity Leave</span></td>
+                  <td>2026-03-15</td><td>2026-06-15</td><td>92</td>
+                  <td>Maternity leave as per policy</td><td>2026-02-01</td>
+                  <td><span class="status pending">Pending</span></td>
+                  <td>
+                    <button class="btn-action approve" onclick="approveLeave(this)" title="Approve"><i class="fa-solid fa-check"></i></button>
+                    <button class="btn-action reject" onclick="rejectLeave(this)" title="Reject"><i class="fa-solid fa-times"></i></button>
+                    <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details"><i class="fa-solid fa-eye"></i></button>
+                  </td>
+                </tr>
+
+                <tr data-status="approved" data-type="sick" data-employee="kevin thomas">
+                  <td>EMP009</td>
+                  <td><div class="emp-name-cell"><div class="emp-avatar" style="background:#0ea5e9">KT</div><span>Kevin Thomas</span></div></td>
+                  <td>Logistics</td>
+                  <td><span class="leave-type sick">Sick Leave</span></td>
+                  <td>2026-01-28</td><td>2026-01-30</td><td>3</td>
+                  <td>Hospitalized for appendix surgery</td><td>2026-01-27</td>
+                  <td><span class="status approved">Approved</span></td>
+                  <td><button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details"><i class="fa-solid fa-eye"></i></button></td>
+                </tr>
+
+                <tr data-status="pending" data-type="casual" data-employee="natalie green">
+                  <td>EMP010</td>
+                  <td><div class="emp-name-cell"><div class="emp-avatar" style="background:#22c55e">NG</div><span>Natalie Green</span></div></td>
+                  <td>Design</td>
+                  <td><span class="leave-type casual">Casual Leave</span></td>
+                  <td>2026-02-18</td><td>2026-02-19</td><td>2</td>
+                  <td>Attending sibling's wedding</td><td>2026-02-12</td>
+                  <td><span class="status pending">Pending</span></td>
+                  <td>
+                    <button class="btn-action approve" onclick="approveLeave(this)" title="Approve"><i class="fa-solid fa-check"></i></button>
+                    <button class="btn-action reject" onclick="rejectLeave(this)" title="Reject"><i class="fa-solid fa-times"></i></button>
+                    <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details"><i class="fa-solid fa-eye"></i></button>
+                  </td>
+                </tr>
+
+                <tr data-status="rejected" data-type="annual" data-employee="omar hassan">
+                  <td>EMP011</td>
+                  <td><div class="emp-name-cell"><div class="emp-avatar" style="background:#d97706">OH</div><span>Omar Hassan</span></div></td>
+                  <td>Engineering</td>
+                  <td><span class="leave-type annual">Annual Leave</span></td>
+                  <td>2026-02-03</td><td>2026-02-07</td><td>5</td>
+                  <td>Trip to Cox's Bazar</td><td>2026-01-25</td>
+                  <td><span class="status denied">Rejected</span></td>
+                  <td><button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details"><i class="fa-solid fa-eye"></i></button></td>
+                </tr>
+
+                <tr data-status="approved" data-type="casual" data-employee="priya chakraborty">
+                  <td>EMP012</td>
+                  <td><div class="emp-name-cell"><div class="emp-avatar" style="background:#a21caf">PC</div><span>Priya Chakraborty</span></div></td>
+                  <td>Finance</td>
+                  <td><span class="leave-type casual">Casual Leave</span></td>
+                  <td>2026-02-14</td><td>2026-02-14</td><td>1</td>
+                  <td>Personal appointment</td><td>2026-02-13</td>
+                  <td><span class="status approved">Approved</span></td>
+                  <td><button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details"><i class="fa-solid fa-eye"></i></button></td>
+                </tr>
+
+                <tr data-status="pending" data-type="sick" data-employee="james carter">
+                  <td>EMP013</td>
+                  <td><div class="emp-name-cell"><div class="emp-avatar" style="background:#475569">JC</div><span>James Carter</span></div></td>
+                  <td>Operations</td>
+                  <td><span class="leave-type sick">Sick Leave</span></td>
+                  <td>2026-02-20</td><td>2026-02-22</td><td>3</td>
+                  <td>Dental surgery recovery</td><td>2026-02-18</td>
+                  <td><span class="status pending">Pending</span></td>
+                  <td>
+                    <button class="btn-action approve" onclick="approveLeave(this)" title="Approve"><i class="fa-solid fa-check"></i></button>
+                    <button class="btn-action reject" onclick="rejectLeave(this)" title="Reject"><i class="fa-solid fa-times"></i></button>
+                    <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details"><i class="fa-solid fa-eye"></i></button>
+                  </td>
+                </tr>
+
+                <tr data-status="approved" data-type="emergency" data-employee="sophia lee">
+                  <td>EMP014</td>
+                  <td><div class="emp-name-cell"><div class="emp-avatar" style="background:#be185d">SL</div><span>Sophia Lee</span></div></td>
+                  <td>HR</td>
+                  <td><span class="leave-type emergency">Emergency Leave</span></td>
+                  <td>2026-02-05</td><td>2026-02-06</td><td>2</td>
+                  <td>Parent hospitalized</td><td>2026-02-05</td>
+                  <td><span class="status approved">Approved</span></td>
+                  <td><button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details"><i class="fa-solid fa-eye"></i></button></td>
+                </tr>
+
+                <tr data-status="pending" data-type="annual" data-employee="ali rahman">
+                  <td>EMP015</td>
+                  <td><div class="emp-name-cell"><div class="emp-avatar" style="background:#065f46">AR</div><span>Ali Rahman</span></div></td>
+                  <td>Sales</td>
+                  <td><span class="leave-type annual">Annual Leave</span></td>
+                  <td>2026-03-20</td><td>2026-03-25</td><td>6</td>
+                  <td>Eid holiday travel</td><td>2026-02-15</td>
+                  <td><span class="status pending">Pending</span></td>
+                  <td>
+                    <button class="btn-action approve" onclick="approveLeave(this)" title="Approve"><i class="fa-solid fa-check"></i></button>
+                    <button class="btn-action reject" onclick="rejectLeave(this)" title="Reject"><i class="fa-solid fa-times"></i></button>
+                    <button class="btn-action view" onclick="viewLeaveDetails(this)" title="View Details"><i class="fa-solid fa-eye"></i></button>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Leave Summary -->
+        <div class="card" style="margin-top:20px">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fa-solid fa-chart-pie"></i> Leave Summary Statistics</h2>
+          </div>
+          <div class="leave-summary-grid">
+            <div class="summary-item">
+              <div class="summary-label">Total Requests (This Month)</div>
+              <div class="summary-value">15</div>
+            </div>
+            <div class="summary-item">
+              <div class="summary-label">Approved</div>
+              <div class="summary-value" style="color:#10b981">7</div>
+            </div>
+            <div class="summary-item">
+              <div class="summary-label">Pending</div>
+              <div class="summary-value" style="color:#f59e0b">6</div>
+            </div>
+            <div class="summary-item">
+              <div class="summary-label">Rejected</div>
+              <div class="summary-value" style="color:#ef4444">2</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for Leave Details -->
+    <div id="leaveDetailsModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2><i class="fa-solid fa-info-circle"></i> Leave Request Details</h2>
+          <span class="close" onclick="closeModal()">&times;</span>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+        <div class="modal-footer">
+          <button class="btn btn-default" onclick="closeModal()">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/js/header-loader.js?v=20260328i"></script>
+    <script>
+      let leaveRows = [];
+      let leaveDebounce = null;
+
+      function esc(v) {
+        return String(v == null ? "" : v)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function showToast(message, type) {
+        const toast = document.createElement("div");
+        toast.style.cssText = "position:fixed;top:16px;right:16px;z-index:2100;padding:10px 12px;border-radius:8px;color:#fff;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.18);";
+        toast.style.background = type === "error" ? "#e74c3c" : (type === "success" ? "#27ae60" : "#2d9cdb");
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2800);
+      }
+
+      async function apiJson(path, opts) {
+        const res = await fetch(path, Object.assign({ credentials: "include" }, opts || {}));
+        let data;
+        try {
+          data = await res.json();
+        } catch (e) {
+          throw new Error("Server returned invalid response");
+        }
+        if (!res.ok || !data.ok) throw new Error((data && data.message) || "Request failed");
+        return data;
+      }
+
+      function getFilters() {
+        const t = document.getElementById("typeFilter").value;
+        return {
+          status: document.getElementById("statusFilter").value,
+          type: t === "all" ? "" : t,
+          search: (document.getElementById("searchEmployee").value || "").trim(),
+          date_from: document.getElementById("dateFrom").value,
+        };
+      }
+
+      function leaveTypeLabel(value) {
+        const s = String(value || "").trim();
+        if (!s) return "-";
+        const key = s.toLowerCase().replace(/\s+/g, "_");
+        if (key === "sick") return "Sick Leave";
+        if (key === "casual") return "Casual Leave";
+        if (key === "annual") return "Annual Leave";
+        if (key === "maternity") return "Maternity Leave";
+        if (key === "emergency") return "Emergency Leave";
+        if (key === "unpaid") return "Unpaid Leave";
+        return s;
+      }
+
+      function typeClass(name) {
+        const s = String(name || "").toLowerCase();
+        if (s.includes("sick")) return "sick";
+        if (s.includes("annual")) return "annual";
+        if (s.includes("maternity")) return "maternity";
+        if (s.includes("emergency")) return "emergency";
+        return "casual";
+      }
+
+      function statusHtml(status) {
+        const s = String(status || "pending").toLowerCase();
+        if (s === "approved") return '<span class="status approved">Approved</span>';
+        if (s === "rejected") return '<span class="status denied">Rejected</span>';
+        if (s === "cancelled") return '<span class="status denied">Cancelled</span>';
+        return '<span class="status pending">Pending</span>';
+      }
+
+      function initials(name) {
+        const parts = String(name || "").trim().split(/\s+/).filter(Boolean);
+        return (parts[0] ? parts[0][0] : "N") + (parts[1] ? parts[1][0] : "A");
+      }
+
+      function renderLeaveTable() {
+        const tbody = document.getElementById("leaveTableBody");
+        tbody.innerHTML = leaveRows.map((row) => {
+          const rid = Number(row.id || 0);
+          const canApprove = String(row.status_label || "").toLowerCase() === "pending";
+          const canCancel = String(row.status_label || "").toLowerCase() === "approved";
+          return `
+            <tr>
+              <td>${esc(row.employee_code || "")}</td>
+              <td><div class="emp-name-cell"><div class="emp-avatar" style="background:#3b82f6">${esc(initials(row.employee_name || ""))}</div><span>${esc(row.employee_name || "")}</span></div></td>
+              <td>${esc(row.department_name || "")}</td>
+              <td><span class="leave-type ${typeClass(row.leave_type)}">${esc(leaveTypeLabel(row.leave_type))}</span></td>
+              <td>${esc(row.start_date || "")}</td>
+              <td>${esc(row.end_date || "")}</td>
+              <td>${Number(row.total_days || 0)}</td>
+              <td>${esc(row.reason_text || "")}</td>
+              <td>${esc(row.applied_on || "")}</td>
+              <td>${statusHtml(row.status_label)}</td>
+              <td>
+                ${canApprove ? `<button class="btn-action approve" onclick="updateLeaveStatus(${rid}, 'approved')" title="Approve"><i class="fa-solid fa-check"></i></button><button class="btn-action reject" onclick="updateLeaveStatus(${rid}, 'rejected')" title="Reject"><i class="fa-solid fa-times"></i></button>` : ""}
+                ${canCancel ? `<button class="btn-action cancel" onclick="updateLeaveStatus(${rid}, 'cancelled')" title="Cancel"><i class="fa-solid fa-ban"></i></button>` : ""}
+                <button class="btn-action view" onclick="viewLeaveDetails(${rid})" title="View Details"><i class="fa-solid fa-eye"></i></button>
+              </td>
+            </tr>`;
+        }).join("");
+
+        const approved = leaveRows.filter((r) => String(r.status_label).toLowerCase() === "approved").length;
+        const pending = leaveRows.filter((r) => String(r.status_label).toLowerCase() === "pending").length;
+        const rejected = leaveRows.filter((r) => ["rejected", "cancelled"].includes(String(r.status_label).toLowerCase())).length;
+        document.querySelectorAll(".summary-value")[0].textContent = leaveRows.length;
+        document.querySelectorAll(".summary-value")[1].textContent = approved;
+        document.querySelectorAll(".summary-value")[2].textContent = pending;
+        document.querySelectorAll(".summary-value")[3].textContent = rejected;
+        document.querySelectorAll(".stats-info p")[2].textContent = pending;
+      }
+
+      async function loadLeaves() {
+        try {
+          const f = getFilters();
+          const params = new URLSearchParams();
+          params.set("limit", "400");
+          if (f.status && f.status !== "all") params.set("status", f.status);
+          if (f.type && f.type !== "all") params.set("type", f.type);
+          if (f.search) params.set("search", f.search);
+          if (f.date_from) params.set("date_from", f.date_from);
+          const data = await apiJson("backend/public/leave/list.php?" + params.toString());
+          leaveRows = Array.isArray(data.items) ? data.items : [];
+          renderLeaveTable();
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      }
+
+      function filterLeaves() {
+        clearTimeout(leaveDebounce);
+        leaveDebounce = setTimeout(loadLeaves, 150);
+      }
+
+      function clearFilters() {
+        document.getElementById("statusFilter").value = "all";
+        document.getElementById("typeFilter").value = "all";
+        document.getElementById("searchEmployee").value = "";
+        document.getElementById("dateFrom").value = "";
+        loadLeaves();
+      }
+
+      async function updateLeaveStatus(id, status) {
+        try {
+          await apiJson("backend/public/leave/update_status.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: id, status_label: status }),
+          });
+          await loadLeaves();
+          showToast("Leave status updated", "success");
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      }
+
+      function viewLeaveDetails(id) {
+        const row = leaveRows.find((r) => Number(r.id) === Number(id));
+        if (!row) return;
+        const attachments = Array.isArray(row.attachments) ? row.attachments : [];
+        const attachmentHtml = attachments.length
+          ? '<div class="detail-row"><strong>Attachments:</strong> '
+            + attachments.map((a) => {
+                const safeName = esc(a.name || 'attachment');
+                const safePath = esc(a.path || '');
+                return '<a href="' + safePath + '" target="_blank" rel="noopener">' + safeName + '</a>';
+              }).join(' | ')
+            + '</div>'
+          : '<div class="detail-row"><strong>Attachments:</strong> None</div>';
+        document.getElementById("modalBody").innerHTML = `
+          <div class="leave-details">
+            <div class="detail-row"><strong>Employee ID:</strong> ${esc(row.employee_code || "")}</div>
+            <div class="detail-row"><strong>Employee Name:</strong> ${esc(row.employee_name || "")}</div>
+            <div class="detail-row"><strong>Department:</strong> ${esc(row.department_name || "")}</div>
+            <div class="detail-row"><strong>Leave Type:</strong> ${esc(row.leave_type || "")}</div>
+            <div class="detail-row"><strong>Start Date:</strong> ${esc(row.start_date || "")}</div>
+            <div class="detail-row"><strong>End Date:</strong> ${esc(row.end_date || "")}</div>
+            <div class="detail-row"><strong>Total Days:</strong> ${Number(row.total_days || 0)}</div>
+            <div class="detail-row"><strong>Reason:</strong> ${esc(row.reason_text || "")}</div>
+            <div class="detail-row"><strong>Applied On:</strong> ${esc(row.applied_on || "")}</div>
+            <div class="detail-row"><strong>Status:</strong> ${esc(row.status_label || "")}</div>
+            ${attachmentHtml}
+          </div>`;
+        document.getElementById("leaveDetailsModal").style.display = "block";
+      }
+
+      function closeModal() {
+        document.getElementById("leaveDetailsModal").style.display = "none";
+      }
+
+      window.onclick = function(event) {
+        const modal = document.getElementById("leaveDetailsModal");
+        if (event.target == modal) modal.style.display = "none";
+      };
+
+      loadLeaves();
+    </script>
+  </body>
+</html>
+
+
+
+

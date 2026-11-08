@@ -1,0 +1,1861 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/css/style.css?v=20260326f" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <title>Promee Internet - Billing</title>
+    <style>
+      :root {
+        --navy-primary: #0f1d3f;
+        --navy-dark: #0f1d3f;
+        --navy-darker: #0f1d3f;
+        --navy-light: #0f1d3f;
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-300: #d1d5db;
+        --gray-400: #9ca3af;
+        --gray-500: #6b7280;
+        --gray-600: #4b5563;
+        --gray-700: #374151;
+        --gray-800: #1f2937;
+        --gray-900: #111827;
+        --success: #10b981;
+        --danger: #ef4444;
+        --warning: #f59e0b;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: var(--gray-50);
+        color: var(--gray-800);
+      }
+
+      /* Page Header */
+      .page-header {
+        background: white;
+        padding: 24px 32px;
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--gray-200);
+      }
+
+      .page-header h1 {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .page-header h1 i {
+        color: var(--navy-primary);
+      }
+
+      .page-header p {
+        color: var(--gray-500);
+        font-size: 14px;
+      }
+
+      /* Stats Grid - Compact */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .stat-card {
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-radius: 12px;
+        padding: 18px;
+        transition: all 0.2s ease;
+      }
+
+      .stat-card:hover {
+        border-color: var(--navy-primary);
+        box-shadow: 0 4px 12px rgba(30, 58, 138, 0.08);
+      }
+
+      .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+      }
+
+      .stat-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: var(--gray-50);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        color: var(--navy-primary);
+      }
+
+      .stat-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 4px;
+      }
+
+      .stat-label {
+        font-size: 13px;
+        color: var(--gray-500);
+        font-weight: 500;
+      }
+
+      .stat-trend {
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-weight: 600;
+      }
+
+      .trend-up {
+        background: #d1fae5;
+        color: #065f46;
+      }
+
+      .trend-down {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      /* Account Summary Card */
+      .account-summary {
+        background: linear-gradient(
+          135deg,
+          var(--navy-primary) 0%,
+          var(--navy-darker) 100%
+        );
+        border-radius: 16px;
+        padding: 28px;
+        color: white;
+        margin-bottom: 24px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .account-summary::before {
+        content: "";
+        position: absolute;
+        top: -50px;
+        right: -50px;
+        width: 200px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 50%;
+      }
+
+      .summary-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .summary-title h2 {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+
+      .summary-title p {
+        font-size: 13px;
+        opacity: 0.8;
+      }
+
+      .upgrade-btn {
+        background: white;
+        color: var(--navy-primary);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .upgrade-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .summary-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .summary-item h4 {
+        font-size: 12px;
+        opacity: 0.8;
+        margin-bottom: 6px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .summary-item p {
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .usage-bar {
+        height: 6px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        margin-top: 8px;
+        overflow: hidden;
+      }
+
+      .usage-fill {
+        height: 100%;
+        background: white;
+        border-radius: 10px;
+        transition: width 1s ease;
+      }
+
+      /* Filters Section */
+      .filters-section {
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .filters-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .filter-item {
+        flex: 1;
+        min-width: 180px;
+      }
+
+      .filter-item label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--gray-600);
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+
+      .filter-select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--gray-300);
+        border-radius: 8px;
+        font-size: 14px;
+        color: var(--gray-700);
+        background: white;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .filter-select:hover {
+        border-color: var(--navy-primary);
+      }
+
+      .filter-select:focus {
+        outline: none;
+        border-color: var(--navy-primary);
+        box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+      }
+
+      .filter-actions {
+        display: flex;
+        gap: 8px;
+        align-items: flex-end;
+      }
+
+      /* Buttons */
+      .btn {
+        padding: 10px 18px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+      }
+
+      .btn-primary {
+        background: var(--navy-primary);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: var(--navy-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2);
+      }
+
+      .btn-secondary {
+        background: var(--gray-100);
+        color: var(--gray-700);
+      }
+
+      .btn-secondary:hover {
+        background: var(--gray-200);
+      }
+
+      .btn-success {
+        background: var(--success);
+        color: white;
+      }
+
+      .btn-success:hover {
+        background: #059669;
+      }
+
+      .btn-danger {
+        background: var(--danger);
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background: #dc2626;
+      }
+
+      /* Table Section */
+      .table-section {
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      .table-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--gray-200);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .table-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--gray-900);
+      }
+
+      .table-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      /* Data Table */
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .data-table thead {
+        background: var(--gray-50);
+      }
+
+      .data-table th {
+        padding: 12px 16px;
+        text-align: left;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--gray-600);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid var(--gray-200);
+      }
+
+      .data-table td {
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--gray-100);
+        font-size: 14px;
+        color: var(--gray-700);
+      }
+
+      .data-table tbody tr {
+        transition: background 0.15s ease;
+      }
+
+      .data-table tbody tr:hover {
+        background: var(--gray-50);
+      }
+
+      /* Status Badges */
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .status-paid {
+        background: #d1fae5;
+        color: #065f46;
+      }
+
+      .status-unpaid {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .status-overdue {
+        background: #fef3c7;
+        color: #92400e;
+      }
+
+      /* Package Badges */
+      .package-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+
+      .package-star {
+        background: #fef3c7;
+        color: #92400e;
+      }
+
+      .package-basic {
+        background: var(--gray-200);
+        color: var(--gray-700);
+      }
+
+      .package-premium {
+        background: #ddd6fe;
+        color: #5b21b6;
+      }
+
+      .package-silver {
+        background: var(--gray-100);
+        color: var(--gray-600);
+      }
+
+      /* Action Dropdown */
+      .action-dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      .dropdown-toggle {
+        background: transparent;
+        border: 1px solid var(--gray-300);
+        color: var(--gray-600);
+        padding: 6px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.2s ease;
+      }
+
+      .dropdown-toggle:hover {
+        background: var(--gray-50);
+        border-color: var(--navy-primary);
+        color: var(--navy-primary);
+      }
+
+      .dropdown-menu {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background: white;
+        min-width: 180px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+        border: 1px solid var(--gray-200);
+        border-radius: 8px;
+        z-index: 1000;
+        margin-top: 4px;
+        overflow: hidden;
+      }
+
+      .dropdown-menu.show {
+        display: block;
+        animation: slideDown 0.2s ease;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .dropdown-menu button {
+        width: 100%;
+        padding: 10px 14px;
+        border: none;
+        background: white;
+        text-align: left;
+        cursor: pointer;
+        font-size: 13px;
+        color: var(--gray-700);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.15s ease;
+        font-weight: 500;
+      }
+
+      .dropdown-menu button:hover {
+        background: var(--gray-50);
+        color: var(--navy-primary);
+      }
+
+      .dropdown-menu button i {
+        width: 16px;
+        text-align: center;
+      }
+
+      .dropdown-menu hr {
+        margin: 0;
+        border: none;
+        border-top: 1px solid var(--gray-200);
+      }
+
+      /* Pagination */
+      .pagination {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 24px;
+        border-top: 1px solid var(--gray-200);
+      }
+
+      .pagination-info {
+        font-size: 13px;
+        color: var(--gray-600);
+      }
+
+      .pagination-controls {
+        display: flex;
+        gap: 8px;
+      }
+
+      .pagination button {
+        padding: 8px 14px;
+        background: white;
+        border: 1px solid var(--gray-300);
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--gray-700);
+        transition: all 0.2s ease;
+      }
+
+      .pagination button:hover:not(:disabled) {
+        background: var(--navy-primary);
+        color: white;
+        border-color: var(--navy-primary);
+      }
+
+      .pagination button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      /* Bulk Actions Bar */
+      .bulk-actions-bar {
+        display: none;
+        background: #eff6ff;
+        border: 1px solid #93c5fd;
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .bulk-actions-bar.show {
+        display: flex;
+      }
+
+      .bulk-message {
+        font-weight: 600;
+        color: var(--navy-dark);
+        font-size: 14px;
+      }
+
+      .bulk-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      /* Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        animation: fadeIn 0.2s ease;
+      }
+
+      .modal.show {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 500px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideUp 0.3s ease;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .modal-header {
+        padding: 24px 24px 16px;
+        border-bottom: 1px solid var(--gray-200);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .modal-header h2 {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--gray-900);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .close {
+        background: transparent;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: var(--gray-400);
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+      }
+
+      .close:hover {
+        background: var(--gray-100);
+        color: var(--gray-700);
+      }
+
+      .modal-body {
+        padding: 24px;
+      }
+
+      .modal-footer {
+        padding: 16px 24px;
+        border-top: 1px solid var(--gray-200);
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+      }
+
+      .invoice-details {
+        display: grid;
+        gap: 12px;
+      }
+
+      .invoice-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px;
+        background: var(--gray-50);
+        border-radius: 8px;
+      }
+
+      .invoice-label {
+        font-size: 13px;
+        color: var(--gray-600);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .invoice-value {
+        font-size: 14px;
+        color: var(--gray-900);
+        font-weight: 600;
+      }
+
+      /* Plan Options */
+      .plan-options {
+        display: grid;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .plan-option {
+        border: 2px solid var(--gray-200);
+        border-radius: 12px;
+        padding: 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background: white;
+      }
+
+      .plan-option:hover {
+        border-color: var(--navy-primary);
+        box-shadow: 0 4px 12px rgba(30, 58, 138, 0.1);
+      }
+
+      .plan-option.selected {
+        border-color: var(--navy-primary);
+        background: #eff6ff;
+      }
+
+      .plan-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+
+      .plan-name {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--gray-900);
+      }
+
+      .plan-price {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--navy-primary);
+      }
+
+      .plan-features {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .plan-features li {
+        padding: 6px 0;
+        color: var(--gray-600);
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .plan-features li i {
+        color: var(--success);
+      }
+
+      /* Quick Actions */
+      .quick-actions {
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 24px;
+      }
+
+      .quick-actions-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+
+      .quick-actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px;
+      }
+
+      .billing-ops-section {
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 24px;
+      }
+
+      .billing-ops-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+
+      .billing-ops-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--gray-900);
+      }
+
+      .billing-ops-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .billing-panel {
+        border: 1px solid var(--gray-200);
+        border-radius: 10px;
+        padding: 14px;
+        background: var(--gray-50);
+      }
+
+      .billing-panel h4 {
+        margin-bottom: 12px;
+        font-size: 14px;
+      }
+
+      .billing-form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .billing-form-group {
+        margin-bottom: 10px;
+      }
+
+      .billing-form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 12px;
+        color: var(--gray-600);
+        font-weight: 600;
+      }
+
+      .billing-input,
+      .billing-select {
+        width: 100%;
+        border: 1px solid var(--gray-300);
+        border-radius: 8px;
+        padding: 9px 10px;
+        background: white;
+        font-size: 13px;
+      }
+
+      .billing-status-message {
+        min-height: 20px;
+        font-size: 13px;
+        margin-bottom: 10px;
+      }
+
+      .billing-list-wrap {
+        margin-top: 16px;
+        overflow-x: auto;
+      }
+
+      .mini-kpi {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 10px;
+        border-radius: 6px;
+        border: 1px solid var(--gray-200);
+        font-size: 12px;
+        margin-right: 8px;
+        background: white;
+      }
+
+      .quick-action-btn {
+        padding: 12px;
+        background: var(--gray-50);
+        border: 1px solid var(--gray-200);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--gray-700);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .quick-action-btn:hover {
+        background: var(--navy-primary);
+        color: white;
+        border-color: var(--navy-primary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(30, 58, 138, 0.15);
+      }
+
+      .quick-action-btn i {
+        font-size: 18px;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .summary-details {
+          grid-template-columns: 1fr;
+        }
+
+        .filters-row {
+          flex-direction: column;
+        }
+
+        .filter-item {
+          width: 100%;
+        }
+
+        .table-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .quick-actions-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .billing-ops-grid,
+        .billing-form-row {
+          grid-template-columns: 1fr;
+        }
+
+        .pagination {
+          flex-direction: column;
+          gap: 12px;
+        }
+      }
+
+      /* Loading State */
+      .loading {
+        opacity: 0.6;
+        pointer-events: none;
+      }
+
+      /* Notification */
+      .notification {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-left: 4px solid var(--success);
+        padding: 16px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        z-index: 3000;
+        animation: slideInRight 0.3s ease;
+        max-width: 350px;
+      }
+
+      .notification.error {
+        border-left-color: var(--danger);
+      }
+
+      .notification.warning {
+        border-left-color: var(--warning);
+      }
+
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(100px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .notification-content {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .notification-icon {
+        font-size: 20px;
+      }
+
+      .notification-icon.success {
+        color: var(--success);
+      }
+
+      .notification-icon.error {
+        color: var(--danger);
+      }
+
+      .notification-message {
+        flex: 1;
+      }
+
+      .notification-title {
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--gray-900);
+        margin-bottom: 2px;
+      }
+
+      .notification-text {
+        font-size: 13px;
+        color: var(--gray-600);
+      }
+
+      /* Empty State */
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+      }
+
+      .empty-state i {
+        font-size: 64px;
+        color: var(--gray-300);
+        margin-bottom: 16px;
+      }
+
+      .empty-state h3 {
+        font-size: 18px;
+        color: var(--gray-700);
+        margin-bottom: 8px;
+      }
+
+      .empty-state p {
+        font-size: 14px;
+        color: var(--gray-500);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app-header"></div>
+<div class="main-content">
+<!-- Search Results Modal -->
+      <div id="searchModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+        <div style="background: white; width: 90%; max-width: 1200px; margin: 5% auto; border-radius: 8px; padding: 20px; max-height: 80vh; overflow-y: auto;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>Search Results</h2>
+            <button onclick="closeSearchModal()" style="background: #ff6b6b; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;"><i class="fa-solid fa-times"></i> Close</button>
+          </div>
+          <div id="searchResults" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
+            <!-- Search results will be populated here -->
+          </div>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <!-- Page Header -->
+        <div class="page-header">
+          <h1>
+            <i class="fa-solid fa-file-invoice-dollar"></i> Billing & Invoicing
+          </h1>
+          <p>Manage billing operations, track payments, and generate reports</p>
+        </div>
+
+        <!-- Account Summary -->
+        <div class="account-summary">
+          <div class="summary-header">
+            <div class="summary-title">
+              <h2><i class="fa-solid fa-crown"></i> Current Plan</h2>
+              <p>Growth Plan - Monthly Billing</p>
+            </div>
+            <button class="upgrade-btn" onclick="openUpgradeModal()">
+              <i class="fa-solid fa-arrow-up"></i> Upgrade Plan
+            </button>
+          </div>
+          <div class="summary-details">
+            <div class="summary-item">
+              <h4>Monthly Cost</h4>
+              <p>৳5,698</p>
+            </div>
+            <div class="summary-item">
+              <h4>Active Users</h4>
+              <p>4,850 / 5,000</p>
+              <div class="usage-bar">
+                <div class="usage-fill" style="width: 97%"></div>
+              </div>
+            </div>
+            <div class="summary-item">
+              <h4>Next Billing Date</h4>
+              <p>March 1, 2026</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon">
+                <i class="fa-solid fa-bangladeshi-taka-sign"></i>
+              </div>
+              <span class="stat-trend trend-up">
+                <i class="fa-solid fa-arrow-up"></i> 12%
+              </span>
+            </div>
+            <div class="stat-value" id="totalCollected">৳0</div>
+            <div class="stat-label">Total Collected</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon">
+                <i class="fa-solid fa-clock"></i>
+              </div>
+            </div>
+            <div class="stat-value" id="totalDue">৳0</div>
+            <div class="stat-label">Outstanding Amount</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon">
+                <i class="fa-solid fa-users"></i>
+              </div>
+            </div>
+            <div class="stat-value" id="totalClients">0</div>
+            <div class="stat-label">Total Clients</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon">
+                <i class="fa-solid fa-check-circle"></i>
+              </div>
+              <span class="stat-trend trend-up">
+                <i class="fa-solid fa-arrow-up"></i> 8%
+              </span>
+            </div>
+            <div class="stat-value" id="collectionRate">0%</div>
+            <div class="stat-label">Collection Rate</div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <div class="quick-actions-title">Quick Actions</div>
+          <div class="quick-actions-grid">
+            <button class="quick-action-btn" onclick="generateMonthlyReport()">
+              <i class="fa-solid fa-file-pdf"></i>
+              Monthly Report
+            </button>
+            <button class="quick-action-btn" onclick="exportToExcel()">
+              <i class="fa-solid fa-file-excel"></i>
+              Export Excel
+            </button>
+            <button class="quick-action-btn" onclick="sendBulkReminders()">
+              <i class="fa-solid fa-paper-plane"></i>
+              Send Reminders
+            </button>
+            <button class="quick-action-btn" onclick="viewPaymentHistory()">
+              <i class="fa-solid fa-history"></i>
+              Payment History
+            </button>
+          </div>
+        </div>
+
+        <div class="billing-ops-section">
+          <div class="billing-ops-header">
+            <div class="billing-ops-title">
+              <i class="fa-solid fa-gears"></i> Live Billing Operations
+            </div>
+            <div>
+              <span class="mini-kpi" id="kpiInvoiceCount"><i class="fa-solid fa-file-invoice"></i> Invoices: 0</span>
+              <span class="mini-kpi" id="kpiPaidCount"><i class="fa-solid fa-circle-check"></i> Paid: 0</span>
+              <span class="mini-kpi" id="kpiDueCount"><i class="fa-solid fa-clock"></i> Due: 0</span>
+            </div>
+          </div>
+
+          <div class="billing-ops-grid">
+            <div class="billing-panel">
+              <h4><i class="fa-solid fa-money-bill-wave"></i> Collect Payment</h4>
+              <div id="collectPaymentMessage" class="billing-status-message"></div>
+              <form id="collectPaymentForm" novalidate>
+                <div class="billing-form-group">
+                  <label for="paymentInvoiceSelect">Invoice</label>
+                  <select id="paymentInvoiceSelect" class="billing-select" required>
+                    <option value="">Select invoice</option>
+                  </select>
+                </div>
+                <div class="billing-form-row">
+                  <div class="billing-form-group">
+                    <label for="paymentAmount">Amount</label>
+                    <input type="number" id="paymentAmount" class="billing-input" min="1" step="0.01" required />
+                  </div>
+                  <div class="billing-form-group">
+                    <label for="paymentMethod">Method</label>
+                    <select id="paymentMethod" class="billing-select" required>
+                      <option value="cash">Cash</option>
+                      <option value="bank">Bank</option>
+                      <option value="mobile_banking">Mobile Banking</option>
+                      <option value="card">Card</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="billing-form-group">
+                  <label for="transactionRef">Transaction Ref (optional)</label>
+                  <input type="text" id="transactionRef" class="billing-input" />
+                </div>
+                <button class="btn btn-success" type="submit">
+                  <i class="fa-solid fa-check"></i> Submit Payment
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <div class="billing-list-wrap">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;">
+              <h4 style="font-size:14px;"><i class="fa-solid fa-list"></i> Latest Invoices</h4>
+              <button class="btn btn-secondary" onclick="window.reloadLiveInvoices && window.reloadLiveInvoices()">
+                <i class="fa-solid fa-rotate"></i> Refresh Invoices
+              </button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Invoice No</th>
+                  <th>Client</th>
+                  <th>Month</th>
+                  <th>Due Date</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="liveInvoicesBody">
+                <tr><td colspan="6" style="text-align:center;">Loading invoices...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="billing-list-wrap">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;">
+              <h4 style="font-size:14px;"><i class="fa-solid fa-money-check-dollar"></i> Client Payment Submissions</h4>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Payslip</th>
+                  <th>Client</th>
+                  <th>Month</th>
+                  <th>Method</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Invoice</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="portalPaymentsBody">
+                <tr><td colspan="8" style="text-align:center;">Loading payment submissions...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="filters-section">
+          <div class="filters-row">
+            <div class="filter-item">
+              <label>Status</label>
+              <select id="statusFilter" class="filter-select">
+                <option value="all">All Status</option>
+                <option value="paid">Paid Only</option>
+                <option value="unpaid">Unpaid Only</option>
+                <option value="overdue">Overdue Only</option>
+              </select>
+            </div>
+
+            <div class="filter-item">
+              <label>Month</label>
+              <select id="monthFilter" class="filter-select">
+                <option value="all">All Months</option>
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+              </select>
+            </div>
+
+            <div class="filter-item">
+              <label>Package</label>
+              <select id="packageFilter" class="filter-select">
+                <option value="all">All Packages</option>
+                <option value="Star">Star</option>
+                <option value="Basic">Basic</option>
+                <option value="Premium">Premium</option>
+                <option value="Silver">Silver</option>
+              </select>
+            </div>
+
+            <div class="filter-actions">
+              <button class="btn btn-secondary" onclick="clearFilters()">
+                <i class="fa-solid fa-rotate-right"></i> Reset
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="table-section">
+          <div class="table-header">
+            <div class="table-title">
+              <span id="resultsCount">Billing Records</span>
+            </div>
+            <div class="table-actions">
+              <button class="btn btn-primary" onclick="bulkMarkPaid()">
+                <i class="fa-solid fa-check-double"></i> Bulk Actions
+              </button>
+            </div>
+          </div>
+
+          <!-- Bulk Actions Bar -->
+          <div id="bulkActionsBar" class="bulk-actions-bar">
+            <div class="bulk-message">
+              <i class="fa-solid fa-info-circle"></i>
+              <span id="selectedCount">0</span> items selected
+            </div>
+            <div class="bulk-actions">
+              <button class="btn btn-success" onclick="confirmBulkPaid()">
+                <i class="fa-solid fa-check"></i> Mark Paid
+              </button>
+              <button class="btn btn-secondary" onclick="clearSelection()">
+                <i class="fa-solid fa-times"></i> Cancel
+              </button>
+            </div>
+          </div>
+
+          <div style="overflow-x: auto">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 40px">
+                    <input
+                      type="checkbox"
+                      id="selectAll"
+                      onchange="toggleSelectAll()"
+                      style="cursor: pointer; width: 16px; height: 16px"
+                    />
+                  </th>
+                  <th>Customer ID</th>
+                  <th>Name</th>
+                  <th>Address</th>
+                  <th>Month</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Payment Method</th>
+                  <th>Package</th>
+                  <th style="text-align: center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="billingBody"></tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div class="pagination">
+            <div class="pagination-info">
+              <span id="paginationInfo">Showing 0 of 0 records</span>
+            </div>
+            <div class="pagination-controls">
+              <button onclick="previousPage()" id="prevBtn">
+                <i class="fa-solid fa-chevron-left"></i> Previous
+              </button>
+              <button onclick="nextPage()" id="nextBtn">
+                Next <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Invoice Modal -->
+    <div id="invoiceModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2><i class="fa-solid fa-file-invoice"></i> Invoice Details</h2>
+          <button class="close" onclick="closeInvoiceModal()">
+            <i class="fa-solid fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="invoiceContent" class="invoice-details"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" onclick="printInvoice()">
+            <i class="fa-solid fa-print"></i> Print
+          </button>
+          <button class="btn btn-primary" onclick="downloadInvoice()">
+            <i class="fa-solid fa-download"></i> Download PDF
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upgrade Modal -->
+    <div id="upgradeModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2><i class="fa-solid fa-rocket"></i> Upgrade Your Plan</h2>
+          <button class="close" onclick="closeUpgradeModal()">
+            <i class="fa-solid fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p
+            style="color: var(--gray-600); margin-bottom: 16px; font-size: 14px"
+          >
+            Choose a plan that fits your growing business needs
+          </p>
+
+          <div class="plan-options">
+            <div
+              class="plan-option"
+              onclick="selectPlan('professional')"
+              id="plan-professional"
+            >
+              <div class="plan-header">
+                <div class="plan-name">
+                  <i class="fa-solid fa-briefcase"></i> Professional
+                </div>
+                <div class="plan-price">৳8,999/mo</div>
+              </div>
+              <ul class="plan-features">
+                <li>
+                  <i class="fa-solid fa-check"></i> 10,000 monthly active users
+                </li>
+                <li><i class="fa-solid fa-check"></i> Priority support</li>
+                <li><i class="fa-solid fa-check"></i> Advanced analytics</li>
+                <li><i class="fa-solid fa-check"></i> Custom branding</li>
+              </ul>
+            </div>
+
+            <div
+              class="plan-option"
+              onclick="selectPlan('enterprise')"
+              id="plan-enterprise"
+            >
+              <div class="plan-header">
+                <div class="plan-name">
+                  <i class="fa-solid fa-building"></i> Enterprise
+                </div>
+                <div class="plan-price">৳15,999/mo</div>
+              </div>
+              <ul class="plan-features">
+                <li>
+                  <i class="fa-solid fa-check"></i> Unlimited active users
+                </li>
+                <li>
+                  <i class="fa-solid fa-check"></i> 24/7 dedicated support
+                </li>
+                <li>
+                  <i class="fa-solid fa-check"></i> Advanced security features
+                </li>
+                <li><i class="fa-solid fa-check"></i> Custom integrations</li>
+                <li><i class="fa-solid fa-check"></i> SLA guarantee</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" onclick="closeUpgradeModal()">
+            Cancel
+          </button>
+          <button class="btn btn-primary" onclick="confirmUpgrade()">
+            <i class="fa-solid fa-check"></i> Confirm Upgrade
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="assets/js/header-loader.js?v=20260328i"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    
+    <script>
+      (function () {
+        const collectPaymentForm = document.getElementById("collectPaymentForm");
+        const paymentInvoiceSelect = document.getElementById("paymentInvoiceSelect");
+        const liveInvoicesBody = document.getElementById("liveInvoicesBody");
+        const portalPaymentsBody = document.getElementById("portalPaymentsBody");
+        let canCreateInvoice = false;
+        let canCollectPayment = false;
+
+        function applyBillingPermissions() {
+          const paymentInputs = collectPaymentForm.querySelectorAll("input, select, button");
+          paymentInputs.forEach((el) => {
+            el.disabled = !canCollectPayment;
+          });
+          if (!canCollectPayment) {
+            setMessage("collectPaymentMessage", "View-only access: payment collection disabled.", true);
+          }
+        }
+
+        function setMessage(id, text, isError) {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.textContent = text || "";
+          el.style.color = isError ? "#dc2626" : "#15803d";
+        }
+
+        function showNotification(text, type) {
+          if (type === "error") {
+            alert(text || "Operation failed");
+            return;
+          }
+          console.log(text || "Done");
+        }
+
+        function toCurrency(amount) {
+          const numeric = Number(amount || 0);
+          return "৳" + numeric.toLocaleString();
+        }
+
+        function toStatusBadge(status) {
+          const normalized = String(status || "unpaid").toLowerCase();
+          if (normalized === "paid") {
+            return '<span class="status-badge status-paid"><i class="fa-solid fa-check-circle"></i> Paid</span>';
+          }
+          if (normalized === "partial") {
+            return '<span class="status-badge status-overdue"><i class="fa-solid fa-percent"></i> Partial</span>';
+          }
+          if (normalized === "overdue") {
+            return '<span class="status-badge status-overdue"><i class="fa-solid fa-exclamation-triangle"></i> Overdue</span>';
+          }
+          return '<span class="status-badge status-unpaid"><i class="fa-solid fa-clock"></i> Unpaid</span>';
+        }
+
+        function toPortalPaymentBadge(status) {
+          const normalized = String(status || "pending_confirmation").toLowerCase();
+          if (normalized === "paid_confirmed") {
+            return '<span class="status-badge status-paid"><i class="fa-solid fa-check-circle"></i> Paid</span>';
+          }
+          if (normalized === "approved") {
+            return '<span class="status-badge status-paid"><i class="fa-solid fa-thumbs-up"></i> Approved</span>';
+          }
+          if (normalized === "rejected") {
+            return '<span class="status-badge status-unpaid"><i class="fa-solid fa-ban"></i> Rejected</span>';
+          }
+          if (normalized === "invoice_generated") {
+            return '<span class="status-badge status-overdue"><i class="fa-solid fa-file-invoice"></i> Invoice Generated</span>';
+          }
+          return '<span class="status-badge status-overdue"><i class="fa-solid fa-hourglass-half"></i> Pending Confirmation</span>';
+        }
+
+        function encodeHtml(value) {
+          return String(value == null ? "" : value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/\"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+        }
+
+        async function apiRequest(url, options) {
+          const response = await fetch(url, {
+            credentials: "same-origin",
+            ...options,
+          });
+
+          const data = await response.json();
+          if (!response.ok || !data.ok) {
+            throw new Error(data.message || "Request failed");
+          }
+
+          return data;
+        }
+
+        async function ensureAuth() {
+          try {
+            await apiRequest("backend/public/auth/me.php", { method: "GET" });
+            return true;
+          } catch (error) {
+            window.location.href = "login.html";
+            return false;
+          }
+        }
+
+        async function loadLiveInvoices() {
+          const data = await apiRequest("backend/public/billing/list_invoices.php", { method: "GET" });
+          const invoices = Array.isArray(data.invoices) ? data.invoices : [];
+          canCreateInvoice = Boolean(data.can_create_invoice);
+          canCollectPayment = Boolean(data.can_collect_payment);
+          applyBillingPermissions();
+
+          if (!invoices.length) {
+            liveInvoicesBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No invoices found</td></tr>';
+            paymentInvoiceSelect.innerHTML = '<option value="">Select invoice</option>';
+            document.getElementById("kpiInvoiceCount").innerHTML = '<i class="fa-solid fa-file-invoice"></i> Invoices: 0';
+            document.getElementById("kpiPaidCount").innerHTML = '<i class="fa-solid fa-circle-check"></i> Paid: 0';
+            document.getElementById("kpiDueCount").innerHTML = '<i class="fa-solid fa-clock"></i> Due: 0';
+            return;
+          }
+
+          liveInvoicesBody.innerHTML = invoices
+            .map((row) => {
+              return "<tr>" +
+                "<td>" + encodeHtml(row.invoice_no) + "</td>" +
+                "<td>" + encodeHtml(row.client_code + " - " + row.full_name) + "</td>" +
+                "<td>" + encodeHtml(row.billing_month) + "</td>" +
+                "<td>" + encodeHtml(row.due_date) + "</td>" +
+                "<td><strong>" + toCurrency(row.amount) + "</strong></td>" +
+                "<td>" + toStatusBadge(row.status) + "</td>" +
+              "</tr>";
+            })
+            .join("");
+
+          const payableStatuses = new Set(["unpaid", "overdue", "partial"]);
+          paymentInvoiceSelect.innerHTML = '<option value="">Select invoice</option>';
+          invoices.forEach((row) => {
+            const status = String(row.status || "").toLowerCase();
+            if (!payableStatuses.has(status)) return;
+
+            const option = document.createElement("option");
+            option.value = row.id;
+            option.dataset.amount = row.amount;
+            option.textContent = row.invoice_no + " | " + row.client_code + " | " + row.status + " | " + toCurrency(row.amount);
+            paymentInvoiceSelect.appendChild(option);
+          });
+
+          const paidCount = invoices.filter((x) => x.status === "paid").length;
+          const dueCount = invoices.filter((x) => x.status !== "paid").length;
+          document.getElementById("kpiInvoiceCount").innerHTML = '<i class="fa-solid fa-file-invoice"></i> Invoices: ' + invoices.length;
+          document.getElementById("kpiPaidCount").innerHTML = '<i class="fa-solid fa-circle-check"></i> Paid: ' + paidCount;
+          document.getElementById("kpiDueCount").innerHTML = '<i class="fa-solid fa-clock"></i> Due: ' + dueCount;
+        }
+
+        async function loadPortalPayments() {
+          const data = await apiRequest("backend/public/billing/list_payment_submissions.php", { method: "GET" });
+          const items = Array.isArray(data.items) ? data.items : [];
+
+          if (!items.length) {
+            portalPaymentsBody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No payment submissions found</td></tr>';
+            return;
+          }
+
+          portalPaymentsBody.innerHTML = items.map((row) => {
+            const status = String(row.status || '').toLowerCase();
+            const showApprove = canCreateInvoice && status === 'pending_confirmation';
+            const showInvoice = canCreateInvoice && !row.invoice_id && (status === 'approved' || status === 'invoice_generated' || status === 'paid_confirmed');
+
+            return '<tr>' +
+              '<td>' + encodeHtml(row.payslip_no || '-') + '</td>' +
+              '<td>' + encodeHtml((row.client_code || '') + ' - ' + (row.full_name || '')) + '</td>' +
+              '<td>' + encodeHtml(row.billing_month || '-') + '</td>' +
+              '<td>' + encodeHtml(row.payment_method || '-') + '</td>' +
+              '<td><strong>' + toCurrency(row.amount) + '</strong></td>' +
+              '<td>' + toPortalPaymentBadge(row.status) + '</td>' +
+              '<td>' + encodeHtml(row.invoice_no || '-') + '</td>' +
+              '<td>' +
+                (showApprove ? '<button class="btn btn-secondary" style="padding:6px 10px;" onclick="window.approvePortalPayment(' + Number(row.id || 0) + ')"><i class="fa-solid fa-check"></i> Approve</button> ' : '') +
+                (showInvoice ? '<button class="btn btn-primary" style="padding:6px 10px;" onclick="window.generateInvoiceFromPortalPayment(' + Number(row.id || 0) + ')"><i class="fa-solid fa-file-circle-plus"></i> Create Invoice</button>' : '') +
+                (!showApprove && !showInvoice ? '<span style="color:#6b7280; font-size:12px;">-</span>' : '') +
+              '</td>' +
+            '</tr>';
+          }).join('');
+        }
+
+        paymentInvoiceSelect.addEventListener("change", function () {
+          const selected = paymentInvoiceSelect.selectedOptions[0];
+          if (!selected || !selected.dataset.amount) return;
+          document.getElementById("paymentAmount").value = selected.dataset.amount;
+        });
+
+        collectPaymentForm.addEventListener("submit", async function (event) {
+          event.preventDefault();
+          setMessage("collectPaymentMessage", "", false);
+
+          if (!canCollectPayment) {
+            setMessage("collectPaymentMessage", "You do not have permission to collect payment.", true);
+            return;
+          }
+
+          const invoiceId = Number(paymentInvoiceSelect.value);
+          const amount = Number(document.getElementById("paymentAmount").value);
+          const method = document.getElementById("paymentMethod").value;
+          const transactionRef = document.getElementById("transactionRef").value.trim();
+
+          if (!invoiceId || !amount || amount <= 0 || !method) {
+            setMessage("collectPaymentMessage", "Please complete all payment fields.", true);
+            return;
+          }
+
+          try {
+            const result = await apiRequest("backend/public/billing/collect_payment.php", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                invoice_id: invoiceId,
+                amount: amount,
+                method: method,
+                transaction_ref: transactionRef,
+              }),
+            });
+
+            setMessage(
+              "collectPaymentMessage",
+              "Payment recorded. Invoice status: " + String(result.invoice_status || "updated").toUpperCase(),
+              false,
+            );
+            collectPaymentForm.reset();
+            await loadLiveInvoices();
+          } catch (error) {
+            setMessage("collectPaymentMessage", error.message, true);
+          }
+        });
+
+        window.reloadLiveInvoices = async function () {
+          try {
+            await loadLiveInvoices();
+            await loadPortalPayments();
+            showNotification("Invoice list refreshed", "success");
+          } catch (error) {
+            showNotification(error.message, "error");
+          }
+        };
+
+        window.approvePortalPayment = async function (paymentId) {
+          if (!canCreateInvoice) {
+            showNotification('You do not have permission to approve payments.', 'error');
+            return;
+          }
+
+          try {
+            await apiRequest('backend/public/billing/approve_payment.php', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ payment_id: Number(paymentId), decision: 'approve' }),
+            });
+            await loadPortalPayments();
+            showNotification('Payment approved successfully', 'success');
+          } catch (error) {
+            showNotification(error.message || 'Failed to approve payment', 'error');
+          }
+        };
+
+        window.generateInvoiceFromPortalPayment = async function (paymentId) {
+          if (!canCreateInvoice) {
+            showNotification('You do not have permission to generate invoice.', 'error');
+            return;
+          }
+
+          try {
+            await apiRequest('backend/public/billing/create_invoice_from_payment.php', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ payment_id: Number(paymentId) }),
+            });
+            await loadLiveInvoices();
+            await loadPortalPayments();
+            showNotification('Invoice generated from payment submission', 'success');
+          } catch (error) {
+            showNotification(error.message || 'Failed to generate invoice', 'error');
+          }
+        };
+
+        (async function initLiveBillingOps() {
+          const ok = await ensureAuth();
+          if (!ok) return;
+
+          try {
+            await loadLiveInvoices();
+            await loadPortalPayments();
+          } catch (error) {
+            setMessage("collectPaymentMessage", error.message, true);
+            liveInvoicesBody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#dc2626;">' + encodeHtml(error.message) + "</td></tr>";
+          }
+        })();
+      })();
+    </script>
+  </body>
+</html>
+
+
+
+

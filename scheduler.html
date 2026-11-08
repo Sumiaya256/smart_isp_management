@@ -1,0 +1,745 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promee International - Scheduler</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <!-- FontAwesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+            <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <i class="fa-solid fa-circle-nodes"></i> Promee International
+      </div>
+      <ul class="menu">
+        <!-- Dashboard -->
+        <li>
+          <a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+        </li>
+
+        <!-- Client -->
+        <li class="has-submenu open">
+          <a href="#"
+            ><i class="fa-solid fa-user"></i> Client
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="new_request.html"
+                ><i class="fa-regular fa-circle"></i> New Request</a
+              >
+            </li>
+            <li>
+              <a href="add_new_client.html"
+                ><i class="fa-regular fa-circle"></i> Add New</a
+              >
+            </li>
+            <li>
+              <a href="client_list.html"
+                ><i class="fa-regular fa-circle"></i> Client List</a
+              >
+            </li>
+            <li>
+              <a href="left_client.html"
+                ><i class="fa-regular fa-circle"></i> Left Client</a
+              >
+            </li>
+            <li>
+              <a href="scheduler.html" class="active"
+                ><i class="fa-regular fa-circle"></i> Scheduler</a
+              >
+            </li>
+            <li>
+              <a href="change_request.html"
+                ><i class="fa-regular fa-circle"></i> Change Request</a
+              >
+            </li>
+            <li>
+              <a href="portal_manage.html"
+                ><i class="fa-regular fa-circle"></i> Portal Manage</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Billing -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-file-invoice-dollar"></i> Billing
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="billing.html"
+                ><i class="fa-regular fa-circle"></i> Billing</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Mikrotik Server -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-server"></i> Mikrotik Server
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="Bulk_Client_Import.html"
+                ><i class="fa-regular fa-circle"></i> Bulk Client Import</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- HR & Payroll (Your Part) -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-users-gear"></i> HR & Payroll
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="employee_list.html"
+                ><i class="fa-regular fa-circle"></i> Employee List</a
+              >
+            </li>
+            <li>
+              <a href="add_employee.html"
+                ><i class="fa-regular fa-circle"></i> Add Employee</a
+              >
+            </li>
+            <li>
+              <a href="attendance.html"
+                ><i class="fa-regular fa-circle"></i> Attendance</a
+              >
+            </li>
+            <li>
+              <a href="salary_sheet.html"
+                ><i class="fa-regular fa-circle"></i> Salary Sheet</a
+              >
+            </li>
+            <li>
+              <a href="department.html"
+                ><i class="fa-regular fa-circle"></i> Department</a
+              >
+            </li>
+            <li>
+              <a href="position.html"
+                ><i class="fa-regular fa-circle"></i> Position</a
+              >
+            </li>
+            <li>
+              <a href="payhead.html"
+                ><i class="fa-regular fa-circle"></i> Payhead</a
+              >
+            </li>
+            <li>
+              <a href="payroll.html"
+                ><i class="fa-regular fa-circle"></i> Payroll</a
+              >
+            </li>
+            <li>
+              <a href="resign_rule.html"
+                ><i class="fa-regular fa-circle"></i> Resign Rule</a
+              >
+            </li>
+            <li>
+              <a href="resignation.html"
+                ><i class="fa-regular fa-circle"></i> Resignation</a
+              >
+            </li>
+            <li>
+              <a href="rejoin.html"
+                ><i class="fa-regular fa-circle"></i> Rejoin</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Leave Management -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-door-open"></i> Leave Management
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="leave_management.html"
+                ><i class="fa-regular fa-circle"></i> Leave Management</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Events & Holidays -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-calendar-days"></i> Events & Holidays
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="events_holidays.html"
+                ><i class="fa-regular fa-circle"></i> Events & Holidays</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Support & Ticketing -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-headset"></i> Support & Ticketing
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="ticket_list.html"
+                ><i class="fa-regular fa-circle"></i> Ticket List</a
+              >
+            </li>
+            <li>
+              <a href="new_ticket.html"
+                ><i class="fa-regular fa-circle"></i> New Ticket</a
+              >
+            </li>
+            <li>
+              <a href="complain_list.html"
+                ><i class="fa-regular fa-circle"></i> Complain List</a
+              >
+            </li>
+            <li>
+              <a href="complain_category.html"
+                ><i class="fa-regular fa-circle"></i> Complain Category</a
+              >
+            </li>
+            <li>
+              <a href="support_team.html"
+                ><i class="fa-regular fa-circle"></i> Support Team</a
+              >
+            </li>
+            <li>
+              <a href="ticket_reports.html"
+                ><i class="fa-regular fa-circle"></i> Ticket Reports</a
+              >
+            </li>
+            <li>
+              <a href="service_history.html"
+                ><i class="fa-regular fa-circle"></i> Service History</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Task Management -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-list-check"></i> Task Management
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Purchase -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-basket-shopping"></i> Purchase
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Inventory -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-boxes-stacked"></i> Inventory
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Assets -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-laptop-medical"></i> Assets
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Income -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-money-bill-trend-up"></i> Income
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+      <!-- Header -->
+      <header>
+        <div class="header-left">
+          <div class="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
+          <div class="search-box">
+            <input type="text" placeholder="Search Customer" />
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="monitor">
+            <i class="fa-solid fa-desktop"></i> Online Client Monitoring
+          </div>
+          <div class="releases">
+            <i class="fa-solid fa-wrench"></i> Releases
+            <span class="badge">0</span>
+          </div>
+          <div class="notifications">
+            <i class="fa-solid fa-bell"></i> <span class="badge">0</span>
+          </div>
+          <a href="login.html" class="header-btn"><i class="fa-solid fa-house"></i> Home</a>
+          <a href="login.html" class="header-btn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+          <div class="profile"><i class="fa-solid fa-user-circle"></i></div>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-content">
+        <div class="content-header">
+          <h1>
+            <i class="fa-solid fa-calendar-days"></i> Appointment Scheduler
+          </h1>
+          <p>Manage client appointments and technician schedules</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fa-solid fa-calendar-check"></i>
+            </div>
+            <div class="stat-info">
+              <h3>12</h3>
+              <p>Today's Appointments</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fa-solid fa-clock"></i>
+            </div>
+            <div class="stat-info">
+              <h3>8</h3>
+              <p>Pending Schedule</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fa-solid fa-user-tie"></i>
+            </div>
+            <div class="stat-info">
+              <h3>6</h3>
+              <p>Available Technicians</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fa-solid fa-route"></i>
+            </div>
+            <div class="stat-info">
+              <h3>45 km</h3>
+              <p>Total Distance Today</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-grid">
+          <!-- Calendar View -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-calendar"></i> Calendar View</h3>
+              <div class="card-actions">
+                <button class="btn btn-sm btn-navy">
+                  <i class="fa-solid fa-plus"></i> New Appointment
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="calendar-controls">
+                <button class="btn btn-navy">
+                  <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <h4>January 2024</h4>
+                <button class="btn btn-navy">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
+
+              <div class="mini-calendar">
+                <div class="calendar-weekdays">
+                  <div>Sun</div>
+                  <div>Mon</div>
+                  <div>Tue</div>
+                  <div>Wed</div>
+                  <div>Thu</div>
+                  <div>Fri</div>
+                  <div>Sat</div>
+                </div>
+                <div class="calendar-days">
+                  <div class="day other-month">31</div>
+                  <div class="day">1</div>
+                  <div class="day">2</div>
+                  <div class="day">3</div>
+                  <div class="day">4</div>
+                  <div class="day">5</div>
+                  <div class="day">6</div>
+                  <div class="day">7</div>
+                  <div class="day">8</div>
+                  <div class="day">9</div>
+                  <div class="day">10</div>
+                  <div class="day">11</div>
+                  <div class="day">12</div>
+                  <div class="day">13</div>
+                  <div class="day">14</div>
+                  <div class="day today">15</div>
+                  <div class="day has-appointments">16</div>
+                  <div class="day">17</div>
+                  <div class="day has-appointments">18</div>
+                  <div class="day">19</div>
+                  <div class="day">20</div>
+                  <div class="day">21</div>
+                  <div class="day">22</div>
+                  <div class="day">23</div>
+                  <div class="day">24</div>
+                  <div class="day has-appointments">25</div>
+                  <div class="day">26</div>
+                  <div class="day">27</div>
+                  <div class="day">28</div>
+                  <div class="day">29</div>
+                  <div class="day">30</div>
+                  <div class="day">31</div>
+                  <div class="day other-month">1</div>
+                  <div class="day other-month">2</div>
+                  <div class="day other-month">3</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Today's Schedule -->
+          <div class="card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-clock"></i> Today's Schedule</h3>
+            </div>
+            <div class="card-body">
+              <div class="schedule-list">
+                <div class="schedule-item">
+                  <div class="schedule-time">09:00 AM</div>
+                  <div class="schedule-details">
+                    <h4>New Installation</h4>
+                    <p><i class="fa-solid fa-user"></i> Ahmed Rahman</p>
+                    <p>
+                      <i class="fa-solid fa-location-dot"></i> Dhanmondi, Dhaka
+                    </p>
+                    <p><i class="fa-solid fa-user-tie"></i> Tech: Karim</p>
+                  </div>
+                  <div class="schedule-status">
+                    <span class="status-badge scheduled">Scheduled</span>
+                  </div>
+                </div>
+
+                <div class="schedule-item">
+                  <div class="schedule-time">11:30 AM</div>
+                  <div class="schedule-details">
+                    <h4>Maintenance</h4>
+                    <p><i class="fa-solid fa-user"></i> Sarah Khan</p>
+                    <p>
+                      <i class="fa-solid fa-location-dot"></i> Gulshan, Dhaka
+                    </p>
+                    <p><i class="fa-solid fa-user-tie"></i> Tech: Rahman</p>
+                  </div>
+                  <div class="schedule-status">
+                    <span class="status-badge in-progress">In Progress</span>
+                  </div>
+                </div>
+
+                <div class="schedule-item">
+                  <div class="schedule-time">02:00 PM</div>
+                  <div class="schedule-details">
+                    <h4>Troubleshooting</h4>
+                    <p><i class="fa-solid fa-user"></i> Mohammad Ali</p>
+                    <p>
+                      <i class="fa-solid fa-location-dot"></i> Mirpur, Dhaka
+                    </p>
+                    <p><i class="fa-solid fa-user-tie"></i> Tech: Hasan</p>
+                  </div>
+                  <div class="schedule-status">
+                    <span class="status-badge pending">Pending</span>
+                  </div>
+                </div>
+
+                <div class="schedule-item">
+                  <div class="schedule-time">04:30 PM</div>
+                  <div class="schedule-details">
+                    <h4>Equipment Upgrade</h4>
+                    <p><i class="fa-solid fa-user"></i> Fatima Begum</p>
+                    <p>
+                      <i class="fa-solid fa-location-dot"></i> Banani, Dhaka
+                    </p>
+                    <p><i class="fa-solid fa-user-tie"></i> Tech: Karim</p>
+                  </div>
+                  <div class="schedule-status">
+                    <span class="status-badge pending">Pending</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Appointment Form -->
+        <div class="card">
+          <div class="card-header">
+            <h3>
+              <i class="fa-solid fa-calendar-plus"></i> Schedule New Appointment
+            </h3>
+          </div>
+          <div class="card-body">
+            <form class="appointment-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="client-id">Client ID *</label>
+                  <input
+                    type="text"
+                    id="client-id"
+                    required
+                    placeholder="Enter client ID"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="appointment-type">Appointment Type *</label>
+                  <select id="appointment-type" required>
+                    <option value="">Select Type</option>
+                    <option value="installation">New Installation</option>
+                    <option value="maintenance">Maintenance</option>
+                    <option value="troubleshooting">Troubleshooting</option>
+                    <option value="upgrade">Equipment Upgrade</option>
+                    <option value="disconnection">Disconnection</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="appointment-date">Date *</label>
+                  <input type="date" id="appointment-date" required />
+                </div>
+                <div class="form-group">
+                  <label for="appointment-time">Time Slot *</label>
+                  <select id="appointment-time" required>
+                    <option value="">Select Time</option>
+                    <option value="09:00">09:00 AM</option>
+                    <option value="10:00">10:00 AM</option>
+                    <option value="11:00">11:00 AM</option>
+                    <option value="12:00">12:00 PM</option>
+                    <option value="14:00">02:00 PM</option>
+                    <option value="15:00">03:00 PM</option>
+                    <option value="16:00">04:00 PM</option>
+                    <option value="17:00">05:00 PM</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="technician">Assigned Technician *</label>
+                  <select id="technician" required>
+                    <option value="">Select Technician</option>
+                    <option value="karim">Karim Hossain</option>
+                    <option value="rahman">Rahman Ali</option>
+                    <option value="hasan">Hasan Mahmud</option>
+                    <option value="jamal">Jamal Ahmed</option>
+                    <option value="kamal">Kamal Uddin</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="priority">Priority Level</label>
+                  <select id="priority">
+                    <option value="normal">Normal</option>
+                    <option value="urgent">Urgent</option>
+                    <option value="emergency">Emergency</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="appointment-notes">Notes</label>
+                <textarea
+                  id="appointment-notes"
+                  rows="3"
+                  placeholder="Special instructions or requirements..."
+                ></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-navy">
+                  <i class="fa-solid fa-calendar-check"></i> Schedule
+                  Appointment
+                </button>
+                <button type="reset" class="btn btn-secondary btn-navy">
+                  <i class="fa-solid fa-undo"></i> Clear Form
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Technician Availability -->
+        <div class="card">
+          <div class="card-header">
+            <h3>
+              <i class="fa-solid fa-user-tie"></i> Technician Availability
+            </h3>
+          </div>
+          <div class="card-body">
+            <div class="technician-grid">
+              <div class="technician-card">
+                <div class="technician-info">
+                  <div class="technician-avatar">
+                    <i class="fa-solid fa-user-tie"></i>
+                  </div>
+                  <div class="technician-details">
+                    <h4>Karim Hossain</h4>
+                    <p>Senior Technician</p>
+                    <div class="technician-status">
+                      <span class="status-badge available">Available</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="technician-schedule">
+                  <p><strong>Today:</strong> 2 appointments</p>
+                  <p><strong>Area:</strong> Dhanmondi, Gulshan</p>
+                </div>
+              </div>
+
+              <div class="technician-card">
+                <div class="technician-info">
+                  <div class="technician-avatar">
+                    <i class="fa-solid fa-user-tie"></i>
+                  </div>
+                  <div class="technician-details">
+                    <h4>Rahman Ali</h4>
+                    <p>Technician</p>
+                    <div class="technician-status">
+                      <span class="status-badge busy">Busy</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="technician-schedule">
+                  <p><strong>Today:</strong> 3 appointments</p>
+                  <p><strong>Area:</strong> Mirpur, Uttara</p>
+                </div>
+              </div>
+
+              <div class="technician-card">
+                <div class="technician-info">
+                  <div class="technician-avatar">
+                    <i class="fa-solid fa-user-tie"></i>
+                  </div>
+                  <div class="technician-details">
+                    <h4>Hasan Mahmud</h4>
+                    <p>Junior Technician</p>
+                    <div class="technician-status">
+                      <span class="status-badge available">Available</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="technician-schedule">
+                  <p><strong>Today:</strong> 1 appointment</p>
+                  <p><strong>Area:</strong> Banani, Baridhara</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/js/script.js"></script>
+  </body>
+</html>

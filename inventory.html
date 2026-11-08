@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Inventory | Promee Internet</title>
+  <link rel="stylesheet" href="assets/css/style.css?v=20260326f" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary-color: #0d1b2a; --accent-color: #1b263b; --active-menu-bg: #102a43;
+      --bg: #f1f3f7; --surface: #FDFCFA; --ink: #102a43; --ink2: #5A5A52; --ink3: #9A9A90;
+      --gold: #204b71; --gold-light: #b4cde9; --teal: #2A7A6A; --teal-light: #D6EDEA;
+      --danger: #C0392B; --danger-light: #FDECEA; --warning: #D97706; --warning-light: #FEF3C7;
+      --border: #E2DDD4; --shadow: 0 2px 12px rgba(24,24,26,0.08); --shadow-lg: 0 8px 40px rgba(24,24,26,0.12);
+      --radius: 12px; --font-display: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; --font-body: 'DM Sans', system-ui, sans-serif;
+    }
+    html, body { height: 100%; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--ink); font-size: 14px; line-height: 1.6; }
+
+    /* HEADER */
+
+    .h-badge { background: red; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 50px; margin-left: 4px; }
+    .sidebar-toggle { margin-right: 15px; cursor: pointer; font-size: 18px; }
+    .badge { background-color: #dc3545; color: white; border-radius: 50%; padding: 2px 5px; font-size: 10px; position: relative; top: -5px; left: -5px; }
+    .header-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 12px; margin-left: 12px; display: flex; align-items: center; transition: background 0.2s, border-color 0.2s; }
+    .header-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.5); color: white; }
+    .header-btn i { margin-right: 6px; font-size: 14px; }
+
+    /* LAYOUT */
+    .dashboard { display: flex; height: 100vh; overflow: hidden; }
+
+    /* SIDEBAR */
+    .sidebar { width: 250px; background-color: var(--primary-color); color: #fff; display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; }
+    .brand { padding: 15px 20px; font-size: 16px; font-weight: bold; display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); gap: 10px; }
+    .menu { list-style: none; padding: 0; margin-top: 10px; }
+    .menu li { border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .menu li a { display: block; padding: 12px 20px; color: #b0b8c1; text-decoration: none; font-size: 14px; transition: background 0.2s, color 0.2s; }
+    .menu li a:hover, .menu li a.active { background-color: var(--active-menu-bg); color: #fff; border-left: 4px solid #3498db; }
+    .menu li a i { width: 25px; text-align: center; margin-right: 5px; }
+    .submenu { list-style: none; padding-left: 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background-color: rgba(0,0,0,0.2); }
+    .has-submenu.open .submenu { max-height: 700px; }
+    .has-submenu.open > a .fa-caret-right { transform: rotate(90deg); transition: transform 0.3s; }
+    .submenu li a { padding-left: 45px; font-size: 13px; border: none; color: #b0b8c1; }
+    .submenu li a:hover { color: white; }
+    .submenu li a i { font-size: 8px; width: 15px; margin-right: 10px; }
+
+    /* MAIN */
+    .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 56px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .topbar-title { font-size: 14px; font-weight: 500; color: var(--ink); }
+    .main-inner { flex: 1; overflow-y: auto; padding: 32px; }
+    .main-inner::-webkit-scrollbar { width: 5px; }
+    .main-inner::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+    /* PAGE HEADER */
+    .page-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 28px; }
+    .page-header h1 { font-family: var(--font-display); font-size: 30px; letter-spacing: -0.5px; color: var(--ink); line-height: 1.15; font-style: italic; }
+    .page-header h1 em { font-style: normal; color: var(--gold); }
+    .page-header p { font-size: 13px; color: var(--ink3); margin-top: 4px; }
+
+    /* BUTTONS */
+    .btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px; border-radius: 8px; font-family: var(--font-body); font-size: 13px; font-weight: 500; border: none; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+    .btn-gold { background: var(--gold); color: #fff; }
+    .btn-gold:hover { background: #1a3d5e; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(32,75,113,0.35); }
+    .btn-outline { background: transparent; color: var(--ink2); border: 1px solid var(--border); }
+    .btn-outline:hover { background: var(--bg); }
+    .btn-danger-soft { background: var(--danger-light); color: var(--danger); border: 1px solid rgba(192,57,43,0.2); }
+    .btn-danger-soft:hover { background: var(--danger); color: #fff; }
+    .btn-warning-soft { background: var(--warning-light); color: var(--warning); border: 1px solid rgba(217,119,6,0.2); }
+    .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 6px; }
+    .act-btn { padding: 6px 9px; border-radius: 7px; border: 1px solid var(--border); background: var(--surface); color: var(--ink2); cursor: pointer; font-size: 12px; display: inline-flex; align-items: center; transition: all 0.15s; }
+    .act-btn:hover { background: var(--bg); }
+    .act-btn.del:hover { background: var(--danger-light); color: var(--danger); border-color: rgba(192,57,43,0.2); }
+    .act-btn.edit:hover { background: var(--gold-light); color: var(--gold); border-color: rgba(32,75,113,0.2); }
+
+    /* STAT CARDS */
+    .stat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; display: flex; align-items: center; gap: 16px; box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s; }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.7px; font-weight: 600; color: var(--ink3); }
+    .stat-val { font-family: var(--font-display); font-size: 28px; line-height: 1.1; margin-top: 2px; color: var(--ink); }
+    .stat-sub { font-size: 11px; color: var(--ink3); margin-top: 2px; }
+
+    /* LOW STOCK BANNER */
+    .alert-banner { background: var(--warning-light); border: 1px solid rgba(217,119,6,0.3); border-radius: var(--radius); padding: 12px 18px; display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+    .alert-banner i { color: var(--warning); font-size: 16px; flex-shrink: 0; }
+    .alert-banner span { font-size: 13px; color: #92400E; font-weight: 500; }
+    .alert-banner strong { color: var(--warning); }
+
+    /* CATEGORY CARDS */
+    .cat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+    .cat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); cursor: pointer; transition: all 0.2s; border-top: 3px solid transparent; }
+    .cat-card:hover, .cat-card.active { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .cat-card.active { border-top-color: var(--gold); background: linear-gradient(to bottom, rgba(32,75,113,0.04), var(--surface)); }
+    .cat-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; margin-bottom: 10px; }
+    .cat-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .cat-count { font-family: var(--font-display); font-size: 22px; color: var(--ink); margin-top: 2px; }
+    .cat-sub { font-size: 11px; color: var(--ink3); margin-top: 1px; }
+
+    /* TABLE CARD */
+    .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); margin-bottom: 24px; }
+    .card-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+    .card-head h3 { font-family: var(--font-display); font-size: 18px; font-weight: 400; color: var(--ink); display: flex; align-items: center; gap: 10px; }
+    .card-head-right { display: flex; gap: 8px; align-items: center; }
+    .rec-badge { font-family: var(--font-body); font-size: 12px; color: var(--ink3); background: var(--bg); border: 1px solid var(--border); padding: 3px 9px; border-radius: 99px; }
+
+    /* FILTER BAR */
+    .filter-bar { display: flex; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--bg); flex-wrap: wrap; align-items: center; }
+    .filter-bar select, .filter-bar input { height: 34px; padding: 0 12px; border-radius: 7px; border: 1.5px solid var(--border); background: var(--surface); font-family: var(--font-body); font-size: 12.5px; color: var(--ink); outline: none; transition: border-color 0.2s; }
+    .filter-bar select:focus, .filter-bar input:focus { border-color: var(--gold); }
+    .filter-bar input { min-width: 200px; }
+
+    /* TABLE */
+    .tscroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th { background: var(--primary-color); color: rgba(255,255,255,0.75); padding: 11px 14px; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.7px; font-weight: 600; text-align: left; white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--bg); }
+    tbody td { padding: 11px 14px; font-size: 13px; vertical-align: middle; }
+
+    .item-cell { display: flex; align-items: center; gap: 10px; }
+    .item-icon { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .item-name { font-weight: 600; color: var(--ink); }
+    .item-sub { font-size: 11px; color: var(--ink3); }
+    .item-id { font-family: monospace; font-size: 11.5px; color: var(--ink3); }
+
+    .sp { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; }
+    .sp-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+    .sp-good    { background: var(--teal-light); color: var(--teal); }
+    .sp-low     { background: var(--warning-light); color: var(--warning); }
+    .sp-out     { background: var(--danger-light); color: var(--danger); }
+    .sp-ordered { background: #EEF4FF; color: #3B82F6; }
+
+    .stock-bar { display: flex; align-items: center; gap: 8px; }
+    .strack { width: 70px; height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; flex-shrink: 0; }
+    .sfill { height: 100%; border-radius: 99px; }
+    .sval { font-size: 12.5px; font-weight: 600; color: var(--ink2); }
+
+    .act-group { display: flex; gap: 4px; justify-content: center; }
+
+    /* TWO COL BOTTOM */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .mini-table td { padding: 8px 14px; }
+    .mini-table thead th { padding: 9px 14px; }
+
+    /* MODAL */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(26,26,24,0.5); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--surface); border-radius: 16px; box-shadow: var(--shadow-lg); width: 560px; max-width: 95vw; overflow: hidden; animation: mIn 0.25s ease; border: 1px solid var(--border); max-height: 90vh; display: flex; flex-direction: column; }
+    @keyframes mIn { from { opacity:0; transform:translateY(14px) scale(0.98); } }
+    .mhead { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: linear-gradient(to right, rgba(32,75,113,0.05), transparent); flex-shrink: 0; }
+    .mhead h3 { font-family: var(--font-display); font-size: 20px; color: var(--ink); font-weight: 400; }
+    .mclose { width: 28px; height: 28px; border-radius: 7px; background: var(--bg); border: 1px solid var(--border); color: var(--ink3); cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    .mclose:hover { background: var(--danger-light); color: var(--danger); }
+    .mbody { padding: 22px; overflow-y: auto; }
+    .mfoot { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; background: var(--bg); flex-shrink: 0; }
+    .fg { margin-bottom: 14px; }
+    .fl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--ink2); display: block; margin-bottom: 5px; }
+    .fc { background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 9px 13px; font-family: var(--font-body); font-size: 13px; color: var(--ink); outline: none; width: 100%; transition: border-color 0.2s; }
+    .fc:focus { border-color: var(--gold); background: var(--surface); }
+    .fc::placeholder { color: var(--ink3); }
+    .frow2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .frow3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .toast-host { position: fixed; top: 16px; right: 16px; z-index: 2100; display: flex; flex-direction: column; gap: 8px; }
+    .toast { min-width: 260px; max-width: 360px; padding: 10px 12px; border-radius: 8px; color: #fff; font-size: 13px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18); animation: toastIn 0.2s ease; }
+    .toast.info { background: #2d9cdb; }
+    .toast.success { background: #27ae60; }
+    .toast.error { background: #e74c3c; }
+    @keyframes toastIn { from { transform: translateY(-8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    input[type="checkbox"] { accent-color: var(--gold); cursor: pointer; }
+  </style>
+</head>
+<body>
+<div id="app-header"></div>
+<div class="page-content">
+
+      <div class="page-header">
+        <div>
+          <h1>Inventory <em>Management</em></h1>
+          <p>Track network equipment, cables, and consumables for Promee Internet</p>
+        </div>
+        <div style="display:flex;gap:8px">
+          <input class="fc" type="date" id="reportFrom" style="width:150px;padding:0 8px;height:36px" title="Report from date" />
+          <input class="fc" type="date" id="reportTo" style="width:150px;padding:0 8px;height:36px" title="Report to date" />
+          <button class="btn btn-outline" onclick="openInventoryReport('export')"><i class="fa-solid fa-file-export"></i> Export</button>
+          <button class="btn btn-outline" onclick="openInventoryReport('print')"><i class="fa-solid fa-print"></i> Print</button>
+          <button class="btn btn-gold" onclick="openModal('addModal')"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-icon" style="background:#EEF4FF;color:#3B82F6"><i class="fa-solid fa-boxes-stacked"></i></div><div><div class="stat-label">Total Items</div><div class="stat-val" id="statTotalItems">0</div><div class="stat-sub">Across all categories</div></div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:#ECFDF5;color:#10B981"><i class="fa-solid fa-circle-check"></i></div><div><div class="stat-label">In Stock</div><div class="stat-val" id="statInStock">0</div><div class="stat-sub">Sufficient quantity</div></div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:#FEF3C7;color:#D97706"><i class="fa-solid fa-triangle-exclamation"></i></div><div><div class="stat-label">Low Stock</div><div class="stat-val" id="statLowStock">0</div><div class="stat-sub">Needs reorder soon</div></div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:#FDECEA;color:#C0392B"><i class="fa-solid fa-ban"></i></div><div><div class="stat-label">Out of Stock</div><div class="stat-val" id="statOutStock">0</div><div class="stat-sub">Reorder required</div></div></div>
+      </div>
+
+      <!-- Low stock alert -->
+      <div class="alert-banner">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span id="lowStockBannerText">Checking low stock items...</span>
+      </div>
+
+      <!-- Category Cards -->
+      <div class="cat-row">
+        <div class="cat-card active" onclick="filterCat(this,'all')">
+          <div class="cat-icon" style="background:#EEF4FF;color:#3B82F6"><i class="fa-solid fa-layer-group"></i></div>
+          <div class="cat-name">All Items</div>
+          <div class="cat-count">148</div>
+          <div class="cat-sub">Total inventory</div>
+        </div>
+        <div class="cat-card" onclick="filterCat(this,'Network')">
+          <div class="cat-icon" style="background:#ECFDF5;color:#10B981"><i class="fa-solid fa-network-wired"></i></div>
+          <div class="cat-name">Network Equipment</div>
+          <div class="cat-count">42</div>
+          <div class="cat-sub">Routers, switches, OLT</div>
+        </div>
+        <div class="cat-card" onclick="filterCat(this,'Cable')">
+          <div class="cat-icon" style="background:#FFF7ED;color:#F59E0B"><i class="fa-solid fa-ethernet"></i></div>
+          <div class="cat-name">Cables & Fiber</div>
+          <div class="cat-count">58</div>
+          <div class="cat-sub">Fiber, LAN, coaxial</div>
+        </div>
+        <div class="cat-card" onclick="filterCat(this,'Consumable')">
+          <div class="cat-icon" style="background:#FDF4FF;color:#A855F7"><i class="fa-solid fa-toolbox"></i></div>
+          <div class="cat-name">Consumables</div>
+          <div class="cat-count">48</div>
+          <div class="cat-sub">Connectors, tools, misc</div>
+        </div>
+      </div>
+
+      <!-- Inventory Table -->
+      <div class="table-card">
+        <div class="card-head">
+          <h3><i class="fa-solid fa-table-list" style="font-size:15px;color:var(--ink3)"></i> Item List <span class="rec-badge" id="recBadge">14 items</span></h3>
+          <div class="card-head-right">
+            <button class="btn btn-outline btn-sm" onclick="openStockMovementPrompt()"><i class="fa-solid fa-arrow-down-up-across-line"></i> Stock In/Out</button>
+            <button class="btn btn-gold btn-sm" onclick="openModal('addModal')"><i class="fa-solid fa-plus"></i> Add Item</button>
+          </div>
+        </div>
+        <div class="filter-bar">
+          <select id="fCat" onchange="scheduleLoadInventory(true)"><option value="">All Categories</option><option value="Network">Network Equipment</option><option value="Cable">Cables & Fiber</option><option value="Consumable">Consumables</option></select>
+          <select id="fStatus" onchange="scheduleLoadInventory(true)"><option value="">All Status</option><option value="critical">Critical (Low + Out)</option><option value="good">In Stock</option><option value="low">Low Stock</option><option value="out">Out of Stock</option><option value="ordered">Ordered</option></select>
+          <input type="text" id="fQ" placeholder="Search item name or SKU..." oninput="scheduleLoadInventory(true)" style="flex:1;max-width:280px">
+        </div>
+        <div class="tscroll">
+          <table>
+            <thead><tr>
+              <th>Item</th><th>SKU</th><th>Category</th><th>Unit</th>
+              <th>In Stock</th><th>Min Level</th><th>Unit Cost (৳)</th><th>Total Value (৳)</th>
+              <th>Status</th><th style="text-align:center">Actions</th>
+            </tr></thead>
+            <tbody id="invTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Bottom two-col: Recent Activity + Top Categories by Value -->
+      <div class="two-col">
+        <div class="table-card">
+          <div class="card-head"><h3><i class="fa-solid fa-clock-rotate-left" style="font-size:14px;color:var(--ink3)"></i> Recent Stock Activity</h3></div>
+          <table class="mini-table">
+            <thead><tr><th>Item</th><th>Type</th><th>Qty</th><th>By</th><th>Date</th></tr></thead>
+            <tbody id="activityTbody"></tbody>
+          </table>
+        </div>
+
+        <div class="table-card">
+          <div class="card-head"><h3><i class="fa-solid fa-chart-bar" style="font-size:14px;color:var(--ink3)"></i> Value by Category</h3></div>
+          <div id="valueByCategoryBox" style="padding:20px 22px;display:flex;flex-direction:column;gap:12px"></div>
+        </div>
+      </div>
+
+</div>
+
+<div id="toastHost" class="toast-host"></div>
+
+<!-- Add Item Modal -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <div class="mhead"><h3>Add Inventory Item</h3><button class="mclose" onclick="closeModal('addModal')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="mbody">
+      <div class="frow2">
+        <div class="fg"><label class="fl">Item Name *</label><input class="fc" id="itemName" type="text" placeholder="e.g. MikroTik RB760iGS"></div>
+        <div class="fg"><label class="fl">SKU / Item Code</label><input class="fc" id="itemCode" type="text" placeholder="Auto-generated by system" disabled></div>
+      </div>
+      <div class="frow2">
+        <div class="fg"><label class="fl">Category *</label><select class="fc" id="itemCategory"><option value="">Select</option><option>Network Equipment</option><option>Cables & Fiber</option><option>Consumables</option></select></div>
+        <div class="fg"><label class="fl">Unit</label><select class="fc" id="itemUnit"><option>Piece</option><option>Meter</option><option>Roll (100m)</option><option>Box</option><option>Set</option></select></div>
+      </div>
+      <div class="frow3">
+        <div class="fg"><label class="fl">Opening Qty</label><input class="fc" id="itemOpeningQty" type="number" placeholder="0" min="0"></div>
+        <div class="fg"><label class="fl">Min Stock Level</label><input class="fc" id="itemMinStock" type="number" placeholder="5" min="0"></div>
+        <div class="fg"><label class="fl">Unit Cost (BDT)</label><input class="fc" id="itemUnitCost" type="number" placeholder="0" min="0"></div>
+      </div>
+      <div class="fg"><label class="fl">Supplier</label><select class="fc" id="itemSupplier"><option value="">Select Supplier</option><option>Tech Galaxy BD</option><option>Network Plus Dhaka</option><option>ISP Supplies Ltd</option><option>Direct Import</option></select></div>
+      <div class="fg"><label class="fl">Notes / Specifications</label><textarea class="fc" id="itemNotes" rows="2" placeholder="Model number, specs, warranty..."></textarea></div>
+    </div>
+    <div class="mfoot">
+      <button class="btn btn-outline" onclick="closeModal('addModal')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveItem()"><i class="fa-solid fa-check"></i> Save Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit/View Modal -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="mhead"><h3 id="editTitle">Edit Item</h3><button class="mclose" onclick="closeModal('editModal')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="mbody" id="editBody"></div>
+    <div class="mfoot">
+      <button class="btn btn-outline" onclick="closeModal('editModal')">Cancel</button>
+      <button class="btn btn-gold" id="editSaveBtn"><i class="fa-solid fa-save"></i> Save Changes</button>
+    </div>
+  </div>
+</div>
+
+    <script>
+      var inventoryItems = [];
+      var inventoryAllItems = [];
+      var activeCategory = "all";
+      var editingItemId = 0;
+      var inventoryFilterDebounce = null;
+
+      function esc(v) {
+        return String(v == null ? "" : v)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function fmtMoney(n) {
+        return Number(n || 0).toLocaleString("en-BD", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      }
+
+      function showToast(message, type) {
+        var host = document.getElementById("toastHost");
+        var node = document.createElement("div");
+        node.className = "toast " + (type || "info");
+        node.textContent = message;
+        host.appendChild(node);
+        setTimeout(function () {
+          node.remove();
+        }, 3200);
+      }
+
+      function itemStatus(item) {
+        var stock = Number(item.current_stock || 0);
+        var min = Number(item.min_stock || 0);
+        if (stock <= 0) return "out";
+        if (stock <= min) return "low";
+        return "good";
+      }
+
+      function statusBadge(status) {
+        if (status === "out") {
+          return '<span class="sp sp-out"><span class="sp-dot"></span>Out of Stock</span>';
+        }
+        if (status === "low") {
+          return '<span class="sp sp-low"><span class="sp-dot"></span>Low Stock</span>';
+        }
+        return '<span class="sp sp-good"><span class="sp-dot"></span>In Stock</span>';
+      }
+
+      function categoryMatches(key, categoryName) {
+        if (!key || key === "all") return true;
+        var c = (categoryName || "").toLowerCase();
+        if (key === "Network") return c.indexOf("network") >= 0;
+        if (key === "Cable") return c.indexOf("cable") >= 0 || c.indexOf("fiber") >= 0;
+        if (key === "Consumable") return c.indexOf("consum") >= 0 || c.indexOf("tool") >= 0 || c.indexOf("misc") >= 0;
+        return true;
+      }
+
+      async function apiJson(path, opts) {
+        var res = await fetch(path, Object.assign({ credentials: "include" }, opts || {}));
+        var data;
+        try {
+          data = await res.json();
+        } catch (e) {
+          throw new Error("Server returned an invalid response");
+        }
+        if (!res.ok || !data.ok) {
+          throw new Error((data && data.message) || "Request failed");
+        }
+        return data;
+      }
+
+      function filteredItems() {
+        var statusFilter = document.getElementById("fStatus").value;
+
+        return inventoryItems.filter(function (item) {
+          var status = itemStatus(item);
+
+          return (
+            categoryMatches(activeCategory, item.category_name) &&
+            (!statusFilter || status === statusFilter)
+          );
+        });
+      }
+
+      function serverCategoryFromFilters() {
+        var direct = document.getElementById("fCat").value;
+        var key = direct || activeCategory;
+        if (key === "Network") return "Network Equipment";
+        if (key === "Cable") return "Cables & Fiber";
+        if (key === "Consumable") return "Consumables";
+        return "";
+      }
+
+      function updateOverviewCards() {
+        var sourceItems = inventoryAllItems.length ? inventoryAllItems : inventoryItems;
+        var total = sourceItems.length;
+        var inStock = 0;
+        var low = 0;
+        var out = 0;
+        sourceItems.forEach(function (it) {
+          var st = itemStatus(it);
+          if (st === "good") inStock += 1;
+          if (st === "low") low += 1;
+          if (st === "out") out += 1;
+        });
+
+        document.getElementById("statTotalItems").textContent = String(total);
+        document.getElementById("statInStock").textContent = String(inStock);
+        document.getElementById("statLowStock").textContent = String(low);
+        document.getElementById("statOutStock").textContent = String(out);
+
+        var catCards = document.querySelectorAll(".cat-card");
+        if (catCards.length >= 4) {
+          catCards[0].querySelector(".cat-count").textContent = String(total);
+          catCards[1].querySelector(".cat-count").textContent = String(
+            sourceItems.filter(function (it) {
+              return categoryMatches("Network", it.category_name);
+            }).length,
+          );
+          catCards[2].querySelector(".cat-count").textContent = String(
+            sourceItems.filter(function (it) {
+              return categoryMatches("Cable", it.category_name);
+            }).length,
+          );
+          catCards[3].querySelector(".cat-count").textContent = String(
+            sourceItems.filter(function (it) {
+              return categoryMatches("Consumable", it.category_name);
+            }).length,
+          );
+        }
+
+        updateLowStockBanner();
+        renderValueByCategory();
+      }
+
+      function updateLowStockBanner() {
+        var sourceItems = inventoryAllItems.length ? inventoryAllItems : inventoryItems;
+        var lowItems = sourceItems
+          .filter(function (it) { return itemStatus(it) === "low" || itemStatus(it) === "out"; })
+          .sort(function (a, b) { return Number(a.current_stock || 0) - Number(b.current_stock || 0); })
+          .slice(0, 3);
+
+        var textEl = document.getElementById("lowStockBannerText");
+        if (!textEl) return;
+
+        if (!sourceItems.length) {
+          textEl.innerHTML = "No inventory items available yet.";
+          return;
+        }
+
+        var totalItems = sourceItems.length;
+        var outItems = sourceItems.filter(function (it) { return itemStatus(it) === "out"; });
+        var lowOnlyItems = sourceItems.filter(function (it) { return itemStatus(it) === "low"; });
+        var criticalCount = outItems.length + lowOnlyItems.length;
+        var criticalRatio = totalItems > 0 ? (criticalCount / totalItems) : 0;
+
+        if (criticalCount <= 0) {
+          textEl.innerHTML = '<strong>Healthy stock.</strong> All items are above minimum stock levels.';
+          return;
+        }
+
+        var itemText = lowItems
+          .map(function (it) {
+            return esc(it.item_name || "Item") + " (" + Number(it.current_stock || 0) + " left)";
+          })
+          .join(", ");
+
+        if (outItems.length > 0 && criticalRatio >= 0.5) {
+          textEl.innerHTML =
+            "<strong>Critical alert.</strong> " +
+            criticalCount + " of " + totalItems + " items need urgent restock (" + outItems.length + " out of stock). " +
+            itemText +
+            '. <a href="#" onclick="applyReorderFilter(event)" style="color:var(--warning);text-decoration:underline;font-weight:600">Reorder now -></a>';
+          return;
+        }
+
+        if (outItems.length > 0) {
+          textEl.innerHTML =
+            "<strong>Action required.</strong> " + outItems.length + " item(s) are out of stock and " + lowOnlyItems.length + " are low: " +
+            itemText +
+            '. <a href="#" onclick="applyReorderFilter(event)" style="color:var(--warning);text-decoration:underline;font-weight:600">Reorder now -></a>';
+          return;
+        }
+
+        textEl.innerHTML =
+          "<strong>Restock soon.</strong> " + lowOnlyItems.length + " item(s) are below minimum stock: " +
+          itemText +
+          '. <a href="#" onclick="applyReorderFilter(event)" style="color:var(--warning);text-decoration:underline;font-weight:600">Reorder now -></a>';
+      }
+
+      function renderValueByCategory() {
+        var sourceItems = inventoryAllItems.length ? inventoryAllItems : inventoryItems;
+        var box = document.getElementById("valueByCategoryBox");
+        if (!box) return;
+
+        var categories = [
+          { key: "Network", label: "Network Equipment", color: "#3B82F6" },
+          { key: "Cable", label: "Cables & Fiber", color: "#F59E0B" },
+          { key: "Consumable", label: "Consumables", color: "#A855F7" },
+        ];
+
+        var values = categories.map(function (cat) {
+          var value = sourceItems
+            .filter(function (it) { return categoryMatches(cat.key, it.category_name); })
+            .reduce(function (sum, it) {
+              return sum + (Number(it.current_stock || 0) * Number(it.unit_cost || 0));
+            }, 0);
+          return { label: cat.label, color: cat.color, value: value };
+        });
+
+        var totalValue = values.reduce(function (sum, row) { return sum + row.value; }, 0);
+
+        var html = values.map(function (row) {
+          var pct = totalValue > 0 ? Math.round((row.value / totalValue) * 100) : 0;
+          return '<div>' +
+            '<div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px;color:var(--ink2);font-weight:500">' + esc(row.label) + '</span><span style="font-size:13px;font-weight:700;color:var(--ink)">BDT ' + fmtMoney(row.value) + '</span></div>' +
+            '<div style="height:8px;background:var(--border);border-radius:99px;overflow:hidden"><div style="width:' + pct + '%;height:100%;background:' + row.color + ';border-radius:99px"></div></div>' +
+          '</div>';
+        }).join("");
+
+        html += '<div style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px">' +
+          '<div style="display:flex;justify-content:space-between"><span style="font-size:13px;font-weight:700;color:var(--ink)">Total Inventory Value</span><span style="font-family:var(--font-display);font-size:20px;color:var(--gold)">BDT ' + fmtMoney(totalValue) + '</span></div>' +
+          '</div>';
+
+        box.innerHTML = html;
+      }
+
+      function applyReorderFilter(event) {
+        if (event) event.preventDefault();
+        document.getElementById("fStatus").value = "critical";
+        showToast("Showing critical stock items", "info");
+        scheduleLoadInventory();
+        var tableCard = document.querySelector(".table-card");
+        if (tableCard) tableCard.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function renderTable() {
+        var rows = filteredItems();
+        var body = document.getElementById("invTbody");
+        document.getElementById("recBadge").textContent = rows.length + " items";
+
+        if (!rows.length) {
+          body.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--ink3)">No inventory items found.</td></tr>';
+          return;
+        }
+
+        body.innerHTML = rows
+          .map(function (item) {
+            var stock = Number(item.current_stock || 0);
+            var min = Number(item.min_stock || 0);
+            var cost = Number(item.unit_cost || 0);
+            var value = stock * cost;
+            var status = itemStatus(item);
+            var pct = min <= 0 ? 100 : Math.max(0, Math.min(100, Math.round((stock / min) * 100)));
+            var fillColor = status === "out" ? "#C0392B" : status === "low" ? "#D97706" : "#10B981";
+
+            return (
+              "<tr>" +
+              '<td><div class="item-cell"><div class="item-icon" style="background:#EEF4FF;color:#3B82F6"><i class="fa-solid fa-box"></i></div><div><div class="item-name">' +
+              esc(item.item_name) +
+              '</div><div class="item-sub">' +
+              esc(item.category_name || "-") +
+              "</div></div></div></td>" +
+              '<td><span class="item-id">' +
+              esc(item.item_code || "-") +
+              "</span></td>" +
+              "<td>" + esc(item.category_name || "-") + "</td>" +
+              "<td>" + esc(item.unit_label || "-") + "</td>" +
+              '<td><div class="stock-bar"><div class="strack"><div class="sfill" style="width:' +
+              pct +
+              "%;background:" +
+              fillColor +
+              '"></div></div><span class="sval">' +
+              stock +
+              "</span></div></td>" +
+              "<td>" + min + "</td>" +
+              "<td>" + fmtMoney(cost) + "</td>" +
+              "<td>" + fmtMoney(value) + "</td>" +
+              "<td>" + statusBadge(status) + "</td>" +
+              '<td><div class="act-group">' +
+              '<button class="act-btn edit" title="View" onclick="viewItem(' + Number(item.id) + ')"><i class="fa-solid fa-eye"></i></button>' +
+              '<button class="act-btn edit" title="Edit" onclick="editItem(' + Number(item.id) + ')"><i class="fa-solid fa-pen"></i></button>' +
+              '<button class="act-btn" title="Stock In" onclick="recordMovement(' + Number(item.id) + ',\'IN\')"><i class="fa-solid fa-plus"></i></button>' +
+              '<button class="act-btn" title="Stock Out" onclick="recordMovement(' + Number(item.id) + ',\'OUT\')"><i class="fa-solid fa-minus"></i></button>' +
+              '<button class="act-btn del" title="Delete" onclick="deleteItem(' + Number(item.id) + ')"><i class="fa-solid fa-trash"></i></button>' +
+              "</div></td>" +
+              "</tr>"
+            );
+          })
+          .join("");
+      }
+
+      function renderActivity(movements) {
+        var tbody = document.getElementById("activityTbody");
+        if (!movements.length) {
+          tbody.innerHTML = '<tr><td colspan="5" style="color:var(--ink3)">No recent activity.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = movements
+          .map(function (m) {
+            var isIn = String(m.movement_type || "") === "IN";
+            var chipStyle = isIn
+              ? "background:#ECFDF5;color:#10B981;padding:2px 8px;border-radius:5px;font-size:11px;font-weight:600"
+              : "background:#FDECEA;color:#C0392B;padding:2px 8px;border-radius:5px;font-size:11px;font-weight:600";
+            var qty = Number(m.quantity || 0);
+            var date = new Date(m.created_at || Date.now());
+            var by = m.created_by_employee_id ? "Emp #" + m.created_by_employee_id : "System";
+
+            return (
+              "<tr>" +
+              "<td>" + esc(m.item_name || "-") + "</td>" +
+              '<td><span style="' + chipStyle + '">' + esc(m.movement_type || "-") + "</span></td>" +
+              "<td>" + (isIn ? "+" : "-") + qty + "</td>" +
+              "<td>" + esc(by) + "</td>" +
+              '<td style="color:var(--ink3);font-size:12px">' + date.toLocaleDateString() + "</td>" +
+              "</tr>"
+            );
+          })
+          .join("");
+      }
+
+      async function loadInventory() {
+        try {
+          var params = new URLSearchParams();
+          params.set("limit", "500");
+
+          var q = (document.getElementById("fQ").value || "").trim();
+          var category = serverCategoryFromFilters();
+          var stockStatus = document.getElementById("fStatus").value;
+          if (q) params.set("search", q);
+          if (category) params.set("category", category);
+          if (stockStatus === "good" || stockStatus === "critical" || stockStatus === "low" || stockStatus === "out") {
+            params.set("stock_status", stockStatus);
+          }
+
+          var data = await apiJson("backend/public/inventory/list.php?" + params.toString());
+          inventoryItems = data.items || [];
+
+          var hasFilter = !!(q || category || stockStatus);
+          if (hasFilter) {
+            var allData = await apiJson("backend/public/inventory/list.php?limit=500");
+            inventoryAllItems = allData.items || [];
+          } else {
+            inventoryAllItems = inventoryItems.slice();
+          }
+
+          updateOverviewCards();
+          renderTable();
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      }
+
+      function scheduleLoadInventory() {
+        clearTimeout(inventoryFilterDebounce);
+        inventoryFilterDebounce = setTimeout(function () {
+          loadInventory();
+        }, 200);
+      }
+
+      async function loadActivity() {
+        try {
+          var data = await apiJson("backend/public/inventory/activity.php?limit=10");
+          renderActivity(data.movements || []);
+        } catch (err) {
+          document.getElementById("activityTbody").innerHTML = '<tr><td colspan="5" style="color:var(--danger)">' + esc(err.message) + "</td></tr>";
+        }
+      }
+
+      function openModal(id) {
+        document.getElementById(id).classList.add("open");
+      }
+
+      function closeModal(id) {
+        document.getElementById(id).classList.remove("open");
+      }
+
+      function resetAddForm() {
+        editingItemId = 0;
+        document.getElementById("itemName").value = "";
+        document.getElementById("itemCode").value = "Auto-generated";
+        document.getElementById("itemCategory").value = "";
+        document.getElementById("itemUnit").value = "Piece";
+        document.getElementById("itemOpeningQty").value = "";
+        document.getElementById("itemMinStock").value = "";
+        document.getElementById("itemUnitCost").value = "";
+        document.getElementById("itemSupplier").value = "";
+        document.getElementById("itemNotes").value = "";
+      }
+
+      async function saveItem() {
+        var itemName = document.getElementById("itemName").value.trim();
+        var categoryName = document.getElementById("itemCategory").value.trim();
+        var unitLabel = document.getElementById("itemUnit").value.trim();
+        var minStock = Number(document.getElementById("itemMinStock").value || 0);
+        var openingQty = Number(document.getElementById("itemOpeningQty").value || 0);
+        var unitCost = Number(document.getElementById("itemUnitCost").value || 0);
+
+        if (!itemName) {
+          showToast("Item name is required", "error");
+          return;
+        }
+
+        try {
+          await apiJson("backend/public/inventory/upsert.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              id: editingItemId || undefined,
+              item_name: itemName,
+              category_name: categoryName,
+              unit_label: unitLabel || "Piece",
+              min_stock: minStock,
+              opening_qty: openingQty,
+              opening_unit_cost: unitCost,
+              active_status: 1,
+            }),
+          });
+
+          closeModal("addModal");
+          resetAddForm();
+          await loadInventory();
+          await loadActivity();
+          showToast("Inventory item saved", "success");
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      }
+
+      function findItem(id) {
+        return inventoryItems.find(function (it) {
+          return Number(it.id) === Number(id);
+        });
+      }
+
+      function renderEditBody(item, readOnly) {
+        var dis = readOnly ? "disabled" : "";
+        document.getElementById("editBody").innerHTML =
+          '<div class="frow2">' +
+          '<div class="fg"><label class="fl">Item Name</label><input class="fc" id="e_item_name" ' + dis + ' value="' + esc(item.item_name || "") + '"></div>' +
+          '<div class="fg"><label class="fl">Item Code</label><input class="fc" disabled value="' + esc(item.item_code || "") + '"></div>' +
+          "</div>" +
+          '<div class="frow2">' +
+          '<div class="fg"><label class="fl">Category</label><input class="fc" id="e_category_name" ' + dis + ' value="' + esc(item.category_name || "") + '"></div>' +
+          '<div class="fg"><label class="fl">Unit</label><input class="fc" id="e_unit_label" ' + dis + ' value="' + esc(item.unit_label || "") + '"></div>' +
+          "</div>" +
+          '<div class="frow3">' +
+          '<div class="fg"><label class="fl">Current Stock</label><input class="fc" disabled value="' + esc(item.current_stock || 0) + '"></div>' +
+          '<div class="fg"><label class="fl">Min Stock</label><input class="fc" id="e_min_stock" type="number" min="0" ' + dis + ' value="' + esc(item.min_stock || 0) + '"></div>' +
+          '<div class="fg"><label class="fl">Unit Cost (BDT)</label><input class="fc" disabled value="' + esc(fmtMoney(item.unit_cost || 0)) + '"></div>' +
+          "</div>";
+
+        document.getElementById("editTitle").textContent = readOnly ? "Item Details" : "Edit Item";
+        var saveBtn = document.getElementById("editSaveBtn");
+        saveBtn.style.display = readOnly ? "none" : "inline-flex";
+      }
+
+      async function viewItem(id) {
+        var item = findItem(id);
+        if (!item) return;
+        renderEditBody(item, true);
+        openModal("editModal");
+      }
+
+      async function editItem(id) {
+        var item = findItem(id);
+        if (!item) return;
+        editingItemId = Number(id);
+        renderEditBody(item, false);
+        openModal("editModal");
+      }
+
+      async function saveEditItem() {
+        if (!editingItemId) return;
+        var itemName = document.getElementById("e_item_name").value.trim();
+        var categoryName = document.getElementById("e_category_name").value.trim();
+        var unitLabel = document.getElementById("e_unit_label").value.trim();
+        var minStock = Number(document.getElementById("e_min_stock").value || 0);
+
+        if (!itemName) {
+          showToast("Item name is required", "error");
+          return;
+        }
+
+        try {
+          await apiJson("backend/public/inventory/upsert.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              id: editingItemId,
+              item_name: itemName,
+              category_name: categoryName,
+              unit_label: unitLabel,
+              min_stock: minStock,
+              active_status: 1,
+            }),
+          });
+          closeModal("editModal");
+          await loadInventory();
+          showToast("Inventory item updated", "success");
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      }
+
+      async function deleteItem(id) {
+        if (!confirm("Delete this inventory item?")) return;
+        try {
+          await apiJson("backend/public/inventory/delete.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: Number(id) }),
+          });
+          await loadInventory();
+          await loadActivity();
+          showToast("Inventory item deleted", "success");
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      }
+
+      async function recordMovement(id, movementType) {
+        var qtyRaw = prompt("Enter quantity for " + movementType + ":", "1");
+        if (qtyRaw === null) return;
+        var qty = Number(qtyRaw);
+        if (!qty || qty <= 0) {
+          showToast("Quantity must be greater than zero", "error");
+          return;
+        }
+
+        var unitCost = 0;
+        if (movementType === "IN") {
+          unitCost = Number(prompt("Enter unit cost (optional):", "0") || 0);
+        }
+
+        try {
+          await apiJson("backend/public/inventory/move_stock.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              inventory_item_id: Number(id),
+              movement_type: movementType,
+              quantity: qty,
+              unit_cost: unitCost,
+              reference_label: "UI",
+            }),
+          });
+          await loadInventory();
+          await loadActivity();
+          showToast("Stock movement recorded", "success");
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      }
+
+      function openStockMovementPrompt() {
+        var itemIdRaw = prompt("Enter item ID for stock movement:", "");
+        if (itemIdRaw === null || !itemIdRaw.trim()) return;
+        var typeRaw = prompt("Enter movement type (IN/OUT):", "IN");
+        if (!typeRaw) return;
+        var type = String(typeRaw).trim().toUpperCase();
+        if (type !== "IN" && type !== "OUT") {
+          showToast("Type must be IN or OUT", "error");
+          return;
+        }
+        recordMovement(Number(itemIdRaw), type);
+      }
+
+      function openInventoryReport(kind) {
+        var params = new URLSearchParams();
+        var reportFrom = document.getElementById("reportFrom").value;
+        var reportTo = document.getElementById("reportTo").value;
+        params.set("limit", "5000");
+
+        var q = (document.getElementById("fQ").value || "").trim();
+        var category = serverCategoryFromFilters();
+        if (q) params.set("search", q);
+        if (category) params.set("category", category);
+        if (reportFrom) params.set("date_from", reportFrom);
+        if (reportTo) params.set("date_to", reportTo);
+
+        if (kind === "print") {
+          window.open("backend/public/inventory/report_print.php?" + params.toString(), "_blank");
+          return;
+        }
+
+        window.location.href = "backend/public/inventory/report_export.php?" + params.toString();
+      }
+
+      function filterCat(el, key) {
+        activeCategory = key || "all";
+        document.querySelectorAll(".cat-card").forEach(function (card) {
+          card.classList.remove("active");
+        });
+        if (el) el.classList.add("active");
+        scheduleLoadInventory();
+      }
+
+      document.querySelectorAll(".modal-overlay").forEach(function (modal) {
+        modal.addEventListener("click", function (e) {
+          if (e.target === modal) closeModal(modal.id);
+        });
+      });
+
+      document.getElementById("editSaveBtn").addEventListener("click", saveEditItem);
+      resetAddForm();
+      loadInventory();
+      loadActivity();
+    </script>
+    <script src="assets/js/header-loader.js?v=20260328i"></script>
+  </body>
+</html>
+
+

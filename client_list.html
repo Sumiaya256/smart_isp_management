@@ -1,0 +1,744 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promee International - Client List</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <!-- FontAwesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+            <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <i class="fa-solid fa-circle-nodes"></i> Promee International
+      </div>
+      <ul class="menu">
+        <!-- Dashboard -->
+        <li>
+          <a href="index.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+        </li>
+
+        <!-- Client -->
+        <li class="has-submenu open">
+          <a href="#"
+            ><i class="fa-solid fa-user"></i> Client
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="new_request.html"
+                ><i class="fa-regular fa-circle"></i> New Request</a
+              >
+            </li>
+            <li>
+              <a href="add_new_client.html"
+                ><i class="fa-regular fa-circle"></i> Add New</a
+              >
+            </li>
+            <li>
+              <a href="client_list.html" class="active"
+                ><i class="fa-regular fa-circle"></i> Client List</a
+              >
+            </li>
+            <li>
+              <a href="left_client.html"
+                ><i class="fa-regular fa-circle"></i> Left Client</a
+              >
+            </li>
+            <li>
+              <a href="scheduler.html"
+                ><i class="fa-regular fa-circle"></i> Scheduler</a
+              >
+            </li>
+            <li>
+              <a href="change_request.html"
+                ><i class="fa-regular fa-circle"></i> Change Request</a
+              >
+            </li>
+            <li>
+              <a href="portal_manage.html"
+                ><i class="fa-regular fa-circle"></i> Portal Manage</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Billing -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-file-invoice-dollar"></i> Billing
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="billing.html"
+                ><i class="fa-regular fa-circle"></i> Billing</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Mikrotik Server -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-server"></i> Mikrotik Server
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="Bulk_Client_Import.html"
+                ><i class="fa-regular fa-circle"></i> Bulk Client Import</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- HR & Payroll (Your Part) -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-users-gear"></i> HR & Payroll
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="employee_list.html"
+                ><i class="fa-regular fa-circle"></i> Employee List</a
+              >
+            </li>
+            <li>
+              <a href="add_employee.html"
+                ><i class="fa-regular fa-circle"></i> Add Employee</a
+              >
+            </li>
+            <li>
+              <a href="attendance.html"
+                ><i class="fa-regular fa-circle"></i> Attendance</a
+              >
+            </li>
+            <li>
+              <a href="salary_sheet.html"
+                ><i class="fa-regular fa-circle"></i> Salary Sheet</a
+              >
+            </li>
+            <li>
+              <a href="department.html"
+                ><i class="fa-regular fa-circle"></i> Department</a
+              >
+            </li>
+            <li>
+              <a href="position.html"
+                ><i class="fa-regular fa-circle"></i> Position</a
+              >
+            </li>
+            <li>
+              <a href="payhead.html"
+                ><i class="fa-regular fa-circle"></i> Payhead</a
+              >
+            </li>
+            <li>
+              <a href="payroll.html"
+                ><i class="fa-regular fa-circle"></i> Payroll</a
+              >
+            </li>
+            <li>
+              <a href="resign_rule.html"
+                ><i class="fa-regular fa-circle"></i> Resign Rule</a
+              >
+            </li>
+            <li>
+              <a href="resignation.html"
+                ><i class="fa-regular fa-circle"></i> Resignation</a
+              >
+            </li>
+            <li>
+              <a href="rejoin.html"
+                ><i class="fa-regular fa-circle"></i> Rejoin</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Leave Management -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-door-open"></i> Leave Management
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="leave_management.html"
+                ><i class="fa-regular fa-circle"></i> Leave Management</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Events & Holidays -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-calendar-days"></i> Events & Holidays
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="events_holidays.html"
+                ><i class="fa-regular fa-circle"></i> Events & Holidays</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Support & Ticketing -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-headset"></i> Support & Ticketing
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="ticket_list.html"
+                ><i class="fa-regular fa-circle"></i> Ticket List</a
+              >
+            </li>
+            <li>
+              <a href="new_ticket.html"
+                ><i class="fa-regular fa-circle"></i> New Ticket</a
+              >
+            </li>
+            <li>
+              <a href="complain_list.html"
+                ><i class="fa-regular fa-circle"></i> Complain List</a
+              >
+            </li>
+            <li>
+              <a href="complain_category.html"
+                ><i class="fa-regular fa-circle"></i> Complain Category</a
+              >
+            </li>
+            <li>
+              <a href="support_team.html"
+                ><i class="fa-regular fa-circle"></i> Support Team</a
+              >
+            </li>
+            <li>
+              <a href="ticket_reports.html"
+                ><i class="fa-regular fa-circle"></i> Ticket Reports</a
+              >
+            </li>
+            <li>
+              <a href="service_history.html"
+                ><i class="fa-regular fa-circle"></i> Service History</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Task Management -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-list-check"></i> Task Management
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Purchase -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-basket-shopping"></i> Purchase
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Inventory -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-boxes-stacked"></i> Inventory
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Assets -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-laptop-medical"></i> Assets
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+
+        <!-- Income -->
+        <li class="has-submenu">
+          <a href="#"
+            ><i class="fa-solid fa-money-bill-trend-up"></i> Income
+            <i
+              class="fa-solid fa-caret-right"
+              style="float: right; font-size: 10px; margin-top: 5px"
+            ></i>
+          </a>
+          <ul class="submenu">
+            <li>
+              <a href="dropdown1.html"
+                ><i class="fa-regular fa-circle"></i> Dropdown 1</a
+              >
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+      <!-- Header -->
+      <header>
+        <div class="header-left">
+          <div class="sidebar-toggle"><i class="fa-solid fa-bars"></i></div>
+          <div class="search-box">
+            <input type="text" placeholder="Search Customer" />
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="monitor">
+            <i class="fa-solid fa-desktop"></i> Online Client Monitoring
+          </div>
+          <div class="releases">
+            <i class="fa-solid fa-wrench"></i> Releases
+            <span class="badge">0</span>
+          </div>
+          <div class="notifications">
+            <i class="fa-solid fa-bell"></i> <span class="badge">0</span>
+          </div>
+          <a href="login.html" class="header-btn"><i class="fa-solid fa-house"></i> Home</a>
+          <a href="login.html" class="header-btn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+          <div class="profile"><i class="fa-solid fa-user-circle"></i></div>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-content">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fa-solid fa-list"></i> Client List
+              <span
+                class="text-muted"
+                style="font-size: 12px; margin-left: 10px; font-weight: normal"
+                >View All Client</span
+              >
+            </div>
+            <div
+              style="
+                font-size: 12px;
+                color: #888;
+                float: right;
+                margin-top: -20px;
+              "
+            >
+              <i class="fa-solid fa-user"></i> Client > Client List
+            </div>
+          </div>
+
+          <!-- Top Action Buttons -->
+          <div
+            class="top-actions"
+            style="
+              display: flex;
+              justify-content: flex-end;
+              gap: 5px;
+              flex-wrap: wrap;
+              margin-bottom: 20px;
+            "
+          >
+            <button class="btn btn-navy">
+              <i class="fa-solid fa-file-excel"></i> Generate Excel
+            </button>
+            <button class="btn btn-navy">
+              <i class="fa-solid fa-file-pdf"></i> Generate Pdf
+            </button>
+            <button class="btn btn-navy">
+              <i class="fa-solid fa-right-left"></i> Bulk Status Change
+            </button>
+            <button class="btn btn-navy">
+              <i class="fa-solid fa-unlock"></i> Unbind All PPOE MAC Address
+            </button>
+            <button class="btn btn-navy">
+              <i class="fa-solid fa-lock"></i> Bind All PPOE MAC Address
+            </button>
+            <button class="btn btn-navy">
+              <i class="fa-solid fa-rotate"></i> Sync Clients & Servers
+            </button>
+          </div>
+
+          <!-- Filters -->
+          <div class="filters-container">
+            <div class="filter-row">
+              <div class="filter-group">
+                <label>SERVER</label>
+                <select>
+                  <option>Select</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>ZONE</label>
+                <select>
+                  <option>Select</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>SUB ZONE</label>
+                <select>
+                  <option>Select</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>BOX</label>
+                <select>
+                  <option>Select</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>CONNECTION TYPE</label>
+                <select>
+                  <option>Select</option>
+                </select>
+              </div>
+            </div>
+            <div class="filter-row">
+              <div class="filter-group">
+                <label>CLIENT TYPE</label>
+                <select>
+                  <option>Select</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>PROTOCOL TYPE</label>
+                <select>
+                  <option>Select</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>PACKAGE</label>
+                <select>
+                  <option>Select</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>B.STATUS</label>
+                <select>
+                  <option>Select</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>M.STATUS</label>
+                <select>
+                  <option>Select</option>
+                </select>
+              </div>
+            </div>
+            <div class="filter-row">
+              <div class="filter-group" style="flex: 1">
+                <label>CUSTOM STATUS</label>
+                <select>
+                  <option>Select</option>
+                </select>
+              </div>
+              <div class="filter-group" style="flex: 1">
+                <label>FROM DATE</label>
+                <input
+                  type="text"
+                  class="date-input"
+                  disabled
+                  style="background: #e9ecef"
+                />
+              </div>
+              <div class="filter-group" style="flex: 1">
+                <label>TO DATE</label>
+                <input
+                  type="text"
+                  class="date-input"
+                  disabled
+                  style="background: #e9ecef"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Table Controls -->
+          <div class="filter-section">
+            <div class="entries-select" style="margin-left: 0">
+              SHOW
+              <select
+                style="padding: 5px; border: 1px solid #ddd; border-radius: 3px"
+              >
+                <option>100</option>
+              </select>
+              ENTRIES
+            </div>
+
+            <div class="search-field">
+              SEARCH: <input type="text" placeholder="" />
+            </div>
+          </div>
+
+          <!-- Data Table -->
+          <div class="data-table-container">
+            <table class="client-table">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" /></th>
+                  <th>C.Code <i class="fa-solid fa-sort"></i></th>
+                  <th>ID/IP <i class="fa-solid fa-sort"></i></th>
+                  <th>Password</th>
+                  <th>Cus. Name</th>
+                  <th>Mobile</th>
+                  <th>Zone <i class="fa-solid fa-sort"></i></th>
+                  <th>Conn. Type</th>
+                  <th>Cus. Type</th>
+                  <th>Package/Speed</th>
+                  <th>M.Bill</th>
+                  <th>MAC Addrs</th>
+                  <th>Server</th>
+                  <th>B.Status</th>
+                  <th>M.Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Row 1 -->
+                <tr>
+                  <td><input type="checkbox" /></td>
+                  <td>ACT0005</td>
+                  <td>
+                    <div class="user-id">noc</div>
+                    <i class="fa-solid fa-circle status-dot grey"></i>
+                  </td>
+                  <td>*** <i class="fa-solid fa-eye text-blue"></i></td>
+                  <td>
+                    <div>noc</div>
+                    <i class="fa-solid fa-circle-info text-dark"></i>
+                  </td>
+                  <td>01760000004</td>
+                  <td>AT-Test</td>
+                  <td>Optical Fiber</td>
+                  <td>Home User</td>
+                  <td>10 Mbps/1000TK-Profile</td>
+                  <td>1000</td>
+                  <td><i class="fa-solid fa-rotate text-green"></i></td>
+                  <td>AT-NOC-TEST</td>
+                  <td>Active</td>
+                  <td>
+                    <label class="switch sm">
+                      <input type="checkbox" checked />
+                      <span class="slider round"></span>
+                    </label>
+                  </td>
+                  <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                </tr>
+                <!-- Row 2 -->
+                <tr>
+                  <td><input type="checkbox" /></td>
+                  <td>ACT0004</td>
+                  <td>
+                    <div class="user-id">shakil</div>
+                    <i class="fa-solid fa-circle status-dot grey"></i>
+                  </td>
+                  <td>****** <i class="fa-solid fa-eye text-blue"></i></td>
+                  <td>
+                    <div>shakil</div>
+                    <i class="fa-solid fa-circle-info text-dark"></i>
+                  </td>
+                  <td>01760000003</td>
+                  <td>AT-Test</td>
+                  <td>Optical Fiber</td>
+                  <td>Home User</td>
+                  <td>10 Mbps/1000TK-Profile</td>
+                  <td>1000</td>
+                  <td><i class="fa-solid fa-rotate text-green"></i></td>
+                  <td>AT-NOC-TEST</td>
+                  <td>Active</td>
+                  <td>
+                    <label class="switch sm">
+                      <input type="checkbox" checked />
+                      <span class="slider round"></span>
+                    </label>
+                  </td>
+                  <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                </tr>
+                <!-- Row 3 -->
+                <tr>
+                  <td><input type="checkbox" /></td>
+                  <td>ACT0003</td>
+                  <td>
+                    <div class="user-id">test</div>
+                    <i class="fa-solid fa-circle status-dot grey"></i>
+                  </td>
+                  <td>**** <i class="fa-solid fa-eye text-blue"></i></td>
+                  <td>
+                    <div>test</div>
+                    <i class="fa-solid fa-circle-info text-dark"></i>
+                  </td>
+                  <td>01760000002</td>
+                  <td>Rupali</td>
+                  <td>Optical Fiber</td>
+                  <td>Home User</td>
+                  <td>5 Mbps/500Tk-Profile</td>
+                  <td>500</td>
+                  <td><i class="fa-solid fa-rotate text-green"></i></td>
+                  <td>AT-NOC-TEST</td>
+                  <td>Active</td>
+                  <td>
+                    <label class="switch sm">
+                      <input type="checkbox" checked />
+                      <span class="slider round"></span>
+                    </label>
+                  </td>
+                  <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                </tr>
+                <!-- Row 4 -->
+                <tr>
+                  <td><input type="checkbox" /></td>
+                  <td>ACT0002</td>
+                  <td>
+                    <div class="user-id">mokbul</div>
+                    <i class="fa-solid fa-circle status-dot grey"></i>
+                  </td>
+                  <td>****** <i class="fa-solid fa-eye text-blue"></i></td>
+                  <td>
+                    <div>mokbul</div>
+                    <i class="fa-solid fa-circle-info text-dark"></i>
+                  </td>
+                  <td>01760000001</td>
+                  <td>AT-Test</td>
+                  <td>UTP</td>
+                  <td>Home User</td>
+                  <td>10 Mbps/1000TK-Profile</td>
+                  <td>1000</td>
+                  <td><i class="fa-solid fa-rotate text-green"></i></td>
+                  <td>AT-NOC-TEST</td>
+                  <td>Active</td>
+                  <td>
+                    <label class="switch sm">
+                      <input type="checkbox" checked />
+                      <span class="slider round"></span>
+                    </label>
+                  </td>
+                  <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                </tr>
+                <!-- Row 5 -->
+                <tr>
+                  <td><input type="checkbox" /></td>
+                  <td>ACT0001</td>
+                  <td>
+                    <div class="user-id">test.username1</div>
+                    <i class="fa-solid fa-circle status-dot grey"></i>
+                  </td>
+                  <td>
+                    ************ <i class="fa-solid fa-eye text-blue"></i>
+                  </td>
+                  <td>
+                    <div>Md. Test Islam</div>
+                    <i class="fa-solid fa-circle-info text-dark"></i>
+                  </td>
+                  <td>01760000000</td>
+                  <td>AT-Test</td>
+                  <td>UTP</td>
+                  <td>Home User</td>
+                  <td>10 Mbps/1000TK-Profile</td>
+                  <td>1000</td>
+                  <td><i class="fa-solid fa-rotate text-green"></i></td>
+                  <td>AT-NOC-TEST</td>
+                  <td>Free</td>
+                  <td>
+                    <label class="switch sm">
+                      <input type="checkbox" checked />
+                      <span class="slider round"></span>
+                    </label>
+                  </td>
+                  <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-footer">
+            <div>Showing 1 to 5 of 5 entries</div>
+            <div class="pagination">
+              <a href="#">Previous</a>
+              <a href="#" class="active">1</a>
+              <a href="#">Next</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-widget">Send message</div>
+
+    <script src="assets/js/script.js"></script>
+  </body>
+</html>
